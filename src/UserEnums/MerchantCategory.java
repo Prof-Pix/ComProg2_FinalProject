@@ -1,0 +1,5 @@
+package UserEnums;
+
+public enum MerchantCategory {
+	GADGETS, ELECTRONICS, APPLICANCES, SPORTS, FASHION, FURNITURE, VEHICLES
+}
