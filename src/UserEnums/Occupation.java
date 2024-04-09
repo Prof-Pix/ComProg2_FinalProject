@@ -1,5 +1,9 @@
 package UserEnums;
 
 public enum Occupation {
-	EMPLOYED, RETIRED, UNEMPLOYED, STUDENT, OTHER
+	STUDENT,
+	PROFESSIONAL,
+	BUSINESS_OWNER,
+	RETIRED,
+	OTHER
 }

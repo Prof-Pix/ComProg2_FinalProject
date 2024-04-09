@@ -201,7 +201,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		contentPane.add(lblAccountDetails);
 		
 		separator = new JSeparator();
-		separator.setBounds(20, 114, 335, 2);
+		separator.setBounds(20, 114, 366, 2);
 		contentPane.add(separator);
 		
 		lblPersonalInformation = new JLabel("Personal Information");

@@ -5,16 +5,26 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Components.InvalidInputPopup;
+import User.Loaner;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JSeparator;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import UserEnums.SourceOfIncome;
+import UserEnums.Occupation;
+import UserEnums.MonthlyIncome;
 
-public class RegisterLoanerPage extends JFrame {
+public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -32,9 +42,6 @@ public class RegisterLoanerPage extends JFrame {
 	private JLabel raPasswordLabel;
 	private JTextField rlPasswordField;
 	private JButton registerLoanerButton;
-	private JLabel raMonthLabel;
-	private JLabel raDayLabel;
-	private JLabel raYearLabel;
 	private JTextField rlDayField;
 	private JTextField rlYearField;
 	private JLabel lblAccountDetails;
@@ -43,10 +50,9 @@ public class RegisterLoanerPage extends JFrame {
 	private JLabel lblSourceOfIncome;
 	private JLabel lblOccupation;
 	private JLabel lblMonthlyIncome;
-	private JTextField rlSourceOfIncome;
-	private JTextField rlOccupation;
-	private JTextField rlMonthlyIncome;
 	private JLabel lblNewLabel;
+	private JLabel lblBirthday_1;
+	private JLabel lblBirthday_2;
 
 	/**
 	 * Launch the application.
@@ -88,7 +94,7 @@ public class RegisterLoanerPage extends JFrame {
 		contentPane.add(raUserLabel);
 		
 		rlUserField = new JTextField();
-		rlUserField.setBounds(147, 51, 192, 20);
+		rlUserField.setBounds(172, 49, 192, 20);
 		contentPane.add(rlUserField);
 		rlUserField.setColumns(10);
 		
@@ -98,7 +104,7 @@ public class RegisterLoanerPage extends JFrame {
 		contentPane.add(raFNameLabel);
 		
 		rlFNameField = new JTextField();
-		rlFNameField.setBounds(147, 152, 192, 20);
+		rlFNameField.setBounds(172, 150, 192, 20);
 		rlFNameField.setColumns(10);
 		contentPane.add(rlFNameField);
 		
@@ -108,7 +114,7 @@ public class RegisterLoanerPage extends JFrame {
 		contentPane.add(lblMiddlename);
 		
 		rlMiddleNameField = new JTextField();
-		rlMiddleNameField.setBounds(147, 183, 192, 20);
+		rlMiddleNameField.setBounds(172, 181, 192, 20);
 		rlMiddleNameField.setColumns(10);
 		contentPane.add(rlMiddleNameField);
 		
@@ -118,7 +124,7 @@ public class RegisterLoanerPage extends JFrame {
 		contentPane.add(raLastNameLabel);
 		
 		rlLastNameField = new JTextField();
-		rlLastNameField.setBounds(147, 214, 192, 20);
+		rlLastNameField.setBounds(172, 212, 192, 20);
 		rlLastNameField.setColumns(10);
 		contentPane.add(rlLastNameField);
 		
@@ -128,7 +134,7 @@ public class RegisterLoanerPage extends JFrame {
 		contentPane.add(raAgeLabel);
 		
 		rlPhoneNumberField = new JTextField();
-		rlPhoneNumberField.setBounds(147, 339, 192, 20);
+		rlPhoneNumberField.setBounds(172, 337, 192, 20);
 		rlPhoneNumberField.setColumns(10);
 		contentPane.add(rlPhoneNumberField);
 		
@@ -138,7 +144,7 @@ public class RegisterLoanerPage extends JFrame {
 		contentPane.add(raEmailLabel);
 		
 		rlAgeField = new JTextField();
-		rlAgeField.setBounds(147, 276, 46, 20);
+		rlAgeField.setBounds(172, 274, 46, 20);
 		rlAgeField.setColumns(10);
 		contentPane.add(rlAgeField);
 		
@@ -148,7 +154,7 @@ public class RegisterLoanerPage extends JFrame {
 		contentPane.add(raPhoneNumberLabel);
 		
 		rlEmailField = new JTextField();
-		rlEmailField.setBounds(147, 307, 192, 20);
+		rlEmailField.setBounds(172, 305, 192, 20);
 		rlEmailField.setColumns(10);
 		contentPane.add(rlEmailField);
 		
@@ -159,51 +165,27 @@ public class RegisterLoanerPage extends JFrame {
 		
 		rlPasswordField = new JTextField();
 		rlPasswordField.setColumns(10);
-		rlPasswordField.setBounds(147, 82, 192, 20);
+		rlPasswordField.setBounds(172, 80, 192, 20);
 		contentPane.add(rlPasswordField);
 		
-		registerLoanerButton = new JButton("Register Loaner Account");
-		registerLoanerButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		registerLoanerButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		registerLoanerButton.setBounds(147, 469, 192, 48);
-		contentPane.add(registerLoanerButton);
-		
-		JLabel lblBirthday = new JLabel("Birthday:");
+		JLabel lblBirthday = new JLabel("Birthday (MM/DD/YYYY):");
 		lblBirthday.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblBirthday.setBounds(40, 248, 97, 14);
+		lblBirthday.setBounds(40, 248, 133, 14);
 		contentPane.add(lblBirthday);
 		
-		raMonthLabel = new JLabel("MM");
-		raMonthLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
-		raMonthLabel.setBounds(147, 248, 16, 14);
-		contentPane.add(raMonthLabel);
-		
-		raDayLabel = new JLabel("DD");
-		raDayLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
-		raDayLabel.setBounds(215, 249, 16, 14);
-		contentPane.add(raDayLabel);
-		
-		raYearLabel = new JLabel("YY");
-		raYearLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
-		raYearLabel.setBounds(283, 248, 16, 14);
-		contentPane.add(raYearLabel);
-		
 		JTextField rlMonthField = new JTextField();
-		rlMonthField.setBounds(167, 245, 38, 20);
+		rlMonthField.setBounds(172, 246, 38, 20);
 		contentPane.add(rlMonthField);
 		rlMonthField.setColumns(10);
 		
 		rlDayField = new JTextField();
 		rlDayField.setColumns(10);
-		rlDayField.setBounds(235, 245, 38, 20);
+		rlDayField.setBounds(223, 246, 38, 20);
 		contentPane.add(rlDayField);
 		
 		rlYearField = new JTextField();
 		rlYearField.setColumns(10);
-		rlYearField.setBounds(303, 245, 38, 20);
+		rlYearField.setBounds(273, 246, 38, 20);
 		contentPane.add(rlYearField);
 		
 		lblAccountDetails = new JLabel("Account Details");
@@ -212,7 +194,7 @@ public class RegisterLoanerPage extends JFrame {
 		contentPane.add(lblAccountDetails);
 		
 		separator = new JSeparator();
-		separator.setBounds(20, 114, 335, 2);
+		separator.setBounds(20, 114, 383, 2);
 		contentPane.add(separator);
 		
 		lblPersonalInformation = new JLabel("Personal Information");
@@ -235,26 +217,107 @@ public class RegisterLoanerPage extends JFrame {
 		lblMonthlyIncome.setBounds(40, 434, 97, 14);
 		contentPane.add(lblMonthlyIncome);
 		
-		rlSourceOfIncome = new JTextField();
-		rlSourceOfIncome.setColumns(10);
-		rlSourceOfIncome.setBounds(147, 370, 192, 20);
-		contentPane.add(rlSourceOfIncome);
-		
-		rlOccupation = new JTextField();
-		rlOccupation.setColumns(10);
-		rlOccupation.setBounds(147, 401, 192, 20);
-		contentPane.add(rlOccupation);
-		
-		rlMonthlyIncome = new JTextField();
-		rlMonthlyIncome.setColumns(10);
-		rlMonthlyIncome.setBounds(147, 432, 192, 20);
-		contentPane.add(rlMonthlyIncome);
-		
 		lblNewLabel = new JLabel("Already a member? Login");
 		lblNewLabel.setForeground(new Color(0, 0, 255));
 		lblNewLabel.setBackground(new Color(0, 0, 255));
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 11));
-		lblNewLabel.setBounds(172, 520, 147, 14);
+		lblNewLabel.setBounds(197, 518, 147, 14);
 		contentPane.add(lblNewLabel);
+		
+		JComboBox sourceOfIncomeComboBox = new JComboBox();
+		sourceOfIncomeComboBox.setModel(new DefaultComboBoxModel(SourceOfIncome.values()));
+		sourceOfIncomeComboBox.setSelectedIndex(0);
+		sourceOfIncomeComboBox.setBounds(172, 366, 192, 22);
+		contentPane.add(sourceOfIncomeComboBox);
+		
+		JComboBox occupationComboBox = new JComboBox();
+		occupationComboBox.setModel(new DefaultComboBoxModel(Occupation.values()));
+		occupationComboBox.setSelectedIndex(0);
+		occupationComboBox.setBounds(172, 398, 192, 22);
+		contentPane.add(occupationComboBox);
+		
+		JComboBox monthlyIncomeComboBox = new JComboBox();
+		monthlyIncomeComboBox.setModel(new DefaultComboBoxModel(MonthlyIncome.values()));
+		monthlyIncomeComboBox.setSelectedIndex(0);
+		monthlyIncomeComboBox.setBounds(172, 429, 192, 22);
+		contentPane.add(monthlyIncomeComboBox);
+		
+		lblBirthday_1 = new JLabel("/");
+		lblBirthday_1.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblBirthday_1.setBounds(214, 245, 11, 20);
+		contentPane.add(lblBirthday_1);
+		
+		lblBirthday_2 = new JLabel("/");
+		lblBirthday_2.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblBirthday_2.setBounds(265, 245, 11, 20);
+		contentPane.add(lblBirthday_2);
+		
+		registerLoanerButton = new JButton("Register Loaner Account");
+		registerLoanerButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		registerLoanerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String usernameText = rlUserField.getText().trim();
+				String passwordText = rlPasswordField.getText().trim();
+				String firstNameText = rlFNameField.getText().trim();
+				String middleNameText = rlMiddleNameField.getText().trim();
+				String lastNameText = rlLastNameField.getText().trim();
+				String monthText = rlMonthField.getText().trim();
+				String dayText = rlDayField.getText().trim();
+				String yearText = rlYearField.getText().trim();
+				String ageText = rlAgeField.getText().trim();
+				String emailText = rlEmailField.getText().trim();
+				String phoneNumberText = rlPhoneNumberField.getText().trim();
+				
+				//Checks if one of the common inputs are invalid
+				if (isCommonFieldsInvalid(usernameText,
+						passwordText,
+						firstNameText,
+						middleNameText,
+						lastNameText,
+						monthText,
+						dayText,
+						yearText,
+						ageText,
+						emailText,
+						phoneNumberText)) {	
+					System.out.println(occupationComboBox.getSelectedItem());
+					InvalidInputPopup popup = new InvalidInputPopup(RegisterLoanerPage.this);
+					popup.setVisible(true);
+				} else {
+					//Proceeds if all of the inputs are not empty
+					//Advanced Validation
+					//For birthday
+					LocalDate birthday = LocalDate.of(Integer.parseInt(yearText) , 
+							Integer.parseInt(monthText) , 
+							Integer.parseInt(dayText) );
+
+					//For age
+					int age = Integer.parseInt(ageText);
+					
+					//For phone number
+					long phoneNumber = Long.parseLong(phoneNumberText);
+					
+//					Loaner ln = new Loaner(usernameText,
+//								passwordText,
+//								firstNameText,
+//								middleNameText,
+//								lastNameText,
+//								birthday ,
+//								age, 
+//								emailText,
+//								phoneNumber,
+//								);
+				}
+			}
+		});
+		registerLoanerButton.setBounds(172, 467, 192, 48);
+		contentPane.add(registerLoanerButton);
+	}
+
+	@Override
+	public boolean isSpecificFieldsInvalid() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
