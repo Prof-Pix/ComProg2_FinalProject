@@ -8,13 +8,14 @@ public class User {
 	private String firstName;
 	private String middleName;
 	private String lastName;
+	private String fullName;
 	private LocalDate birthdate;
 	private int age;
 	private String email;
-	private long phoneNumber;
+	private String phoneNumber;
 	
 	public User(String username, String password, String firstName, String middleName, String lastName, LocalDate birthdate,
-			int age, String email, long phoneNumber) {
+			int age, String email, String phoneNumber) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -24,6 +25,7 @@ public class User {
 		this.age = age;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
+		fullName = firstName + " " + middleName + " " + lastName;
 	}
 	
 	public String getUsername() {
@@ -56,6 +58,12 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 	public LocalDate getBirthdate() {
 		return birthdate;
 	}
@@ -74,10 +82,10 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public long getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
-	public void setPhoneNumber(long phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 }

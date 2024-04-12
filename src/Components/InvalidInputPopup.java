@@ -13,13 +13,13 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Dialog.ModalityType;
-import java.awt.Window.Type;
-import java.awt.Rectangle;
+import java.awt.Dimension;
+import javax.swing.SwingConstants;
 
 public class InvalidInputPopup extends JDialog {
 	
 	private static JFrame relativePage;
+	private static String errorText;
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -30,7 +30,7 @@ public class InvalidInputPopup extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			InvalidInputPopup dialog = new InvalidInputPopup(relativePage);
+			InvalidInputPopup dialog = new InvalidInputPopup(relativePage, errorText);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -41,12 +41,15 @@ public class InvalidInputPopup extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public InvalidInputPopup(JFrame relativePage) {
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setType(Type.POPUP);
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		
+	public InvalidInputPopup(JFrame relativePage, String errorText) {
 		InvalidInputPopup.relativePage = relativePage;
+		InvalidInputPopup.errorText = errorText;
+		setPreferredSize(new Dimension(300, 250));
+		setTitle("Error!");
+		setResizable(false);
+		setType(Type.POPUP);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		
 		//This allows a page to be disabled when this popup appears
 		setModal(true);
 		pack();		
@@ -54,8 +57,9 @@ public class InvalidInputPopup extends JDialog {
 		//Settings the location relative to the page that calls this popup window
 		setLocationRelativeTo(relativePage);
 		
-		setBounds(100,100, 355, 189);
+		setBounds(100,100, 300, 219);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setPreferredSize(new Dimension(5, 10));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -66,9 +70,10 @@ public class InvalidInputPopup extends JDialog {
 			contentPanel.add(lblNewLabel);
 		}
 		{
-			JLabel lblPleaseCheckAll = new JLabel("Please check all the required fields.");
+			JLabel lblPleaseCheckAll = new JLabel(errorText);
+			lblPleaseCheckAll.setVerticalAlignment(SwingConstants.TOP);
 			lblPleaseCheckAll.setFont(new Font("Dialog", Font.BOLD, 12));
-			lblPleaseCheckAll.setBounds(23, 54, 202, 14);
+			lblPleaseCheckAll.setBounds(23, 54, 240, 113);
 			contentPanel.add(lblPleaseCheckAll);
 		}
 		{

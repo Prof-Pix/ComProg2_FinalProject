@@ -22,10 +22,10 @@ public class Loaner extends User {
 	//Loaner Specific Attributes
 	private SourceOfIncome sourceOfIncome;
 	private Occupation occupation;
-	private MonthlyIncome monthlyIncome;
+	private String monthlyIncome;
 	
 	public Loaner(String username, String password, String firstName, String middleName, String lastName,
-			LocalDate birthdate, int age, String email, long phoneNumber, SourceOfIncome sourceOfIncome, Occupation occupation, MonthlyIncome monthlyIncome) {
+			LocalDate birthdate, int age, String email, long phoneNumber, SourceOfIncome sourceOfIncome, Occupation occupation, String monthlyIncome) {
 		super(username, password, firstName, middleName, lastName, birthdate, age, email, phoneNumber);
 		
 		this.username = username;
