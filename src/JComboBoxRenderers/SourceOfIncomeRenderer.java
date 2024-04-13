@@ -33,4 +33,5 @@ public class SourceOfIncomeRenderer extends JLabel implements ListCellRenderer<S
         setText(displayText); // Customize display text
         return this;
     }
+
 }

@@ -26,10 +26,11 @@ public class HelperUtility {
  		frame.dispose();
  	}
      
-     public static boolean doesValueExist(Connection con, String columnName, String value) {
-    	    String query = "SELECT * FROM users WHERE " + columnName + " = ?"; 
+     public static boolean doesValueExist(Connection con, String tableName, String columnName, String value, String conditionType) {
+    	    String query = "SELECT * FROM " + tableName + " WHERE user_type = ? AND " + columnName + " = ?"; 
     	    try (PreparedStatement prepSt = con.prepareStatement(query)) {
-    	        prepSt.setString(1, value); 
+    	        prepSt.setString(1, conditionType); 
+    	        prepSt.setString(2, value);
     	        ResultSet rs = prepSt.executeQuery();
 
     	        if (rs.next()) {

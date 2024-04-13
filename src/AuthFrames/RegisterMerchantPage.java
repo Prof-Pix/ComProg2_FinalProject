@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Components.GoToLoginPage;
 import Components.InvalidInputPopup;
 
 import java.awt.Color;
@@ -20,8 +21,10 @@ import javax.swing.JSeparator;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import UserEnums.MerchantCategory;
-import UserEnums.SourceOfIncome;
+import Utilities.HelperUtility;
 import JComboBoxRenderers.MerchantCategoryRenderer;
+import User.Merchant;
+import User.MerchantRegistrationData;
 public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 
 	private static final long serialVersionUID = 1L;
@@ -40,15 +43,12 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 	private JLabel raPasswordLabel;
 	private JTextField rmPasswordField;
 	private JButton registerLoanerButton;
-	private JLabel raMonthLabel;
-	private JLabel raDayLabel;
 	private JLabel raYearLabel;
 	private JTextField rmDayField;
 	private JTextField rmYearField;
 	private JLabel lblAccountDetails;
 	private JSeparator separator;
 	private JLabel lblPersonalInformation;
-	private JLabel lblNewLabel;
 	private JSeparator separator_1;
 	private JLabel lblMerchantInformation;
 	private JLabel lblMerchantName;
@@ -57,6 +57,9 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 	private JLabel lblMerchantAddress;
 	private JTextField rmMerchantAddress;
 	private JComboBox merchantCategoryComboBox;
+	
+	//Getting a reference of the frame
+	JFrame thisFrame = this;
 
 	/**
 	 * Launch the application.
@@ -98,7 +101,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(raUserLabel);
 		
 		rmUserField = new JTextField();
-		rmUserField.setBounds(147, 51, 192, 20);
+		rmUserField.setBounds(171, 50, 192, 20);
 		contentPane.add(rmUserField);
 		rmUserField.setColumns(10);
 		
@@ -108,7 +111,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(raFNameLabel);
 		
 		rmFNameField = new JTextField();
-		rmFNameField.setBounds(147, 152, 192, 20);
+		rmFNameField.setBounds(171, 151, 192, 20);
 		rmFNameField.setColumns(10);
 		contentPane.add(rmFNameField);
 		
@@ -118,7 +121,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(lblMiddlename);
 		
 		rmMiddleNameField = new JTextField();
-		rmMiddleNameField.setBounds(147, 183, 192, 20);
+		rmMiddleNameField.setBounds(171, 182, 192, 20);
 		rmMiddleNameField.setColumns(10);
 		contentPane.add(rmMiddleNameField);
 		
@@ -128,7 +131,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(raLastNameLabel);
 		
 		rmLastNameField = new JTextField();
-		rmLastNameField.setBounds(147, 214, 192, 20);
+		rmLastNameField.setBounds(171, 213, 192, 20);
 		rmLastNameField.setColumns(10);
 		contentPane.add(rmLastNameField);
 		
@@ -138,7 +141,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(raAgeLabel);
 		
 		rmPhoneNumberField = new JTextField();
-		rmPhoneNumberField.setBounds(147, 339, 192, 20);
+		rmPhoneNumberField.setBounds(171, 338, 192, 20);
 		rmPhoneNumberField.setColumns(10);
 		contentPane.add(rmPhoneNumberField);
 		
@@ -148,7 +151,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(raEmailLabel);
 		
 		rmAgeField = new JTextField();
-		rmAgeField.setBounds(147, 276, 46, 20);
+		rmAgeField.setBounds(171, 275, 46, 20);
 		rmAgeField.setColumns(10);
 		contentPane.add(rmAgeField);
 		
@@ -158,7 +161,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(raPhoneNumberLabel);
 		
 		rmEmailField = new JTextField();
-		rmEmailField.setBounds(147, 307, 192, 20);
+		rmEmailField.setBounds(171, 306, 192, 20);
 		rmEmailField.setColumns(10);
 		contentPane.add(rmEmailField);
 		
@@ -169,42 +172,32 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		
 		rmPasswordField = new JTextField();
 		rmPasswordField.setColumns(10);
-		rmPasswordField.setBounds(147, 82, 192, 20);
+		rmPasswordField.setBounds(171, 81, 192, 20);
 		contentPane.add(rmPasswordField);
 		
-		JLabel lblBirthday = new JLabel("Birthday:");
+		JLabel lblBirthday = new JLabel("Birthday (MM/DD/YYYY):");
 		lblBirthday.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblBirthday.setBounds(40, 248, 97, 14);
+		lblBirthday.setBounds(40, 248, 133, 14);
 		contentPane.add(lblBirthday);
 		
-		raMonthLabel = new JLabel("MM");
-		raMonthLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
-		raMonthLabel.setBounds(147, 248, 16, 14);
-		contentPane.add(raMonthLabel);
-		
-		raDayLabel = new JLabel("DD");
-		raDayLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
-		raDayLabel.setBounds(215, 249, 16, 14);
-		contentPane.add(raDayLabel);
-		
-		raYearLabel = new JLabel("YY");
-		raYearLabel.setFont(new Font("Dialog", Font.PLAIN, 11));
-		raYearLabel.setBounds(283, 248, 16, 14);
+		raYearLabel = new JLabel("/");
+		raYearLabel.setFont(new Font("Dialog", Font.BOLD, 12));
+		raYearLabel.setBounds(261, 248, 16, 14);
 		contentPane.add(raYearLabel);
 		
 		JTextField rmMonthField = new JTextField();
-		rmMonthField.setBounds(167, 245, 38, 20);
+		rmMonthField.setBounds(171, 245, 38, 20);
 		contentPane.add(rmMonthField);
 		rmMonthField.setColumns(10);
 		
 		rmDayField = new JTextField();
 		rmDayField.setColumns(10);
-		rmDayField.setBounds(235, 245, 38, 20);
+		rmDayField.setBounds(219, 245, 38, 20);
 		contentPane.add(rmDayField);
 		
 		rmYearField = new JTextField();
 		rmYearField.setColumns(10);
-		rmYearField.setBounds(303, 245, 38, 20);
+		rmYearField.setBounds(268, 245, 38, 20);
 		contentPane.add(rmYearField);
 		
 		lblAccountDetails = new JLabel("Account Details");
@@ -213,7 +206,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(lblAccountDetails);
 		
 		separator = new JSeparator();
-		separator.setBounds(20, 114, 335, 2);
+		separator.setBounds(20, 114, 372, 2);
 		contentPane.add(separator);
 		
 		lblPersonalInformation = new JLabel("Personal Information");
@@ -221,15 +214,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		lblPersonalInformation.setBounds(20, 127, 153, 14);
 		contentPane.add(lblPersonalInformation);
 		
-		lblNewLabel = new JLabel("Already a member? Login");
-		lblNewLabel.setForeground(new Color(0, 0, 255));
-		lblNewLabel.setBackground(new Color(0, 0, 255));
-		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 11));
-		lblNewLabel.setBounds(171, 560, 147, 14);
-		contentPane.add(lblNewLabel);
-		
 		separator_1 = new JSeparator();
-		separator_1.setBounds(20, 371, 335, 2);
+		separator_1.setBounds(20, 371, 372, 2);
 		contentPane.add(separator_1);
 		
 		lblMerchantInformation = new JLabel("Merchant Information");
@@ -244,7 +230,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		
 		rmMerchantNameField = new JTextField();
 		rmMerchantNameField.setColumns(10);
-		rmMerchantNameField.setBounds(147, 407, 192, 20);
+		rmMerchantNameField.setBounds(171, 406, 192, 20);
 		contentPane.add(rmMerchantNameField);
 		
 		lblCategory = new JLabel("Category:");
@@ -259,78 +245,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		
 		rmMerchantAddress = new JTextField();
 		rmMerchantAddress.setColumns(10);
-		rmMerchantAddress.setBounds(147, 471, 192, 20);
+		rmMerchantAddress.setBounds(171, 470, 192, 20);
 		contentPane.add(rmMerchantAddress);
-		
-		registerLoanerButton = new JButton("Register Merchant Account");
-		registerLoanerButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		registerLoanerButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				String errorText;
-				try {
-					String usernameText = rmUserField.getText().trim();
-					String passwordText = rmPasswordField.getText().trim();
-					String firstNameText = rmFNameField.getText().trim();
-					String middleNameText = rmMiddleNameField.getText().trim();
-					String lastNameText = rmLastNameField.getText().trim();
-					String monthText = rmMonthField.getText().trim();
-					String dayText = rmDayField.getText().trim();
-					String yearText = rmYearField.getText().trim();
-					String ageText = rmAgeField.getText().trim();
-					String emailText = rmEmailField.getText().trim();
-					String phoneNumberText = rmPhoneNumberField.getText().trim();
-					String merchantName = rmMerchantNameField.getText().trim();
-					String merchantAddress = rmMerchantAddress.getText().trim();
-					
-					//Checks if one of the common inputs are invalid
-					if (isCommonFieldsInvalid(usernameText,
-							passwordText,
-							firstNameText,
-							middleNameText,
-							lastNameText,
-							monthText,
-							dayText,
-							yearText,
-							ageText,
-							emailText,
-							phoneNumberText)) {	
-						
-						errorText = "Please check all the required fields.";
-						InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
-						popup.setVisible(true);
-						
-					} else if (isSpecificFieldsInvalid()) {
-						errorText = "Please check all the required fields.";
-						InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
-						popup.setVisible(true);
-					} else {
-						//Proceeds if all of the inputs are not empty
-						//Advanced Validation
-						//For birthday
-						LocalDate birthday = LocalDate.of(Integer.parseInt(yearText) , 
-								Integer.parseInt(monthText) , 
-								Integer.parseInt(dayText) );
-
-						//For age
-						int age = Integer.parseInt(ageText);
-						
-						//For phone number
-						long phoneNumber = Long.parseLong(phoneNumberText);
-						
-					}
-				} catch (NumberFormatException numberEx) {
-					errorText = "Some fields only accepts integer values. Please try again.";
-
-					InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
-					popup.setVisible(true);
-				}
-				
-				
-			}
-		});
-		registerLoanerButton.setBounds(147, 508, 192, 48);
-		contentPane.add(registerLoanerButton);
 		
 		merchantCategoryComboBox = new JComboBox();
 		
@@ -346,13 +262,156 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		
 		merchantCategoryComboBox.setModel(categModel);
 		merchantCategoryComboBox.setRenderer(new MerchantCategoryRenderer());
-		merchantCategoryComboBox.setBounds(147, 438, 192, 22);
+		merchantCategoryComboBox.setBounds(171, 437, 192, 22);
 		contentPane.add(merchantCategoryComboBox);
+		
+		registerLoanerButton = new JButton("Register Merchant Account");
+		registerLoanerButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		registerLoanerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String usernameText = rmUserField.getText().trim();
+				String passwordText = rmPasswordField.getText().trim();
+				String firstNameText = rmFNameField.getText().trim();
+				String middleNameText = rmMiddleNameField.getText().trim();
+				String lastNameText = rmLastNameField.getText().trim();
+				String monthText = rmMonthField.getText().trim();
+				String dayText = rmDayField.getText().trim();
+				String yearText = rmYearField.getText().trim();
+				String ageText = rmAgeField.getText().trim();
+				String emailText = rmEmailField.getText().trim();
+				String phoneNumberText = rmPhoneNumberField.getText().trim();
+				String merchantNameText = rmMerchantNameField.getText().trim();
+				String merchantAddressText = rmMerchantAddress.getText().trim();
+				
+				try {
+					
+					//Checks if one of the common inputs are invalid
+					if (isCommonFieldsEmpty(usernameText,
+							passwordText,
+							firstNameText,
+							middleNameText,
+							lastNameText,
+							monthText,
+							dayText,
+							yearText,
+							ageText,
+							emailText,
+							phoneNumberText) || isSpecificFieldsEmpty()) {	
+						
+						String errorText = "Please check all the required fields.";
+						InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
+						popup.setVisible(true);
+						
+					}  else {
+						
+						String merchantCategoryText = merchantCategoryComboBox.getSelectedItem().toString().toLowerCase();
+						//Proceeds if all of the inputs are not empty
+						//Advanced Validation
+						//For birthday
+						LocalDate birthday = LocalDate.of(Integer.parseInt(yearText) , 
+								Integer.parseInt(monthText) , 
+								Integer.parseInt(dayText) );
+
+						//For age
+						int age = Integer.parseInt(ageText);
+						
+						//For phone number
+						long phoneNumber = Long.parseLong(phoneNumberText);
+					
+						
+//						
+//						public Merchant(String username, String password, String firstName, String middleName, String lastName,
+//								LocalDate birthdate, int age, String email, String phoneNumber, String merchantName,
+//								MerchantCategory merchantCategory, String merchantAddress)
+						
+						Merchant merch = new Merchant(usernameText, 
+								passwordText, 
+								firstNameText, 
+								middleNameText, 
+								lastNameText, 
+								birthday, 
+								age, 
+								emailText, 
+								phoneNumberText, 
+								merchantNameText, 
+								merchantCategoryText, 
+								merchantAddressText);
+						
+						if(merch.isUserInputValid() && merch.checkDuplicateInput().equals("ok")) {
+							MerchantRegistrationData merchRegData = new MerchantRegistrationData(usernameText, 
+								passwordText, 
+								firstNameText, 
+								middleNameText, 
+								lastNameText, 
+								birthday, 
+								age, 
+								emailText, 
+								phoneNumberText, 
+								merchantNameText, 
+								merchantCategoryText, 
+								merchantAddressText);
+							
+							//sending it to the data base
+							if (merch.registerMerchant(merchRegData)) {
+								GoToLoginPage login = new GoToLoginPage();
+								login.setVisible(true);
+							} else {
+								String errorText= "";
+								InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
+								popup.setVisible(true);
+							} 
+						}else {
+							
+							String errorText = merch.checkErrorInputRegistration();
+							
+							if (errorText == null) {
+								errorText = merch.checkDuplicateInput();
+							}
+							
+							InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
+							popup.setVisible(true);
+						}
+						
+					}
+				} catch (NumberFormatException numberEx) {
+					String errorText = "Some fields only accepts integer values. Please try again.";
+
+					InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
+					popup.setVisible(true);
+				}
+				
+				
+			}
+		});
+		registerLoanerButton.setBounds(171, 507, 192, 48);
+		contentPane.add(registerLoanerButton);
+		
+		JLabel raYearLabel_1 = new JLabel("/");
+		raYearLabel_1.setFont(new Font("Dialog", Font.BOLD, 12));
+		raYearLabel_1.setBounds(213, 248, 16, 14);
+		contentPane.add(raYearLabel_1);
+		
+		JButton btnAlreadyAMerchant = new JButton("Already a merchant? Login");
+		btnAlreadyAMerchant.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginPage login = new LoginPage();
+				login.setVisible(true);
+
+				//For Closing Page
+				HelperUtility.closePage(thisFrame);
+			}
+		});
+		btnAlreadyAMerchant.setForeground(Color.BLUE);
+		btnAlreadyAMerchant.setContentAreaFilled(false);
+		btnAlreadyAMerchant.setBorderPainted(false);
+		btnAlreadyAMerchant.setBounds(171, 553, 192, 23);
+		contentPane.add(btnAlreadyAMerchant);
 		
 	}
 
 	@Override
-	public boolean isSpecificFieldsInvalid() {
+	public boolean isSpecificFieldsEmpty() {
 		String merchantName = rmMerchantNameField.getText().trim();
 		String merchantAddress = rmMerchantAddress.getText().trim();
 		

@@ -6,7 +6,7 @@ public interface RegistrationPage {
 		return field == null || field.trim().isEmpty();
 	}
 
-	default boolean isCommonFieldsInvalid(String username, String password, String firstName, String middleName, String lastName, String month, String day, String year, String age, String email, String phoneNumber) {
+	default boolean isCommonFieldsEmpty(String username, String password, String firstName, String middleName, String lastName, String month, String day, String year, String age, String email, String phoneNumber) {
 		return isFieldEmpty(username) ||
 				isFieldEmpty(password) ||
 				isFieldEmpty(firstName) ||
@@ -20,6 +20,6 @@ public interface RegistrationPage {
 				isFieldEmpty(phoneNumber);
 	}
 	
-	 boolean isSpecificFieldsInvalid();
+	 boolean isSpecificFieldsEmpty();
 
 }

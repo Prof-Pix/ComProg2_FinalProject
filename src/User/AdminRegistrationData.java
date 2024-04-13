@@ -5,7 +5,7 @@ import java.util.Date;
 
 import Database.DatabaseManager;
 
-public class AdminRegistrationData extends User {
+public class AdminRegistrationData extends Admin {
 	
 	private String username;
 	private String password;

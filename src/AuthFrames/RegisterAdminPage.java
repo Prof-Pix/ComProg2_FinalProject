@@ -238,7 +238,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 
 
 					//Checks if one of the common inputs are invalid
-					if (isCommonFieldsInvalid(usernameText,
+					if (isCommonFieldsEmpty(usernameText,
 							passwordText,
 							firstNameText,
 							middleNameText,
@@ -248,7 +248,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 							yearText,
 							ageText,
 							emailText,
-							phoneNumberText)) {	
+							phoneNumberText) || isSpecificFieldsEmpty()) {	
 						
 						String errorText = "Please check all the required fields.";
 						
@@ -280,7 +280,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 
 						//Perform advance validations
 						//Once the input are valid we now need to check if inputs values are already existing in the database
-						if (ad.isAdminInputValid() && ad.checkDuplicate().equals("ok")) {
+						if (ad.isUserInputValid() && ad.checkDuplicateInput().equals("ok")) {
 							AdminRegistrationData adminRegData = new AdminRegistrationData(usernameText,
 									passwordText,
 									firstNameText,
@@ -303,7 +303,11 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 
 						} else {
 							
-							String errorText = ad.checkErrorAdminRegistration();
+							String errorText = ad.checkErrorInputRegistration();
+							
+							if (errorText == null) {
+								errorText = ad.checkDuplicateInput();
+							}
 							
 							InvalidInputPopup popup = new InvalidInputPopup(RegisterAdminPage.this, errorText);
 							popup.setVisible(true);
@@ -354,7 +358,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 	}
 
 	@Override
-	public boolean isSpecificFieldsInvalid() {
+	public boolean isSpecificFieldsEmpty() {
 		// TODO Auto-generated method stub
 		return false;
 	}

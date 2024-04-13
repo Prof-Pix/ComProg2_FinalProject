@@ -8,8 +8,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Components.GoToLoginPage;
 import Components.InvalidInputPopup;
 import User.Loaner;
+import User.LoanerRegistrationData;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -24,9 +26,9 @@ import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
-import UserEnums.SourceOfIncome;
 import Utilities.HelperUtility;
 import UserEnums.Occupation;
+import UserEnums.SourceOfIncome;
 import UserEnums.MonthlyIncome;
 
 public class RegisterLoanerPage extends JFrame implements RegistrationPage{
@@ -57,11 +59,11 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 	private JLabel lblMonthlyIncome;
 	private JLabel lblBirthday_1;
 	private JLabel lblBirthday_2;
-	
+
 	JComboBox sourceOfIncomeComboBox = new JComboBox();
 	JComboBox occupationComboBox = new JComboBox();
 	JComboBox monthlyIncomeComboBox = new JComboBox();
-	
+
 	//Getting a reference of the frame
 	JFrame thisFrame = this;
 
@@ -227,16 +229,16 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		lblMonthlyIncome.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblMonthlyIncome.setBounds(40, 434, 97, 14);
 		contentPane.add(lblMonthlyIncome);
-		
+
 		//SOURCE OF INCOME CHOICES
 		//For choices
-				DefaultComboBoxModel<SourceOfIncome> socModel = new DefaultComboBoxModel<>();
-				socModel.addElement(null);		
-				
-				for (SourceOfIncome soc: SourceOfIncome.values()) {
-					socModel.addElement(soc);
-				}
-				
+		DefaultComboBoxModel<SourceOfIncome> socModel = new DefaultComboBoxModel<>();
+		socModel.addElement(null);		
+
+		for (SourceOfIncome soc: SourceOfIncome.values()) {
+			socModel.addElement(soc);
+		}
+
 		sourceOfIncomeComboBox.setModel(socModel);
 		sourceOfIncomeComboBox.setRenderer(new SourceOfIncomeRenderer());
 		sourceOfIncomeComboBox.setBounds(172, 366, 192, 22);
@@ -246,7 +248,7 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		//For choices
 		DefaultComboBoxModel<Occupation> occupationModel = new DefaultComboBoxModel<>();
 		occupationModel.addElement(null);		
-		
+
 		for (Occupation occupation: Occupation.values()) {
 			occupationModel.addElement(occupation);
 		}
@@ -274,22 +276,27 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		registerLoanerButton.setFont(new Font("Dialog", Font.PLAIN, 11));
 		registerLoanerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String errorText;
+
+				String usernameText = rlUserField.getText().trim();
+				String passwordText = rlPasswordField.getText().trim();
+				String firstNameText = rlFNameField.getText().trim();
+				String middleNameText = rlMiddleNameField.getText().trim();
+				String lastNameText = rlLastNameField.getText().trim();
+				String monthText = rlMonthField.getText().trim();
+				String dayText = rlDayField.getText().trim();
+				String yearText = rlYearField.getText().trim();
+				String ageText = rlAgeField.getText().trim();
+				String emailText = rlEmailField.getText().trim();
+				String phoneNumberText = rlPhoneNumberField.getText().trim();
+				String monthlyIncomeText = null;
+
+				System.out.println(monthlyIncomeComboBox.getSelectedIndex());
+
+
 				try {
-					String usernameText = rlUserField.getText().trim();
-					String passwordText = rlPasswordField.getText().trim();
-					String firstNameText = rlFNameField.getText().trim();
-					String middleNameText = rlMiddleNameField.getText().trim();
-					String lastNameText = rlLastNameField.getText().trim();
-					String monthText = rlMonthField.getText().trim();
-					String dayText = rlDayField.getText().trim();
-					String yearText = rlYearField.getText().trim();
-					String ageText = rlAgeField.getText().trim();
-					String emailText = rlEmailField.getText().trim();
-					String phoneNumberText = rlPhoneNumberField.getText().trim();
 
 					//Checks if one of the common inputs are invalid
-					if (isCommonFieldsInvalid(usernameText,
+					if (isCommonFieldsEmpty(usernameText,
 							passwordText,
 							firstNameText,
 							middleNameText,
@@ -299,11 +306,16 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 							yearText,
 							ageText,
 							emailText,
-							phoneNumberText) || isSpecificFieldsInvalid()) {	
-						errorText = "Please check all the required fields.";
+							phoneNumberText) || isSpecificFieldsEmpty()) {	
+						String errorText = "Please check all the required fields.";
 						InvalidInputPopup popup = new InvalidInputPopup(RegisterLoanerPage.this, errorText);
 						popup.setVisible(true);
 					} else {
+						
+						String sourceOfIncomeText = sourceOfIncomeComboBox.getSelectedItem().toString().toLowerCase();
+						String occupationText = occupationComboBox.getSelectedItem().toString().toLowerCase();
+						int monthlyIncomeIndex = monthlyIncomeComboBox.getSelectedIndex();
+
 						//Proceeds if all of the inputs are not empty
 						//Advanced Validation
 						//For birthday
@@ -314,23 +326,80 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 						//For age
 						int age = Integer.parseInt(ageText);
 
-						//For phone number
-						long phoneNumber = Long.parseLong(phoneNumberText);
+						//For the monthly income enums
+						switch(monthlyIncomeIndex) {
+						case 1: {
+							monthlyIncomeText = UserEnums.MonthlyIncome.BELOW_10K.toString().toLowerCase();
+							break;
+						}
+						case 2: {
+							monthlyIncomeText = UserEnums.MonthlyIncome.TENK_TO_30K.toString().toLowerCase();
+							break;
+						}
+						case 3: {
+							monthlyIncomeText = UserEnums.MonthlyIncome.THIRTYK_TO_50K.toString().toLowerCase();
+							break;
+						}
+						case 4: {
+							monthlyIncomeText = UserEnums.MonthlyIncome.ABOVE_50K.toString().toLowerCase();
+							break;
+						}
+						}
 
-//						Loaner ln = new Loaner(usernameText,
-//								passwordText,
-//								firstNameText,
-//								middleNameText,
-//								lastNameText,
-//								birthday ,
-//								age, 
-//								emailText,
-//								phoneNumber,
-//								);
+
+						Loaner ln = new Loaner(usernameText,
+								passwordText,
+								firstNameText,
+								middleNameText,
+								lastNameText,
+								birthday ,
+								age, 
+								emailText,
+								phoneNumberText,
+								sourceOfIncomeText,
+								occupationText,
+								monthlyIncomeText
+								);
+
+						if(ln.isUserInputValid() && ln.checkDuplicateInput().equals("ok")) {
+							LoanerRegistrationData lnRegData = new LoanerRegistrationData(usernameText,
+									passwordText,
+									firstNameText,
+									middleNameText,
+									lastNameText,
+									birthday ,
+									age, 
+									emailText,
+									phoneNumberText,
+									sourceOfIncomeText,
+									occupationText,
+									monthlyIncomeText);
+
+							//sending it to the data base
+							if(ln.registerLoaner(lnRegData)) {
+								GoToLoginPage login = new GoToLoginPage();
+								login.setVisible(true);
+							} else {
+								String errorText= "";
+								InvalidInputPopup popup = new InvalidInputPopup(RegisterLoanerPage.this, errorText);
+								popup.setVisible(true);
+							} 
+
+						} else {
+							String errorText = ln.checkErrorInputRegistration();
+
+							if (errorText == null) {
+								errorText = ln.checkDuplicateInput();
+							}
+
+							InvalidInputPopup popup = new InvalidInputPopup(RegisterLoanerPage.this, errorText);
+							popup.setVisible(true);
+						}
+
 					}
 
 				} catch (NumberFormatException numberEx) {
-					errorText = "Some fields only accepts integer values. Please try again.";
+					String errorText = "Some fields only accepts integer values. Please try again.";
 
 					InvalidInputPopup popup = new InvalidInputPopup(RegisterLoanerPage.this, errorText);
 					popup.setVisible(true);
@@ -341,14 +410,14 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		});
 		registerLoanerButton.setBounds(172, 467, 192, 48);
 		contentPane.add(registerLoanerButton);
-		
+
 		JButton alreadyAMemberButton = new JButton();
-		alreadyAMemberButton = new JButton("Already an admin? Login");
+		alreadyAMemberButton = new JButton("Already a loaner? Login");
 		alreadyAMemberButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginPage login = new LoginPage();
 				login.setVisible(true);
-				
+
 				//For Closing Page
 				HelperUtility.closePage(thisFrame);
 			}
@@ -361,13 +430,13 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 	}
 
 	@Override
-	public boolean isSpecificFieldsInvalid() {
+	public boolean isSpecificFieldsEmpty() {
 		int occupationComboBoxIndex = occupationComboBox.getSelectedIndex();
 		int sourceOfIncomeComboBoxIndex = sourceOfIncomeComboBox.getSelectedIndex();
 		int monthlyIncomeComboBoxIndex = monthlyIncomeComboBox.getSelectedIndex();
-		
-		return occupationComboBoxIndex == 0 || 
-				sourceOfIncomeComboBoxIndex == 0 || 
+
+		return occupationComboBoxIndex == -1 || 
+				sourceOfIncomeComboBoxIndex == -1 || 
 				monthlyIncomeComboBoxIndex == 0;
 	}
 }
