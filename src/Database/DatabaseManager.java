@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 import User.AdminRegistrationData;
 import User.LoanerRegistrationData;
@@ -171,17 +173,28 @@ public class DatabaseManager {
 		}
 
 		//Send the remaining merchant-specific information
-		String merchantRegQuery = "INSERT INTO merchant_table (merchant_name, "
+		String merchantRegQuery = "INSERT INTO merchant_table (user_id, "
+				+ "merchant_name, "
 				+ "merchant_category, "
-				+ "merchant_address, "
-				+ "user_id) "
-				+ "VALUES(?,?,?,?)";
+				+ "merchant_region_location, "
+				+ "merchant_province_location,"
+				+ "merchant_city_location,"
+				+ "merchant_barangay_location,"
+				+ "merchant_street_location,"
+				+ "merchant_address) "
+				+ "VALUES(?,?,?,?,?,?,?,?,?)";
 
 		try (PreparedStatement prepSt = connection.prepareStatement(merchantRegQuery)) {
-			prepSt.setString(1, data.getMerchantName());
-			prepSt.setString(2, data.getMerchantCategory());
-			prepSt.setString(3, data.getMerchantAddress());
-			prepSt.setInt(4, retrievedId);
+			prepSt.setInt(1, retrievedId);
+			prepSt.setString(2, data.getMerchantName());
+			prepSt.setString(3, data.getMerchantCategory());
+			prepSt.setString(4, data.getMerchantRegionLocation());
+			prepSt.setString(5, data.getMerchantProvinceLocation());
+			prepSt.setString(6, data.getMerchantCityLocation());
+			prepSt.setString(7, data.getMerchantBarangayLocation());
+			prepSt.setString(8, data.getMerchantStreetLocation());
+			prepSt.setString(9, data.getMerchantAddress());
+			
 
 			prepSt.executeUpdate();
 
@@ -279,17 +292,16 @@ public class DatabaseManager {
 
 	public String checkDuplicateCommonFieldsInput(String username, String email, String fullName, String phoneNumber, String userType) {
 
-		String tableName = "users";
-		if (HelperUtility.doesValueExist(connection, tableName, "username", username, userType)) { 		//check for username duplication
+		if (HelperUtility.doesCommonValueExist(connection, "username", username, userType)) { 		//check for username duplication
 			return "Username already taken. Please try again.";
 		}
-		else if (HelperUtility.doesValueExist(connection, tableName, "email", email, userType)) { 		//check for email duplication
+		else if (HelperUtility.doesCommonValueExist(connection, "email", email, userType)) { 		//check for email duplication
 			return "Email already registered. Please try again."; 
 		}
-		else if (HelperUtility.doesValueExist(connection, tableName, "full_name", fullName, userType)) { //check for full name duplication
+		else if (HelperUtility.doesCommonValueExist(connection, "full_name", fullName, userType)) { //check for full name duplication
 			return "Name already registered. Please try again.";
 		}
-		else if (HelperUtility.doesValueExist(connection, tableName, "phone_number", phoneNumber, userType)) {
+		else if (HelperUtility.doesCommonValueExist(connection, "phone_number", phoneNumber, userType)) {
 			return "Phone already registered. Please try again.";
 		}
 		return null;
@@ -313,7 +325,7 @@ public class DatabaseManager {
 		String statusText = checkDuplicateCommonFieldsInput(username, email, fullName, phoneNumber, userType);
 		if (statusText != null) {
 			return statusText;
-		} else if (HelperUtility.doesValueExist(connection, "merchant_table", "merchant_name", merchantName, userType)){
+		} else if (HelperUtility.doesSpecificValueExist(connection, "merchant_table", "merchant_name", merchantName)){
 			return "Merchant name already taken. Please try again.";
 		} 
 		return "ok";
@@ -331,33 +343,85 @@ public class DatabaseManager {
 		}
 	}
 
-	public boolean verifyLoginInput(String userType, String username, String password) {
+	public int verifyLoginInput(String userType, String usernameEmail, String password) {
 		
-		String query = "SELECT username, password FROM users WHERE username = ? AND user_type = ?";
+		String query = "SELECT password, user_id FROM users WHERE (username = ? OR email = ?) AND user_type = ?";
 		
 		try (PreparedStatement prepSt = connection.prepareStatement(query)){
 
-			prepSt.setString(1, username);
-			prepSt.setString(2, userType);
+			prepSt.setString(1, usernameEmail);
+			prepSt.setString(2, usernameEmail);
+			prepSt.setString(3, userType);
 
 			ResultSet rs = prepSt.executeQuery();
 			
 			if(rs.next()) {
-				String retrievedUsername = rs.getString(1);
-				String retrievedPassword = rs.getString(2);
+				String retrievedPassword = rs.getString(1);
+				int retrievedId = rs.getInt(2);
 				
 				if (password.equals(retrievedPassword)) {
-					return true;
+					return retrievedId;
 				}
-				return false;
+				return 0;
 			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return 0;
 		}
-		return false;
+		return 0;
 		
 	}
+	
+	public void getUserdata(int userId) {
+		HashMap <String, String> userData = new HashMap<>();
+		
+		String query = "SELECT * FROM users WHERE user_id = ?";
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
+			
+			prepSt.setInt(1, userId);
+			
+			ResultSet rs = prepSt.executeQuery();
+			
+			if (rs.next()) {
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				String firstName = rs.getString("first_name");
+				String middleName = rs.getString("middle_name");
+				String lastName = rs.getString("last_name");
+				String fullName = rs.getString("full_name");
+				Date birthdate = rs.getDate("birthday");
+				String email = rs.getString("email");
+				String phoneNumber = rs.getString("phone_number");
+				
+				userData.put("username", username); 
+				userData.put("password", password);
+				userData.put("firstName", firstName);
+				userData.put("middleName", middleName);
+				userData.put("lastName", lastName);
+				userData.put("fullName", fullName);
+
+				// For the birthdate, convert it to a string if needed:
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+				userData.put("birthdate", dateFormat.format(birthdate));
+
+				userData.put("email", email);
+				userData.put("phoneNumber", phoneNumber); 
+				
+				System.out.println(userData);
+				
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		
+	}
+	
+	
 }

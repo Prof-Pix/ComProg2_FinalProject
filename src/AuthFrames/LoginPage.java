@@ -74,9 +74,9 @@ public class LoginPage extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("Username:");
+		JLabel lblNewLabel = new JLabel("Username/Email:");
 		lblNewLabel.setFont(new Font("Dialog", Font.PLAIN, 15));
-		lblNewLabel.setBounds(473, 86, 109, 16);
+		lblNewLabel.setBounds(473, 86, 155, 16);
 		contentPane.add(lblNewLabel);
 
 		JLabel lblPassword = new JLabel("Password:");
@@ -103,20 +103,21 @@ public class LoginPage extends JFrame {
 		JButton btnNewButton = new JButton("Login");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String usernameText = usernameField.getText().trim();
+				String usernameEmailText = usernameField.getText().trim();
 				String passwordText = passwordField.getText().trim();
 				String userType = userRoleComboBox.getSelectedItem().toString().toLowerCase();
 
 
-				if (usernameText == null || usernameText.isEmpty()  || passwordText == null || passwordText.isEmpty()) {
+				if (usernameEmailText == null || usernameEmailText.isEmpty()  || passwordText == null || passwordText.isEmpty()) {
 					String errorText = "Please check all the required fields.";
 
 					InvalidInputPopup popup = new InvalidInputPopup(LoginPage.this, errorText);
 					popup.setVisible(true);
 				} else {
 					dbManager.connect();
+					int returnId = dbManager.verifyLoginInput(userType, usernameEmailText, passwordText);
 
-					if (dbManager.verifyLoginInput(userType, usernameText, passwordText)) {
+					if (returnId != 0) {
 
 						switch(userType) {
 						case "admin" : {
@@ -125,7 +126,7 @@ public class LoginPage extends JFrame {
 							break;
 						}
 						case "merchant": {
-							MerchantFrame merchFrame = new MerchantFrame();
+							MerchantFrame merchFrame = new MerchantFrame(returnId);
 							merchFrame.setVisible(true);
 							break;
 						}

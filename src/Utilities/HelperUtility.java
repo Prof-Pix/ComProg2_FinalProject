@@ -26,10 +26,10 @@ public class HelperUtility {
  		frame.dispose();
  	}
      
-     public static boolean doesValueExist(Connection con, String tableName, String columnName, String value, String conditionType) {
-    	    String query = "SELECT * FROM " + tableName + " WHERE user_type = ? AND " + columnName + " = ?"; 
+     public static boolean doesCommonValueExist(Connection con, String columnName, String value, String conditionType) {
+    	    String query = "SELECT * FROM users WHERE user_type = ? AND " + columnName + " = ?"; 
     	    try (PreparedStatement prepSt = con.prepareStatement(query)) {
-    	        prepSt.setString(1, conditionType); 
+    	        prepSt.setString(1, conditionType); //user type
     	        prepSt.setString(2, value);
     	        ResultSet rs = prepSt.executeQuery();
 
@@ -42,6 +42,22 @@ public class HelperUtility {
     	    }
     	    return false; 
     	}
+     
+     public static boolean doesSpecificValueExist(Connection con, String tableName, String columnName, String value) {
+ 	    String query = "SELECT * FROM " + tableName + " WHERE " + columnName + " = ?"; 
+ 	    try (PreparedStatement prepSt = con.prepareStatement(query)) {
+ 	        prepSt.setString(1, value);
+ 	        ResultSet rs = prepSt.executeQuery();
+
+ 	        if (rs.next()) {
+ 	            return true; 
+ 	        }
+ 	        return false;
+ 	    } catch (SQLException e) {
+ 	        e.printStackTrace();
+ 	    }
+ 	    return false; 
+ 	}
 
 }
 

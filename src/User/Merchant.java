@@ -24,6 +24,11 @@ public class Merchant extends User {
 	private String phoneNumber;
 	private String merchantName;
 	private String merchantCategory;
+	private String merchantRegionLocation;
+	private String merchantProvinceLocation;
+	private String merchantCityLocation;
+	private String merchantBarangayLocation;
+	private String merchantStreetLocation;
 	private String merchantAddress;
 	
 	private static final String USER_TYPE = UserRoles.MERCHANT.toString().toLowerCase();;
@@ -31,7 +36,7 @@ public class Merchant extends User {
 	
 	public Merchant(String username, String password, String firstName, String middleName, String lastName,
 			LocalDate birthdate, int age, String email, String phoneNumber, String merchantName,
-			String merchantCategory, String merchantAddress) {
+			String merchantCategory, String merchantRegionLocation, String merchantProvinceLocation, String merchantCityLocation, String merchantBarangayLocation, String merchantStreetLocation) {
 		
 		super(username, password, firstName, middleName, lastName, birthdate, age, email, phoneNumber);
 		
@@ -47,7 +52,12 @@ public class Merchant extends User {
 		fullName = this.getFullName();
 		this.merchantName = merchantName;
 		this.merchantCategory = merchantCategory;
-		this.merchantAddress = merchantAddress;
+		this.merchantRegionLocation = merchantRegionLocation;
+		this.merchantProvinceLocation = merchantProvinceLocation;
+		this.merchantCityLocation = merchantCityLocation;
+		this.merchantBarangayLocation = merchantBarangayLocation;
+		this.merchantStreetLocation = merchantStreetLocation;
+		this.merchantAddress = merchantStreetLocation + "," + merchantBarangayLocation + "," + merchantCityLocation + "," + merchantProvinceLocation + "," + merchantRegionLocation;
 	}
 
 	public String getMerchantName() {
@@ -74,6 +84,46 @@ public class Merchant extends User {
 		this.merchantAddress = merchantAddress;
 	}
 	
+	public String getMerchantRegionLocation() {
+		return merchantRegionLocation;
+	}
+
+	public void setMerchantRegionLocation(String merchantRegionLocation) {
+		this.merchantRegionLocation = merchantRegionLocation;
+	}
+
+	public String getMerchantProvinceLocation() {
+		return merchantProvinceLocation;
+	}
+
+	public void setMerchantProvinceLocation(String merchantProvinceLocation) {
+		this.merchantProvinceLocation = merchantProvinceLocation;
+	}
+
+	public String getMerchantCityLocation() {
+		return merchantCityLocation;
+	}
+
+	public void setMerchantCityLocation(String merchantCityLocation) {
+		this.merchantCityLocation = merchantCityLocation;
+	}
+
+	public String getMerchantBarangayLocation() {
+		return merchantBarangayLocation;
+	}
+
+	public void setMerchantBarangayLocation(String merchantBarangayLocation) {
+		this.merchantBarangayLocation = merchantBarangayLocation;
+	}
+
+	public String getMerchantStreetLocation() {
+		return merchantStreetLocation;
+	}
+
+	public void setMerchantStreetLocation(String merchantStreetLocation) {
+		this.merchantStreetLocation = merchantStreetLocation;
+	}
+
 	//For database registration
 	public boolean registerMerchant(MerchantRegistrationData data) {
 		try {

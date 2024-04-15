@@ -16,6 +16,11 @@ public class MerchantRegistrationData extends Merchant {
 	private String phoneNumber;
 	private String merchantName;
 	private String merchantCategory;
+	private String merchantRegionLocation;
+	private String merchantProvinceLocation;
+	private String merchantCityLocation;
+	private String merchantBarangayLocation;
+	private String merchantStreetLocation;
 	private String merchantAddress;
 	
 	public MerchantRegistrationData(String username, 
@@ -29,11 +34,16 @@ public class MerchantRegistrationData extends Merchant {
 			String phoneNumber, 
 			String merchantName,
 			String merchantCategory, 
-			String merchantAddress) {
+			String merchantRegionLocation,
+			String merchantProvinceLocation,
+			String merchantCityLocation,
+			String merchantBarangayLocation,
+			String merchantStreetLocation
+			) {
 		super(username, password, firstName, 
 				middleName, lastName, birthdate, 
 				age, email, phoneNumber, merchantName, 
-				merchantCategory, merchantAddress);
+				merchantCategory, merchantRegionLocation, merchantProvinceLocation, merchantCityLocation, merchantBarangayLocation, merchantStreetLocation);
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -46,6 +56,10 @@ public class MerchantRegistrationData extends Merchant {
 		fullName = this.getFullName();
 		this.merchantName = merchantName;
 		this.merchantCategory = merchantCategory;
-		this.merchantAddress = merchantAddress;
-	}
+		this.merchantRegionLocation = merchantRegionLocation;
+		this.merchantProvinceLocation = merchantProvinceLocation;
+		this.merchantCityLocation = merchantCityLocation;
+		this.merchantBarangayLocation = merchantBarangayLocation;
+		this.merchantStreetLocation = merchantStreetLocation;
+		this.merchantAddress = this.getMerchantAddress();	}
 }
