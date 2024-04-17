@@ -25,11 +25,13 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.JComboBox;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import Utilities.HelperUtility;
 import UserEnums.Occupation;
 import UserEnums.SourceOfIncome;
 import UserEnums.MonthlyIncome;
+import javax.swing.JRadioButton;
 
 public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 
@@ -66,6 +68,12 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 
 	//Getting a reference of the frame
 	JFrame thisFrame = this;
+	
+	String selectedGenderText;
+	private JLabel raGenderLabel;
+	private JRadioButton maleRadioButton;
+	private JRadioButton femaleRadioButton;
+	private JRadioButton othersRadioButton;
 
 	/**
 	 * Launch the application.
@@ -87,9 +95,10 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 	 * Create the frame.
 	 */
 	public RegisterLoanerPage() {
+		setResizable(false);
 		setTitle("Loaner Registration Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 600);
+		setBounds(100, 100, 900, 622);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -97,7 +106,7 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(434, 0, 450, 546);
+		panel.setBounds(434, 0, 450, 590);
 		panel.setBackground(new Color(128, 0, 0));
 		contentPane.add(panel);
 
@@ -143,31 +152,31 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 
 		raAgeLabel = new JLabel("Age:");
 		raAgeLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raAgeLabel.setBounds(40, 276, 97, 18);
+		raAgeLabel.setBounds(40, 306, 97, 18);
 		contentPane.add(raAgeLabel);
 
 		rlPhoneNumberField = new JTextField();
-		rlPhoneNumberField.setBounds(172, 337, 192, 20);
+		rlPhoneNumberField.setBounds(172, 367, 192, 20);
 		rlPhoneNumberField.setColumns(10);
 		contentPane.add(rlPhoneNumberField);
 
 		raEmailLabel = new JLabel("Email:");
 		raEmailLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raEmailLabel.setBounds(40, 311, 97, 14);
+		raEmailLabel.setBounds(40, 341, 97, 14);
 		contentPane.add(raEmailLabel);
 
 		rlAgeField = new JTextField();
-		rlAgeField.setBounds(172, 274, 46, 20);
+		rlAgeField.setBounds(172, 304, 46, 20);
 		rlAgeField.setColumns(10);
 		contentPane.add(rlAgeField);
 
 		raPhoneNumberLabel = new JLabel("Phone Number:");
 		raPhoneNumberLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raPhoneNumberLabel.setBounds(40, 341, 97, 14);
+		raPhoneNumberLabel.setBounds(40, 371, 97, 14);
 		contentPane.add(raPhoneNumberLabel);
 
 		rlEmailField = new JTextField();
-		rlEmailField.setBounds(172, 305, 192, 20);
+		rlEmailField.setBounds(172, 335, 192, 20);
 		rlEmailField.setColumns(10);
 		contentPane.add(rlEmailField);
 
@@ -217,17 +226,17 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 
 		lblSourceOfIncome = new JLabel("Source of Income: ");
 		lblSourceOfIncome.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblSourceOfIncome.setBounds(40, 371, 107, 14);
+		lblSourceOfIncome.setBounds(40, 401, 107, 14);
 		contentPane.add(lblSourceOfIncome);
 
 		lblOccupation = new JLabel("Occupation:");
 		lblOccupation.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblOccupation.setBounds(40, 403, 97, 14);
+		lblOccupation.setBounds(40, 433, 97, 14);
 		contentPane.add(lblOccupation);
 
 		lblMonthlyIncome = new JLabel("Monthly Income:");
 		lblMonthlyIncome.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblMonthlyIncome.setBounds(40, 434, 97, 14);
+		lblMonthlyIncome.setBounds(40, 464, 97, 14);
 		contentPane.add(lblMonthlyIncome);
 
 		//SOURCE OF INCOME CHOICES
@@ -241,7 +250,7 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 
 		sourceOfIncomeComboBox.setModel(socModel);
 		sourceOfIncomeComboBox.setRenderer(new SourceOfIncomeRenderer());
-		sourceOfIncomeComboBox.setBounds(172, 366, 192, 22);
+		sourceOfIncomeComboBox.setBounds(172, 396, 192, 22);
 		contentPane.add(sourceOfIncomeComboBox);
 
 		//OCCUPATION CHOICES
@@ -254,12 +263,12 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		}
 		occupationComboBox.setModel(occupationModel);
 		occupationComboBox.setRenderer(new OccupationRenderer());
-		occupationComboBox.setBounds(172, 398, 192, 22);
+		occupationComboBox.setBounds(172, 428, 192, 22);
 		contentPane.add(occupationComboBox);
 
 		//MONTHLY INCOME CHOICES
 		monthlyIncomeComboBox.setModel(new DefaultComboBoxModel(new String[] {"--- Select monthly income ---", "₱ 10,000 or less", "₱ 10,000 to ₱ 30,000", "₱ 30,000 to ₱ 50,000", "₱ 50,000 or above"}));
-		monthlyIncomeComboBox.setBounds(172, 429, 192, 22);
+		monthlyIncomeComboBox.setBounds(172, 459, 192, 22);
 		contentPane.add(monthlyIncomeComboBox);
 
 		lblBirthday_1 = new JLabel("/");
@@ -271,6 +280,59 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		lblBirthday_2.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblBirthday_2.setBounds(265, 245, 11, 20);
 		contentPane.add(lblBirthday_2);
+		
+		raGenderLabel = new JLabel("Gender:");
+		raGenderLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raGenderLabel.setBounds(38, 277, 97, 18);
+		contentPane.add(raGenderLabel);
+		
+		maleRadioButton = new JRadioButton("Male");
+		maleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		maleRadioButton.setBounds(172, 277, 54, 23);
+		contentPane.add(maleRadioButton);
+		
+		femaleRadioButton = new JRadioButton("Female");
+		femaleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		femaleRadioButton.setBounds(223, 277, 64, 23);
+		contentPane.add(femaleRadioButton);
+		
+		othersRadioButton = new JRadioButton("Others");
+		othersRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		othersRadioButton.setBounds(283, 277, 64, 23);
+		contentPane.add(othersRadioButton);
+		
+		final ButtonGroup genderGroup = new ButtonGroup();
+		genderGroup.add(maleRadioButton);
+		genderGroup.add(femaleRadioButton);
+		genderGroup.add(othersRadioButton);
+		
+		maleRadioButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (maleRadioButton.isSelected()) {
+		            // Code to execute when radioButton1 is selected
+		            selectedGenderText = maleRadioButton.getText();
+		        }
+		    }
+		});
+		femaleRadioButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (femaleRadioButton.isSelected()) {
+		            // Code to execute when radioButton1 is selected
+		            selectedGenderText = femaleRadioButton.getText();
+		        }
+		    }
+		});
+		othersRadioButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (othersRadioButton.isSelected()) {
+		            // Code to execute when radioButton1 is selected
+		            selectedGenderText = othersRadioButton.getText();
+		        }
+		    }
+		});
 
 		registerLoanerButton = new JButton("Register Loaner Account");
 		registerLoanerButton.setFont(new Font("Dialog", Font.PLAIN, 11));
@@ -352,6 +414,7 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 								firstNameText,
 								middleNameText,
 								lastNameText,
+								selectedGenderText,
 								birthday ,
 								age, 
 								emailText,
@@ -367,6 +430,7 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 									firstNameText,
 									middleNameText,
 									lastNameText,
+									selectedGenderText,
 									birthday ,
 									age, 
 									emailText,
@@ -408,7 +472,7 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 
 			}
 		});
-		registerLoanerButton.setBounds(172, 467, 192, 48);
+		registerLoanerButton.setBounds(172, 497, 192, 48);
 		contentPane.add(registerLoanerButton);
 
 		JButton alreadyAMemberButton = new JButton();
@@ -425,8 +489,9 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		alreadyAMemberButton.setForeground(Color.BLUE);
 		alreadyAMemberButton.setContentAreaFilled(false);
 		alreadyAMemberButton.setBorderPainted(false);
-		alreadyAMemberButton.setBounds(172, 514, 192, 23);
+		alreadyAMemberButton.setBounds(172, 544, 192, 23);
 		contentPane.add(alreadyAMemberButton);
+		
 	}
 
 	@Override

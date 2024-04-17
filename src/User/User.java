@@ -10,6 +10,7 @@ public class User {
 	private String middleName;
 	private String lastName;
 	private String fullName;
+	private String gender;
 	private LocalDate birthdate;
 	private int age;
 	private String email;
@@ -35,6 +36,7 @@ public class User {
 			String firstName, 
 			String middleName, 
 			String lastName, 
+			String gender,
 			LocalDate birthdate,
 			int age, 
 			String email, 
@@ -45,6 +47,7 @@ public class User {
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
+		this.gender = gender;
 		this.birthdate = birthdate;
 		this.age = age;
 		this.email = email;
@@ -82,6 +85,14 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	public String getFullName() {
 		return fullName;
 	}

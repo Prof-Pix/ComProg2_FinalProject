@@ -50,10 +50,11 @@ public class DatabaseManager {
 				+ "middle_name, "
 				+ "last_name, "
 				+ "full_name,"
+				+ "gender,"
 				+ "birthday, "
 				+ "email, "
 				+ "phone_number) "
-				+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+				+ "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
 		try (PreparedStatement prepSt = connection.prepareStatement(query)){
 
@@ -64,9 +65,10 @@ public class DatabaseManager {
 			prepSt.setString(5, data.getMiddleName());
 			prepSt.setString(6, data.getLastName());
 			prepSt.setString(7, data.getFullName());
-			prepSt.setDate(8, birthdate);
-			prepSt.setString(9, data.getEmail());
-			prepSt.setString(10, data.getPhoneNumber());
+			prepSt.setString(8, data.getGender());
+			prepSt.setDate(9, birthdate);
+			prepSt.setString(10, data.getEmail());
+			prepSt.setString(11, data.getPhoneNumber());
 
 			prepSt.executeUpdate();
 		} catch (SQLException e) {
@@ -125,10 +127,11 @@ public class DatabaseManager {
 				+ "middle_name, "
 				+ "last_name, "
 				+ "full_name,"
+				+ "gender,"
 				+ "birthday, "
 				+ "email, "
 				+ "phone_number) "
-				+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+				+ "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
 		//Send the first the data that are common to all user roles
 		try (PreparedStatement prepSt = connection.prepareStatement(usersQuery)){
@@ -140,9 +143,10 @@ public class DatabaseManager {
 			prepSt.setString(5, data.getMiddleName());
 			prepSt.setString(6, data.getLastName());
 			prepSt.setString(7, data.getFullName());
-			prepSt.setDate(8, birthdate);
-			prepSt.setString(9, data.getEmail());
-			prepSt.setString(10, data.getPhoneNumber());
+			prepSt.setString(8, data.getGender());
+			prepSt.setDate(9, birthdate);
+			prepSt.setString(10, data.getEmail());
+			prepSt.setString(11, data.getPhoneNumber());
 
 			prepSt.executeUpdate();
 
@@ -220,10 +224,11 @@ public class DatabaseManager {
 				+ "middle_name, "
 				+ "last_name, "
 				+ "full_name,"
+				+ "gender,"
 				+ "birthday, "
 				+ "email, "
 				+ "phone_number) "
-				+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+				+ "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
 		//Send the first the data that are common to all user roles
 		try (PreparedStatement prepSt = connection.prepareStatement(usersQuery)){
@@ -235,9 +240,10 @@ public class DatabaseManager {
 			prepSt.setString(5, data.getMiddleName());
 			prepSt.setString(6, data.getLastName());
 			prepSt.setString(7, data.getFullName());
-			prepSt.setDate(8, birthdate);
-			prepSt.setString(9, data.getEmail());
-			prepSt.setString(10, data.getPhoneNumber());
+			prepSt.setString(8, data.getGender());
+			prepSt.setDate(9, birthdate);
+			prepSt.setString(10, data.getEmail());
+			prepSt.setString(11, data.getPhoneNumber());
 
 			prepSt.executeUpdate();
 

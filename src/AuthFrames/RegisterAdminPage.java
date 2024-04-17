@@ -1,9 +1,8 @@
 package AuthFrames;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import Components.GoToLoginPage;
@@ -11,25 +10,15 @@ import Components.InvalidInputPopup;
 import User.Admin;
 import User.AdminRegistrationData;
 import UserEnums.UserRoles;
+import Utilities.GenderButtonsListener;
 import Utilities.HelperUtility;
 
-import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
 import java.time.LocalDate;
 import java.util.Date;
-import java.awt.event.ActionEvent;
-import java.awt.Font;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JSeparator;
-import javax.swing.JSpinner;
-import javax.swing.UIManager;
+import java.util.Enumeration;
+
+
 
 public class RegisterAdminPage extends JFrame implements RegistrationPage {
 
@@ -58,6 +47,8 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 	//Getting a reference of the frame
 	JFrame thisFrame = this;
 
+	
+	String selectedGenderText;
 	/**
 	 * Launch the application.
 	 */
@@ -81,7 +72,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		setResizable(false);
 		setTitle("Admin Registration Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 507);
+		setBounds(100, 100, 900, 545);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -89,7 +80,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(434, 0, 450, 468);
+		panel.setBounds(434, 0, 450, 506);
 		panel.setBackground(new Color(128, 0, 0));
 		contentPane.add(panel);
 
@@ -139,34 +130,34 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 
 		raAgeLabel = new JLabel("Age:");
 		raAgeLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raAgeLabel.setBounds(40, 276, 97, 18);
+		raAgeLabel.setBounds(40, 302, 97, 18);
 		contentPane.add(raAgeLabel);
 
 		raPhoneNumberField = new JTextField();
 		raPhoneNumberField.setToolTipText("Must be eleven (11) characters long.");
-		raPhoneNumberField.setBounds(194, 341, 192, 20);
+		raPhoneNumberField.setBounds(194, 367, 192, 20);
 		raPhoneNumberField.setColumns(10);
 		contentPane.add(raPhoneNumberField);
 
 		raEmailLabel = new JLabel("Email:");
 		raEmailLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raEmailLabel.setBounds(40, 311, 97, 14);
+		raEmailLabel.setBounds(40, 337, 97, 14);
 		contentPane.add(raEmailLabel);
 
 		raAgeField = new JTextField();
 		raAgeField.setToolTipText("Age must be at least 18 years old but not older than 60 years old.");
-		raAgeField.setBounds(194, 278, 46, 20);
+		raAgeField.setBounds(194, 304, 46, 20);
 		raAgeField.setColumns(10);
 		contentPane.add(raAgeField);
 
 		raPhoneNumberLabel = new JLabel("Phone Number:");
 		raPhoneNumberLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raPhoneNumberLabel.setBounds(40, 341, 97, 14);
+		raPhoneNumberLabel.setBounds(40, 367, 97, 14);
 		contentPane.add(raPhoneNumberLabel);
 
 		raEmailField = new JTextField();
 		raEmailField.setToolTipText("Sample Valid Email: xyz@hotmail.edu");
-		raEmailField.setBounds(194, 309, 192, 20);
+		raEmailField.setBounds(194, 335, 192, 20);
 		raEmailField.setColumns(10);
 		contentPane.add(raEmailField);
 
@@ -217,10 +208,66 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		lblPersonalInformation.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblPersonalInformation.setBounds(20, 127, 153, 14);
 		contentPane.add(lblPersonalInformation);
+		
+		JLabel raGenderLabel = new JLabel("Gender:");
+		raGenderLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raGenderLabel.setBounds(40, 273, 97, 18);
+		contentPane.add(raGenderLabel);
+			
+		JRadioButton maleRadioButton = new JRadioButton("Male");
+		maleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		maleRadioButton.setBounds(194, 274, 54, 23);
+		contentPane.add(maleRadioButton);
+		
+		JRadioButton femaleRadioButton = new JRadioButton("Female");
+		femaleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		femaleRadioButton.setBounds(248, 274, 64, 23);
+		contentPane.add(femaleRadioButton);
+		
+		JRadioButton othersRadioButton = new JRadioButton("Others");
+		othersRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		othersRadioButton.setBounds(314, 274, 64, 23);
+		contentPane.add(othersRadioButton);
+		
+		maleRadioButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (maleRadioButton.isSelected()) {
+		            // Code to execute when radioButton1 is selected
+		            selectedGenderText = maleRadioButton.getText();
+		        }
+		    }
+		});
+		femaleRadioButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (femaleRadioButton.isSelected()) {
+		            // Code to execute when radioButton1 is selected
+		            selectedGenderText = femaleRadioButton.getText();
+		        }
+		    }
+		});
+		othersRadioButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (othersRadioButton.isSelected()) {
+		            // Code to execute when radioButton1 is selected
+		            selectedGenderText = othersRadioButton.getText();
+		        }
+		    }
+		});
+		
+		
+		final ButtonGroup genderGroup = new ButtonGroup();
+		genderGroup.add(maleRadioButton);
+		genderGroup.add(femaleRadioButton);
+		genderGroup.add(othersRadioButton);
 
 		registerAdminButton = new JButton("Register Admin Account");
 		registerAdminButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				System.out.println(selectedGenderText);
 				
 				String usernameText = raUserField.getText().trim();
 				String passwordText = raPasswordField.getText().trim();
@@ -273,6 +320,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 								firstNameText,
 								middleNameText,
 								lastNameText,
+								selectedGenderText,
 								birthday ,
 								age, 
 								emailText,
@@ -286,6 +334,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 									firstNameText,
 									middleNameText,
 									lastNameText,
+									selectedGenderText,
 									birthday ,
 									age, 
 									emailText,
@@ -326,7 +375,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 
 			}		
 		});
-		registerAdminButton.setBounds(194, 378, 192, 48);
+		registerAdminButton.setBounds(194, 404, 192, 48);
 		contentPane.add(registerAdminButton);
 
 		JLabel lblBirthday_1 = new JLabel("/");
@@ -353,8 +402,10 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		});
 		alreadyAMemberButton.setContentAreaFilled(false);
 		alreadyAMemberButton.setBorderPainted(false); 
-		alreadyAMemberButton.setBounds(194, 427, 192, 23);
+		alreadyAMemberButton.setBounds(194, 453, 192, 23);
 		contentPane.add(alreadyAMemberButton);
+		
+
 	}
 
 	@Override
@@ -362,6 +413,5 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
 

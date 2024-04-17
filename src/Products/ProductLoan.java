@@ -22,4 +22,5 @@ public class ProductLoan {
 	public void setInterestRate(float interestRate) {
 		this.interestRate = interestRate;
 	}
+	
 }

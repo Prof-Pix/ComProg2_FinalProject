@@ -7,20 +7,18 @@ public class Product {
 	private String brand;
 	private String description;
 	private String specifications;
-	private String condition;
 	private float price;
 	private int stocksAvailable;
 	private String category;
 	
 	public Product(int merchantOwnerId, String name, String brand, String description, String specifications,
-			String condition, float price, int stocksAvailable, String category) {
+		 float price, int stocksAvailable, String category) {
 		super();
 		this.merchantOwnerId = merchantOwnerId;
 		this.name = name;
 		this.brand = brand;
 		this.description = description;
 		this.specifications = specifications;
-		this.condition = condition;
 		this.price = price;
 		this.stocksAvailable = stocksAvailable;
 		this.category = category;
@@ -55,12 +53,6 @@ public class Product {
 	}
 	public void setSpecifications(String specifications) {
 		this.specifications = specifications;
-	}
-	public String getCondition() {
-		return condition;
-	}
-	public void setCondition(String condition) {
-		this.condition = condition;
 	}
 	public float getPrice() {
 		return price;

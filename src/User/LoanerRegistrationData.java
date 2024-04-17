@@ -16,6 +16,7 @@ public class LoanerRegistrationData extends Loaner {
 	private String firstName;
 	private String middleName;
 	private String lastName;
+	private String gender;
 	private String fullName;
 	private LocalDate birthdate;
 	private int age;
@@ -32,6 +33,7 @@ public class LoanerRegistrationData extends Loaner {
 			String firstName, 
 			String middleName, 
 			String lastName,
+			String gender,
 			LocalDate birthdate, 
 			int age, 
 			String email, 
@@ -45,6 +47,7 @@ public class LoanerRegistrationData extends Loaner {
 				firstName, 
 				middleName, 
 				lastName, 
+				gender,
 				birthdate, 
 				age, 
 				email, 
@@ -57,6 +60,7 @@ public class LoanerRegistrationData extends Loaner {
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.gender = gender;
 		fullName = this.getFullName();
 		this.birthdate = birthdate;
 		this.age = age;

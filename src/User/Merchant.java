@@ -17,6 +17,7 @@ public class Merchant extends User {
 	private String firstName;
 	private String middleName;
 	private String lastName;
+	private String gender;
 	private String fullName;
 	private LocalDate birthdate;
 	private int age;
@@ -34,17 +35,18 @@ public class Merchant extends User {
 	private static final String USER_TYPE = UserRoles.MERCHANT.toString().toLowerCase();;
 
 	
-	public Merchant(String username, String password, String firstName, String middleName, String lastName,
+	public Merchant(String username, String password, String firstName, String middleName, String lastName, String gender,
 			LocalDate birthdate, int age, String email, String phoneNumber, String merchantName,
 			String merchantCategory, String merchantRegionLocation, String merchantProvinceLocation, String merchantCityLocation, String merchantBarangayLocation, String merchantStreetLocation) {
 		
-		super(username, password, firstName, middleName, lastName, birthdate, age, email, phoneNumber);
+		super(username, password, firstName, middleName, lastName, gender, birthdate, age, email, phoneNumber);
 		
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
+		this.gender = gender;
 		this.birthdate = birthdate;
 		this.age = age;
 		this.email = email;

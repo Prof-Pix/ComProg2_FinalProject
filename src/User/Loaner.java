@@ -35,6 +35,7 @@ public class Loaner extends User {
 			String firstName, 
 			String middleName, 
 			String lastName,
+			String gender,
 			LocalDate birthdate, 
 			int age, 
 			String email, 
@@ -43,7 +44,7 @@ public class Loaner extends User {
 			String occupation, 
 			String monthlyIncome) {
 		
-		super(username, password, firstName, middleName, lastName, birthdate, age, email, phoneNumber);
+		super(username, password, firstName, middleName, lastName, gender, birthdate, age, email, phoneNumber);
 
 		this.username = username;
 		this.password = password;

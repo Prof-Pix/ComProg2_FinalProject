@@ -16,6 +16,7 @@ public class Admin extends User {
 	private String firstName;
 	private String middleName;
 	private String lastName;
+	private String gender;
 	private String fullName;
 	private LocalDate birthdate;
 	private int age;
@@ -24,9 +25,9 @@ public class Admin extends User {
 	
 	private static final String USER_TYPE = UserRoles.ADMIN.toString().toLowerCase();
 	
-	public Admin(String username, String password, String firstName, String middleName, String lastName, LocalDate birthdate,
+	public Admin(String username, String password, String firstName, String middleName, String lastName, String gender, LocalDate birthdate,
 			int age, String email, String phoneNumber) {
-		super(username, password, firstName, middleName, lastName, birthdate, age, email, phoneNumber);
+		super(username, password, firstName, middleName, lastName, gender, birthdate, age, email, phoneNumber);
 		
 		this.username = username;
 		this.password = password;

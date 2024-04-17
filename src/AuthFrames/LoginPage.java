@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+
 import Components.InvalidInputPopup;
 import Database.DatabaseManager;
 import Products.Merchant;
@@ -154,5 +155,6 @@ public class LoginPage extends JFrame {
 		panel.setBackground(new Color(128, 0, 0));
 		panel.setBounds(0, 0, 450, 461);
 		contentPane.add(panel);
+		
 	}
 }

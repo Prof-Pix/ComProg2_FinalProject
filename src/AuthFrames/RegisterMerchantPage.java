@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.JComboBox;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import UserEnums.MerchantCategory;
 import Utilities.HelperUtility;
@@ -29,6 +30,7 @@ import JComboBoxRenderers.MerchantCategoryRenderer;
 import PH_Locations.PHLocationsClass;
 import User.Merchant;
 import User.MerchantRegistrationData;
+import javax.swing.JRadioButton;
 public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 
 	private static final long serialVersionUID = 1L;
@@ -53,7 +55,6 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 	private JLabel lblAccountDetails;
 	private JSeparator separator;
 	private JLabel lblPersonalInformation;
-	private JSeparator separator_1;
 	private JLabel lblMerchantInformation;
 	private JLabel lblMerchantName;
 	private JTextField rmMerchantNameField;
@@ -70,6 +71,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 
 	//Getting a reference of the frame
 	JFrame thisFrame = this;
+	
+	String selectedGenderText;
 
 	//For Locations
 	private HashMap<String, HashMap<String, HashMap<String, List<String>>>> phLocations;
@@ -80,6 +83,10 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 	String selectedProvince;
 	String selectedCity;
 	String selectedBarangay;
+	private JLabel raGenderLabel;
+	private JRadioButton maleRadioButton;
+	private JRadioButton femaleRadioButton;
+	private JRadioButton othersRadioButton;
 
 	/**
 	 * Launch the application.
@@ -104,21 +111,16 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 
 		setTitle("Merchant Registration Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 760);
+		setBounds(100, 100, 897, 514);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(431, 0, 453, 721);
-		panel.setBackground(new Color(128, 0, 0));
-		contentPane.add(panel);
-
 		JLabel raUserLabel = new JLabel("Username:");
-		raUserLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raUserLabel.setBounds(40, 53, 107, 14);
+		raUserLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raUserLabel);
 
 		rmUserField = new JTextField();
@@ -127,8 +129,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		rmUserField.setColumns(10);
 
 		JLabel raFNameLabel = new JLabel("First Name:");
-		raFNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raFNameLabel.setBounds(40, 154, 97, 14);
+		raFNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raFNameLabel);
 
 		rmFNameField = new JTextField();
@@ -137,8 +139,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(rmFNameField);
 
 		JLabel lblMiddlename = new JLabel("Middle Name:");
-		lblMiddlename.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblMiddlename.setBounds(40, 185, 97, 14);
+		lblMiddlename.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblMiddlename);
 
 		rmMiddleNameField = new JTextField();
@@ -147,8 +149,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(rmMiddleNameField);
 
 		raLastNameLabel = new JLabel("Last Name:");
-		raLastNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raLastNameLabel.setBounds(40, 216, 97, 14);
+		raLastNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raLastNameLabel);
 
 		rmLastNameField = new JTextField();
@@ -157,8 +159,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(rmLastNameField);
 
 		raAgeLabel = new JLabel("Age:");
-		raAgeLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raAgeLabel.setBounds(40, 276, 97, 18);
+		raAgeLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raAgeLabel);
 
 		rmPhoneNumberField = new JTextField();
@@ -167,8 +169,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(rmPhoneNumberField);
 
 		raEmailLabel = new JLabel("Email:");
-		raEmailLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raEmailLabel.setBounds(40, 311, 97, 14);
+		raEmailLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raEmailLabel);
 
 		rmAgeField = new JTextField();
@@ -177,8 +179,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(rmAgeField);
 
 		raPhoneNumberLabel = new JLabel("Phone Number:");
-		raPhoneNumberLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raPhoneNumberLabel.setBounds(40, 341, 97, 14);
+		raPhoneNumberLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raPhoneNumberLabel);
 
 		rmEmailField = new JTextField();
@@ -187,23 +189,23 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(rmEmailField);
 
 		raPasswordLabel = new JLabel("Password:");
-		raPasswordLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raPasswordLabel.setBounds(40, 84, 107, 14);
+		raPasswordLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raPasswordLabel);
 
 		rmPasswordField = new JTextField();
-		rmPasswordField.setColumns(10);
 		rmPasswordField.setBounds(171, 81, 192, 20);
+		rmPasswordField.setColumns(10);
 		contentPane.add(rmPasswordField);
 
 		JLabel lblBirthday = new JLabel("Birthday (MM/DD/YYYY):");
-		lblBirthday.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblBirthday.setBounds(40, 248, 133, 14);
+		lblBirthday.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblBirthday);
 
 		raYearLabel = new JLabel("/");
-		raYearLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 		raYearLabel.setBounds(261, 248, 16, 14);
+		raYearLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 		contentPane.add(raYearLabel);
 
 		JTextField rmMonthField = new JTextField();
@@ -212,18 +214,18 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		rmMonthField.setColumns(10);
 
 		rmDayField = new JTextField();
-		rmDayField.setColumns(10);
 		rmDayField.setBounds(219, 245, 38, 20);
+		rmDayField.setColumns(10);
 		contentPane.add(rmDayField);
 
 		rmYearField = new JTextField();
-		rmYearField.setColumns(10);
 		rmYearField.setBounds(268, 245, 38, 20);
+		rmYearField.setColumns(10);
 		contentPane.add(rmYearField);
 
 		lblAccountDetails = new JLabel("Account Details");
-		lblAccountDetails.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblAccountDetails.setBounds(20, 26, 153, 14);
+		lblAccountDetails.setFont(new Font("Dialog", Font.BOLD, 15));
 		contentPane.add(lblAccountDetails);
 
 		separator = new JSeparator();
@@ -231,40 +233,37 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(separator);
 
 		lblPersonalInformation = new JLabel("Personal Information");
-		lblPersonalInformation.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblPersonalInformation.setBounds(20, 127, 153, 14);
+		lblPersonalInformation.setFont(new Font("Dialog", Font.BOLD, 15));
 		contentPane.add(lblPersonalInformation);
 
-		separator_1 = new JSeparator();
-		separator_1.setBounds(20, 371, 372, 2);
-		contentPane.add(separator_1);
-
 		lblMerchantInformation = new JLabel("Merchant Information");
+		lblMerchantInformation.setBounds(457, 36, 153, 14);
 		lblMerchantInformation.setFont(new Font("Dialog", Font.BOLD, 15));
-		lblMerchantInformation.setBounds(20, 384, 153, 14);
 		contentPane.add(lblMerchantInformation);
 
 		lblMerchantName = new JLabel("Merchant Name:");
+		lblMerchantName.setBounds(477, 61, 97, 14);
 		lblMerchantName.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblMerchantName.setBounds(40, 409, 97, 14);
 		contentPane.add(lblMerchantName);
 
 		rmMerchantNameField = new JTextField();
+		rmMerchantNameField.setBounds(608, 58, 192, 20);
 		rmMerchantNameField.setColumns(10);
-		rmMerchantNameField.setBounds(171, 406, 192, 20);
 		contentPane.add(rmMerchantNameField);
 
 		lblCategory = new JLabel("Category:");
+		lblCategory.setBounds(477, 94, 97, 14);
 		lblCategory.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblCategory.setBounds(40, 442, 97, 14);
 		contentPane.add(lblCategory);
 
 		lblMerchantAddress = new JLabel("Province:");
+		lblMerchantAddress.setBounds(503, 171, 107, 14);
 		lblMerchantAddress.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblMerchantAddress.setBounds(66, 519, 107, 14);
 		contentPane.add(lblMerchantAddress);
 
 		merchantCategoryComboBox = new JComboBox();
+		merchantCategoryComboBox.setBounds(608, 89, 192, 22);
 
 		//For choices
 
@@ -278,52 +277,52 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 
 		merchantCategoryComboBox.setModel(categModel);
 		merchantCategoryComboBox.setRenderer(new MerchantCategoryRenderer());
-		merchantCategoryComboBox.setBounds(171, 437, 192, 22);
 		contentPane.add(merchantCategoryComboBox);
 
 		JLabel lblLocation = new JLabel("LOCATION");
+		lblLocation.setBounds(477, 122, 107, 14);
 		lblLocation.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblLocation.setBounds(40, 470, 107, 14);
 		contentPane.add(lblLocation);
 
 		JLabel lblCity = new JLabel("City:");
+		lblCity.setBounds(503, 202, 107, 14);
 		lblCity.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblCity.setBounds(66, 550, 107, 14);
 		contentPane.add(lblCity);
 
 		JLabel lblStreet = new JLabel("Street:");
+		lblStreet.setBounds(503, 264, 107, 14);
 		lblStreet.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblStreet.setBounds(66, 612, 107, 14);
 		contentPane.add(lblStreet);
 
 		lblRegion = new JLabel("Region:");
+		lblRegion.setBounds(503, 140, 107, 14);
 		lblRegion.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblRegion.setBounds(66, 488, 107, 14);
 		contentPane.add(lblRegion);
 
 		lblBarangay = new JLabel("Barangay:");
+		lblBarangay.setBounds(503, 234, 107, 14);
 		lblBarangay.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblBarangay.setBounds(66, 582, 107, 14);
 		contentPane.add(lblBarangay);
 
 		locProvinceComboBox = new JComboBox<String>();
-		locProvinceComboBox.setBounds(171, 517, 192, 22);
+		locProvinceComboBox.setBounds(608, 169, 192, 22);
 		contentPane.add(locProvinceComboBox);
 
 		locCityComboBox = new JComboBox<String>();
-		locCityComboBox.setBounds(171, 548, 192, 22);
+		locCityComboBox.setBounds(608, 200, 192, 22);
 		contentPane.add(locCityComboBox);
 
 		locBarangayComboBox = new JComboBox<String>();
-		locBarangayComboBox.setBounds(171, 579, 192, 22);
+		locBarangayComboBox.setBounds(608, 231, 192, 22);
 		contentPane.add(locBarangayComboBox);
 
 		rmStreetLocField = new JTextField();
+		rmStreetLocField.setBounds(608, 262, 192, 20);
 		rmStreetLocField.setColumns(10);
-		rmStreetLocField.setBounds(171, 610, 192, 20);
 		contentPane.add(rmStreetLocField);
 		
 		locRegionComboBox = new JComboBox<String>();
+		locRegionComboBox.setBounds(608, 138, 192, 22);
 
 		//For the elements of the location JComboBoxes
 		PHLocationsClass phLocs = new PHLocationsClass();
@@ -447,12 +446,65 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 			}
 
 		});
-
-		locRegionComboBox.setBounds(171, 486, 192, 22);
 		contentPane.add(locRegionComboBox);
+		
+		raGenderLabel = new JLabel("Gender:");
+		raGenderLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raGenderLabel.setBounds(40, 365, 97, 18);
+		contentPane.add(raGenderLabel);
+		
+		maleRadioButton = new JRadioButton("Male");
+		maleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		maleRadioButton.setBounds(194, 366, 54, 23);
+		contentPane.add(maleRadioButton);
+		
+		femaleRadioButton = new JRadioButton("Female");
+		femaleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		femaleRadioButton.setBounds(248, 366, 64, 23);
+		contentPane.add(femaleRadioButton);
+		
+		othersRadioButton = new JRadioButton("Others");
+		othersRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		othersRadioButton.setBounds(314, 366, 64, 23);
+		contentPane.add(othersRadioButton);
+		
+		maleRadioButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (maleRadioButton.isSelected()) {
+		            // Code to execute when radioButton1 is selected
+		            selectedGenderText = maleRadioButton.getText();
+		        }
+		    }
+		});
+		femaleRadioButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (femaleRadioButton.isSelected()) {
+		            // Code to execute when radioButton1 is selected
+		            selectedGenderText = femaleRadioButton.getText();
+		        }
+		    }
+		});
+		othersRadioButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (othersRadioButton.isSelected()) {
+		            // Code to execute when radioButton1 is selected
+		            selectedGenderText = othersRadioButton.getText();
+		        }
+		    }
+		});
+		
+		
+		final ButtonGroup genderGroup = new ButtonGroup();
+		genderGroup.add(maleRadioButton);
+		genderGroup.add(femaleRadioButton);
+		genderGroup.add(othersRadioButton);
 
 
 		registerLoanerButton = new JButton("Register Merchant Account");
+		registerLoanerButton.setBounds(608, 294, 192, 48);
 		registerLoanerButton.setFont(new Font("Dialog", Font.PLAIN, 11));
 		registerLoanerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -525,6 +577,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 								firstNameText, 
 								middleNameText, 
 								lastNameText, 
+								selectedGenderText,
 								birthday, 
 								age, 
 								emailText, 
@@ -543,6 +596,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 									firstNameText, 
 									middleNameText, 
 									lastNameText, 
+									selectedGenderText,
 									birthday, 
 									age, 
 									emailText, 
@@ -587,15 +641,15 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 
 			}
 		});
-		registerLoanerButton.setBounds(171, 642, 192, 48);
 		contentPane.add(registerLoanerButton);
 
 		JLabel raYearLabel_1 = new JLabel("/");
-		raYearLabel_1.setFont(new Font("Dialog", Font.BOLD, 12));
 		raYearLabel_1.setBounds(213, 248, 16, 14);
+		raYearLabel_1.setFont(new Font("Dialog", Font.BOLD, 12));
 		contentPane.add(raYearLabel_1);
 
 		JButton btnAlreadyAMerchant = new JButton("Already a merchant? Login");
+		btnAlreadyAMerchant.setBounds(608, 340, 192, 23);
 		btnAlreadyAMerchant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginPage login = new LoginPage();
@@ -608,10 +662,8 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		btnAlreadyAMerchant.setForeground(Color.BLUE);
 		btnAlreadyAMerchant.setContentAreaFilled(false);
 		btnAlreadyAMerchant.setBorderPainted(false);
-		btnAlreadyAMerchant.setBounds(171, 688, 192, 23);
 		contentPane.add(btnAlreadyAMerchant);
-
-
+		
 	}
 
 	@Override
