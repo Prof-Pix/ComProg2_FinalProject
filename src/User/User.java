@@ -179,17 +179,17 @@ public class User {
 				return "Username must be atleast 8 characters.";
 			}
 			else if (!username.matches(USERNAME_REGEX)) {
-				return "Username must start with an uppercase letter. \n"
+				return "Username must start with an uppercase letter and must be followed by lowercase letters. \n"
 						+ "Username cannot have any symbol.";
 			}
 			else if (password.length() < 8) {
 				return "Password must be at least 8 characters.";
 			}
 			else if (!firstName.matches(NAME_REGEX) || !middleName.matches(NAME_REGEX) || !lastName.matches(NAME_REGEX)) {
-				return "Name must start with an uppercase letter \n"
+				return "Name must start with an uppercase letter and must be followed by lowercase letters.\n"
 						+ "Name cannot have any number or symbol.";
 			}
-			else if((birthdate.isBefore(sixtyYearsAgo) &&  birthdate.isAfter(eighteenYearsAgo)) && (age < 18 && age > 60)) {
+			else if((birthdate.isBefore(sixtyYearsAgo) ||  birthdate.isAfter(eighteenYearsAgo)) || (age < 18 || age > 60)) {
 				return "Age must be at least 18 years old but not older than 60 years old.";
 			}
 			else if(!email.matches(EMAIL_REGEX)) {
@@ -198,7 +198,6 @@ public class User {
 			else if(!phoneNumber.matches(PHONE_REGEX)) {
 				return "Phone number is not valid";
 			}
-			
 			return null;
 
 		}

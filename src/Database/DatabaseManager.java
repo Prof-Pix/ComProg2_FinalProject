@@ -1,5 +1,8 @@
 package Database;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -10,8 +13,13 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
+import Products.ProductLoanTerm;
+import Products.ProductRegistrationData;
+import User.Admin;
 import User.AdminRegistrationData;
+import User.Loaner;
 import User.LoanerRegistrationData;
+import User.Merchant;
 import User.MerchantRegistrationData;
 import UserEnums.UserRoles;
 import Utilities.HelperUtility;
@@ -111,6 +119,87 @@ public class DatabaseManager {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public boolean addProductForMerchant(int merchantUserId, ProductRegistrationData data) {
+		
+		int retrievedProductId = 0;
+		String addProductQuery = "INSERT INTO products (merchant_id, "
+				+ "product_picture, "
+				+ "product_name, "
+				+ "product_brand, "
+				+ "product_description, "
+				+ "product_specifications, "
+				+ "product_price, "
+				+ "product_stocks_available,"
+				+ "product_category) "
+				+ "VALUES (?,?,?,?,?,?,?,?,?)";
+		
+		FileInputStream productImageFile = null;
+		try {
+			productImageFile = new FileInputStream(new File(data.getProductImagePath()));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(addProductQuery)) {
+			
+			prepSt.setInt(1, data.getMerchantOwnerId());
+			prepSt.setBinaryStream(2, productImageFile);
+			prepSt.setString(3, data.getName());
+			prepSt.setString(4, data.getBrand());
+			prepSt.setString(5, data.getDescription());
+			prepSt.setString(6, data.getSpecifications());
+			prepSt.setFloat(7, data.getPrice());
+			prepSt.setInt(8, data.getStocksAvailable());
+			prepSt.setString(9, data.getCategory());
+			
+			prepSt.executeUpdate();	
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		//Retrieve the product id
+		String retrieveProductIdQuery = "SELECT * FROM products where product_name = ?";
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductIdQuery)) {
+			
+			prepSt.setString(1, data.getName());
+			
+			ResultSet rs = prepSt.executeQuery();
+			
+			if(rs.next()) {
+				retrievedProductId = rs.getInt(1);
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		} 
+		
+		//Send the product loans
+		String addProductLoans = "INSERT INTO product_loan_table (product_id, months_to_pay, interest_rate) VALUES (?, ? , ?) ";
+		
+		try (PreparedStatement prepSt = connection.prepareStatement(addProductLoans)){
+			
+			prepSt.setInt(1, retrievedProductId);
+			for(ProductLoanTerm prodLoanTerms : data.getProductLoans()) {
+				prepSt.setInt(2, prodLoanTerms.getMonthsToPay());
+				prepSt.setFloat(3, prodLoanTerms.getInterestRate());
+				
+				prepSt.executeUpdate();
+			}
+			
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
 
 	public boolean registerMerchantInDatabase(MerchantRegistrationData data) {
@@ -351,9 +440,10 @@ public class DatabaseManager {
 
 	public int verifyLoginInput(String userType, String usernameEmail, String password) {
 		
-		String query = "SELECT password, user_id FROM users WHERE (username = ? OR email = ?) AND user_type = ?";
+		String checkCredentialsQuery = "SELECT password, user_id FROM users WHERE (username = ? OR email = ?) AND user_type = ?";
+		int retrievedUserId = 0; 
 		
-		try (PreparedStatement prepSt = connection.prepareStatement(query)){
+		try (PreparedStatement prepSt = connection.prepareStatement(checkCredentialsQuery)){
 
 			prepSt.setString(1, usernameEmail);
 			prepSt.setString(2, usernameEmail);
@@ -363,12 +453,13 @@ public class DatabaseManager {
 			
 			if(rs.next()) {
 				String retrievedPassword = rs.getString(1);
-				int retrievedId = rs.getInt(2);
 				
-				if (password.equals(retrievedPassword)) {
-					return retrievedId;
+				if (!password.equals(retrievedPassword)) {
+					return 0;
+				} else {
+					retrievedUserId = rs.getInt(2);
 				}
-				return 0;
+				
 			}
 
 		} catch (SQLException e) {
@@ -376,7 +467,25 @@ public class DatabaseManager {
 			e.printStackTrace();
 			return 0;
 		}
-		return 0;
+		
+		//If the password is correct, get the merchant id using the user_id
+		String retrieveMerchantIdQuery = "SELECT merchant_id FROM merchant_table WHERE user_id = ?";
+		
+		try (PreparedStatement prepSt = connection.prepareStatement(retrieveMerchantIdQuery)){
+
+			prepSt.setInt(1, retrievedUserId);
+
+			ResultSet rs = prepSt.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+			return 0;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
 		
 	}
 	

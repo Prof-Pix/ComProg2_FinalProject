@@ -4,13 +4,14 @@ import java.time.LocalDate;
 import java.util.Date;
 
 import Database.DatabaseManager;
+import Products.ProductRegistrationData;
 import UserEnums.MerchantCategory;
 import UserEnums.UserRoles;
 
 public class Merchant extends User {
 	
 	
-	DatabaseManager dbManager = new DatabaseManager();
+	static DatabaseManager dbManager = new DatabaseManager();
 	
 	private String username;
 	private String password;
@@ -146,6 +147,17 @@ public class Merchant extends User {
 			} catch (Exception e){
 				e.printStackTrace();
 				return null;
+			}
+		}
+	
+	//For adding product to the database
+		public static boolean addProduct(int merchantOwnerId, ProductRegistrationData data) {
+			try {
+				dbManager.connect();
+				return dbManager.addProductForMerchant(merchantOwnerId, data);
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
 			}
 		}
 	

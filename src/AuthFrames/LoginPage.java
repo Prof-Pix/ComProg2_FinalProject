@@ -6,11 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-
-import Components.InvalidInputPopup;
 import Database.DatabaseManager;
-import Products.Merchant;
-import Products.MerchantProduct_View;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,6 +30,7 @@ import UserEnums.UserRoles;
 import UserRoleFrames.AdminFrame;
 import UserRoleFrames.LoanerFrame;
 import UserRoleFrames.MerchantFrame;
+import Utilities.HelperUtility;
 
 public class LoginPage extends JFrame {
 
@@ -109,11 +106,11 @@ public class LoginPage extends JFrame {
 				String userType = userRoleComboBox.getSelectedItem().toString().toLowerCase();
 
 
-				if (usernameEmailText == null || usernameEmailText.isEmpty()  || passwordText == null || passwordText.isEmpty()) {
-					String errorText = "Please check all the required fields.";
-
-					InvalidInputPopup popup = new InvalidInputPopup(LoginPage.this, errorText);
-					popup.setVisible(true);
+				if (HelperUtility.isInputFieldEmpty(usernameEmailText)) {
+					JOptionPane.showMessageDialog(null, "Please enter a username to continue.", "Missing Username!", JOptionPane.ERROR_MESSAGE);
+					
+				}  else if (HelperUtility.isInputFieldEmpty(passwordText)) {
+					JOptionPane.showMessageDialog(null, "Please enter a password to continue.", "Missing Password!", JOptionPane.ERROR_MESSAGE);
 				} else {
 					dbManager.connect();
 					int returnId = dbManager.verifyLoginInput(userType, usernameEmailText, passwordText);
@@ -140,10 +137,7 @@ public class LoginPage extends JFrame {
 						}
 
 					} else {
-						String errorText = "Incorrect Credentials";
-
-						InvalidInputPopup popup = new InvalidInputPopup(LoginPage.this, errorText);
-						popup.setVisible(true);
+						JOptionPane.showMessageDialog(null, "Please enter a correct credentials to continue.", "Incorrect Credentials!", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			}

@@ -1,10 +1,10 @@
 package Products;
 
-public class ProductLoan {
+public class ProductLoanTerm {
 	private int monthsToPay;
 	private float interestRate;
 	
-	public ProductLoan(int monthsToPay, float interestRate) {
+	public ProductLoanTerm(int monthsToPay, float interestRate) {
 		super();
 		this.monthsToPay = monthsToPay;
 		this.interestRate = interestRate;

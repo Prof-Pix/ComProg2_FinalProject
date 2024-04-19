@@ -1,8 +1,11 @@
 package Products;
 
+import java.util.ArrayList;
+
 public class Product {
 	
 	private int merchantOwnerId;
+	private String productImagePath;
 	private String name;
 	private String brand;
 	private String description;
@@ -10,11 +13,13 @@ public class Product {
 	private float price;
 	private int stocksAvailable;
 	private String category;
+	private ArrayList<ProductLoanTerm> productLoans;
 	
-	public Product(int merchantOwnerId, String name, String brand, String description, String specifications,
-		 float price, int stocksAvailable, String category) {
+	public Product(int merchantOwnerId, String productImagePath, String name, String brand, String description, String specifications,
+		 float price, int stocksAvailable, String category, ArrayList<ProductLoanTerm> productLoans) {
 		super();
 		this.merchantOwnerId = merchantOwnerId;
+		this.productImagePath = productImagePath;
 		this.name = name;
 		this.brand = brand;
 		this.description = description;
@@ -22,6 +27,7 @@ public class Product {
 		this.price = price;
 		this.stocksAvailable = stocksAvailable;
 		this.category = category;
+		this.productLoans = productLoans;
 	}
 	
 	public int getMerchantOwnerId() {
@@ -30,6 +36,15 @@ public class Product {
 	public void setMerchantOwnerId(int merchantOwnerId) {
 		this.merchantOwnerId = merchantOwnerId;
 	}
+	
+	public String getProductImagePath() {
+		return productImagePath;
+	}
+
+	public void setProductImagePath(String productImagePath) {
+		this.productImagePath = productImagePath;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -73,5 +88,26 @@ public class Product {
 		this.category = category;
 	}
 	
+	public ArrayList<ProductLoanTerm> getProductLoans() {
+		return productLoans;
+	}
+
+	public void setProductLoans(ArrayList<ProductLoanTerm> productLoans) {
+		this.productLoans = productLoans;
+	}
+
+	public boolean isProductInputValid() {
+		return isStocksAvailableValid() && isPriceValid();
+		
+	}
+	
+	//For Validations
+	private boolean isStocksAvailableValid() {
+		return stocksAvailable > 0;
+	}
+	
+	private boolean isPriceValid() {
+		return price > 0;
+	}
 	
 }

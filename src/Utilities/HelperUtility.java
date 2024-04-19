@@ -61,6 +61,10 @@ public class HelperUtility {
  	    }
  	    return false; 
  	}
+     
+     public static boolean isInputFieldEmpty(String input) {
+    	 return input == null || input.trim().isEmpty() ;
+     }
 
 }
 

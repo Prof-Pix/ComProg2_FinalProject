@@ -23,7 +23,7 @@ public class MerchantCategoryRenderer extends JLabel implements ListCellRenderer
 		String displayText;
 		
 		if (value == null) {
-			displayText = "--- Select merchant category ---";
+			displayText = "--- Select category ---";
 			setText(displayText);
 			return this;
 		}

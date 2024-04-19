@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import Components.GoToLoginPage;
-import Components.InvalidInputPopup;
 import User.Admin;
 import User.AdminRegistrationData;
 import UserEnums.UserRoles;
@@ -43,11 +42,11 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 	private JLabel lblAccountDetails;
 	private JSeparator separator;
 	private JLabel lblPersonalInformation;
-	
+
 	//Getting a reference of the frame
 	JFrame thisFrame = this;
 
-	
+
 	String selectedGenderText;
 	/**
 	 * Launch the application.
@@ -179,14 +178,14 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 
 		JTextField raMonthField = new JTextField();
 		raMonthField.setToolTipText("Day of birthdate");
-		raMonthField.setBounds(238, 247, 30, 20);
+		raMonthField.setBounds(194, 247, 30, 20);
 		contentPane.add(raMonthField);
 		raMonthField.setColumns(10);
 
 		raDayField = new JTextField();
 		raDayField.setToolTipText("Month of Birthdate");
 		raDayField.setColumns(10);
-		raDayField.setBounds(194, 247, 30, 20);
+		raDayField.setBounds(238, 247, 30, 20);
 		contentPane.add(raDayField);
 
 		raYearField = new JTextField();
@@ -208,67 +207,76 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		lblPersonalInformation.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblPersonalInformation.setBounds(20, 127, 153, 14);
 		contentPane.add(lblPersonalInformation);
-		
+
 		JLabel raGenderLabel = new JLabel("Gender:");
 		raGenderLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raGenderLabel.setBounds(40, 273, 97, 18);
 		contentPane.add(raGenderLabel);
-			
+
 		JRadioButton maleRadioButton = new JRadioButton("Male");
 		maleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
 		maleRadioButton.setBounds(194, 274, 54, 23);
 		contentPane.add(maleRadioButton);
-		
+
 		JRadioButton femaleRadioButton = new JRadioButton("Female");
 		femaleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
 		femaleRadioButton.setBounds(248, 274, 64, 23);
 		contentPane.add(femaleRadioButton);
-		
+
 		JRadioButton othersRadioButton = new JRadioButton("Others");
 		othersRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
 		othersRadioButton.setBounds(314, 274, 64, 23);
 		contentPane.add(othersRadioButton);
-		
+
 		maleRadioButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        if (maleRadioButton.isSelected()) {
-		            // Code to execute when radioButton1 is selected
-		            selectedGenderText = maleRadioButton.getText();
-		        }
-		    }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (maleRadioButton.isSelected()) {
+					// Code to execute when radioButton1 is selected
+					selectedGenderText = maleRadioButton.getText();
+				}
+			}
 		});
 		femaleRadioButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        if (femaleRadioButton.isSelected()) {
-		            // Code to execute when radioButton1 is selected
-		            selectedGenderText = femaleRadioButton.getText();
-		        }
-		    }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (femaleRadioButton.isSelected()) {
+					// Code to execute when radioButton1 is selected
+					selectedGenderText = femaleRadioButton.getText();
+				}
+			}
 		});
 		othersRadioButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        if (othersRadioButton.isSelected()) {
-		            // Code to execute when radioButton1 is selected
-		            selectedGenderText = othersRadioButton.getText();
-		        }
-		    }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (othersRadioButton.isSelected()) {
+					// Code to execute when radioButton1 is selected
+					selectedGenderText = othersRadioButton.getText();
+				}
+			}
 		});
-		
-		
+
+
 		final ButtonGroup genderGroup = new ButtonGroup();
 		genderGroup.add(maleRadioButton);
 		genderGroup.add(femaleRadioButton);
 		genderGroup.add(othersRadioButton);
 
+
+		JLabel lblBirthday_1 = new JLabel("/");
+		lblBirthday_1.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblBirthday_1.setBounds(229, 247, 11, 20);
+		contentPane.add(lblBirthday_1);
+
+		JLabel lblBirthday_1_1 = new JLabel("/");
+		lblBirthday_1_1.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblBirthday_1_1.setBounds(273, 247, 11, 20);
+		contentPane.add(lblBirthday_1_1);
+
 		registerAdminButton = new JButton("Register Admin Account");
 		registerAdminButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				System.out.println(selectedGenderText);
-				
+
 				String usernameText = raUserField.getText().trim();
 				String passwordText = raPasswordField.getText().trim();
 				String firstNameText = raFNameField.getText().trim();
@@ -280,7 +288,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 				String ageText = raAgeField.getText().trim();
 				String emailText = raEmailField.getText().trim();
 				String phoneNumberText = raPhoneNumberField.getText().trim();
-				
+
 				try {
 
 
@@ -293,29 +301,64 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 							monthText,
 							dayText,
 							yearText,
+							selectedGenderText,
 							ageText,
 							emailText,
 							phoneNumberText) || isSpecificFieldsEmpty()) {	
-						
-						String errorText = "Please check all the required fields.";
-						
-						InvalidInputPopup popup = new InvalidInputPopup(RegisterAdminPage.this, errorText);
-						popup.setVisible(true);
+
+						if (HelperUtility.isInputFieldEmpty(usernameText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a username to continue.", "Missing Username!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(passwordText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a password to continue.", "Missing Password!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(firstNameText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a first name to continue.", "Missing First Name!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(middleNameText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a middle name to continue.", "Missing Middle Name!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(lastNameText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a last name to continue.", "Missing Last Name!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(monthText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a birth month to continue.", "Missing Birth Month!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(dayText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a birth day to continue.", "Missing Birth Day!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(yearText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a birth year to continue.", "Missing Birth Year!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(selectedGenderText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a gender to continue.", "Missing Gender!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(ageText)) {
+							JOptionPane.showMessageDialog(null, "Please enter an age to continue.", "Missing Age!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(emailText)) {
+							JOptionPane.showMessageDialog(null, "Please enter an email to continue.", "Missing Age!", JOptionPane.ERROR_MESSAGE);
+							return;
+						} else if (HelperUtility.isInputFieldEmpty(phoneNumberText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a phone number to continue.", "Missing Phone Number!", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
 					}
-					else { 
-						
-						//Proceeds if all of the inputs are not empty
-						//Advanced Validation
+
+
+
+					//Proceeds if all of the inputs are not empty
+					
 						//For birthday
 						LocalDate birthday = LocalDate.of(Integer.parseInt(yearText) , 
 								Integer.parseInt(monthText) , 
 								Integer.parseInt(dayText) );
-
+	
 						//For age
 						int age = Integer.parseInt(ageText);
-
+	
 						//Instantiate the Admin Class
-						Admin ad = new Admin(usernameText,
+						Admin admin = new Admin(usernameText,
 								passwordText,
 								firstNameText,
 								middleNameText,
@@ -326,49 +369,45 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 								emailText,
 								phoneNumberText);
 
-						//Perform advance validations
-						//Once the input are valid we now need to check if inputs values are already existing in the database
-						if (ad.isUserInputValid() && ad.checkDuplicateInput().equals("ok")) {
-							AdminRegistrationData adminRegData = new AdminRegistrationData(usernameText,
-									passwordText,
-									firstNameText,
-									middleNameText,
-									lastNameText,
-									selectedGenderText,
-									birthday ,
-									age, 
-									emailText,
-									phoneNumberText);
-							
-							//If success send it to the database
-							if(ad.registerAdmin(adminRegData)) {
-								GoToLoginPage login = new GoToLoginPage();
-								login.setVisible(true);
-							} else {
-								String errorText= "";
-								InvalidInputPopup popup = new InvalidInputPopup(RegisterAdminPage.this, errorText);
-								popup.setVisible(true);
-							}
+					//Perform advance validations
+					//Checks if the inputs are invalid
+					if (!admin.isUserInputValid() && !admin.checkDuplicateInput().equals("ok")) {
+						
+						String errorText = admin.checkErrorInputRegistration();
 
-						} else {
-							
-							String errorText = ad.checkErrorInputRegistration();
-							
-							if (errorText == null) {
-								errorText = ad.checkDuplicateInput();
-							}
-							
-							InvalidInputPopup popup = new InvalidInputPopup(RegisterAdminPage.this, errorText);
-							popup.setVisible(true);
+						if (errorText == null) {
+							errorText = admin.checkDuplicateInput();
 						}
 
-					}}
+						JOptionPane.showMessageDialog(null, errorText, "Invalid Input!", JOptionPane.ERROR_MESSAGE);
+						return;
+					
+					} 
+					
+					//If valid, send it to the database
+					
+					AdminRegistrationData adminData = new AdminRegistrationData(usernameText,
+							passwordText,
+							firstNameText,
+							middleNameText,
+							lastNameText,
+							selectedGenderText,
+							birthday ,
+							age, 
+							emailText,
+							phoneNumberText);
+					
+					if(admin.registerAdmin(adminData)) {
+						GoToLoginPage login = new GoToLoginPage();
+						login.setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(null, "Please try again later.", "Server Error!", JOptionPane.ERROR_MESSAGE);
+					}
+
+				}
 
 				catch (NumberFormatException numberEx){ //catch when use provides a non-integer value to some inputs that only accepts integer value
-					String errorText = "Some fields only accepts integer values. Please try again.";
-					
-					InvalidInputPopup popup = new InvalidInputPopup(RegisterAdminPage.this, errorText);
-					popup.setVisible(true);
+					JOptionPane.showMessageDialog(null, "Please enter only a number value for age and birthday.", "Invalid Input!", JOptionPane.ERROR_MESSAGE);
 				} 
 
 
@@ -378,33 +417,23 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		registerAdminButton.setBounds(194, 404, 192, 48);
 		contentPane.add(registerAdminButton);
 
-		JLabel lblBirthday_1 = new JLabel("/");
-		lblBirthday_1.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblBirthday_1.setBounds(229, 247, 11, 20);
-		contentPane.add(lblBirthday_1);
-
-		JLabel lblBirthday_1_1 = new JLabel("/");
-		lblBirthday_1_1.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblBirthday_1_1.setBounds(273, 247, 11, 20);
-		contentPane.add(lblBirthday_1_1);
-		
 		JButton alreadyAMemberButton = new JButton("Already an admin? Login");
 		alreadyAMemberButton.setForeground(Color.BLUE);
 		alreadyAMemberButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginPage login = new LoginPage();
 				login.setVisible(true);
-				
+
 				//For Closing Page
 				HelperUtility.closePage(thisFrame);
-				
+
 			}
 		});
 		alreadyAMemberButton.setContentAreaFilled(false);
 		alreadyAMemberButton.setBorderPainted(false); 
 		alreadyAMemberButton.setBounds(194, 453, 192, 23);
 		contentPane.add(alreadyAMemberButton);
-		
+
 
 	}
 

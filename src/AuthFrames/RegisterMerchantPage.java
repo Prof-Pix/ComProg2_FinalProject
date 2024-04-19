@@ -7,10 +7,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Components.GoToLoginPage;
-import Components.InvalidInputPopup;
 
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -535,13 +535,36 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 							monthText,
 							dayText,
 							yearText,
+							selectedGenderText,
 							ageText,
 							emailText,
 							phoneNumberText) || isSpecificFieldsEmpty()) {	
 
-						String errorText = "Please check all the required fields.";
-						InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
-						popup.setVisible(true);
+						if (HelperUtility.isInputFieldEmpty(usernameText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a username to continue.", "Missing Username!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(passwordText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a password to continue.", "Missing Password!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(firstNameText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a first name to continue.", "Missing First Name!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(middleNameText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a middle name to continue.", "Missing Middle Name!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(lastNameText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a last name to continue.", "Missing Last Name!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(monthText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a birth month to continue.", "Missing Birth Month!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(dayText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a birth day to continue.", "Missing Birth Day!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(yearText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a birth year to continue.", "Missing Birth Year!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(selectedGenderText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a gender to continue.", "Missing Gender!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(ageText)) {
+							JOptionPane.showMessageDialog(null, "Please enter an age to continue.", "Missing Age!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(emailText)) {
+							JOptionPane.showMessageDialog(null, "Please enter an email to continue.", "Missing Age!", JOptionPane.ERROR_MESSAGE);
+						} else if (HelperUtility.isInputFieldEmpty(phoneNumberText)) {
+							JOptionPane.showMessageDialog(null, "Please enter a phone number to continue.", "Missing Phone Number!", JOptionPane.ERROR_MESSAGE);
+						}
 
 					}  else {
 
@@ -614,9 +637,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 								GoToLoginPage login = new GoToLoginPage();
 								login.setVisible(true);
 							} else {
-								String errorText= "";
-								InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
-								popup.setVisible(true);
+								JOptionPane.showMessageDialog(null, "Please try again later.", "Server Error!", JOptionPane.ERROR_MESSAGE);
 							} 
 						}else {
 
@@ -626,16 +647,12 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 								errorText = merch.checkDuplicateInput();
 							}
 
-							InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
-							popup.setVisible(true);
+							JOptionPane.showMessageDialog(null, errorText, "Invalid Input!", JOptionPane.ERROR_MESSAGE);
 						}
 
 					}
 				} catch (NumberFormatException numberEx) {
-					String errorText = "Some fields only accepts integer values. Please try again.";
-
-					InvalidInputPopup popup = new InvalidInputPopup(RegisterMerchantPage.this, errorText);
-					popup.setVisible(true);
+					JOptionPane.showMessageDialog(null, "Please enter only a number value for age and birthday.", "Invalid Input!", JOptionPane.ERROR_MESSAGE);
 				}
 
 
