@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import AuthFrames.LoginPage;
+import MerchantFramePanels.AddProductPanel;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -48,6 +49,7 @@ public class GoToLoginPage extends JDialog {
 			lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 13));
 			lblNewLabel.setBounds(20, 74, 282, 14);
 			contentPanel.add(lblNewLabel);
+			
 		}
 		{
 			JPanel buttonPane = new JPanel();

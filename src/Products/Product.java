@@ -2,10 +2,12 @@ package Products;
 
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 public class Product {
 	
 	private int merchantOwnerId;
-	private String productImagePath;
+	private ImageIcon productImage;
 	private String name;
 	private String brand;
 	private String description;
@@ -15,11 +17,11 @@ public class Product {
 	private String category;
 	private ArrayList<ProductLoanTerm> productLoans;
 	
-	public Product(int merchantOwnerId, String productImagePath, String name, String brand, String description, String specifications,
+	public Product(int merchantOwnerId, ImageIcon productImage, String name, String brand, String description, String specifications,
 		 float price, int stocksAvailable, String category, ArrayList<ProductLoanTerm> productLoans) {
 		super();
 		this.merchantOwnerId = merchantOwnerId;
-		this.productImagePath = productImagePath;
+		this.productImage = productImage;
 		this.name = name;
 		this.brand = brand;
 		this.description = description;
@@ -36,13 +38,13 @@ public class Product {
 	public void setMerchantOwnerId(int merchantOwnerId) {
 		this.merchantOwnerId = merchantOwnerId;
 	}
-	
-	public String getProductImagePath() {
-		return productImagePath;
+
+	public ImageIcon getProductImage() {
+		return productImage;
 	}
 
-	public void setProductImagePath(String productImagePath) {
-		this.productImagePath = productImagePath;
+	public void setProductImage(ImageIcon productImage) {
+		this.productImage = productImage;
 	}
 
 	public String getName() {

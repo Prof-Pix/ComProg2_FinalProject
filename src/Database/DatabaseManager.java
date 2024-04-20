@@ -1,8 +1,14 @@
 package Database;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -11,8 +17,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
+import Products.Product;
 import Products.ProductLoanTerm;
 import Products.ProductRegistrationData;
 import User.Admin;
@@ -320,19 +331,28 @@ public class DatabaseManager {
 				+ "product_category) "
 				+ "VALUES (?,?,?,?,?,?,?,?,?)";
 
-		FileInputStream productImageFile = null;
+		Image image = data.getProductImage().getImage();
+		BufferedImage bufferedImage = (BufferedImage) image;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
-			productImageFile = new FileInputStream(new File(data.getProductImagePath()));
-		} catch (FileNotFoundException e) {
+			if (!ImageIO.write(bufferedImage, "jpg", baos)) { // Try JPG first
+			    if (!ImageIO.write(bufferedImage, "png", baos)) { // Then try PNG
+			          // ... Try other formats or handle if none work
+			    }
+			}
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
-		}
+		} 
+		byte[] imageBytes = baos.toByteArray();
+		
 
 		try(PreparedStatement prepSt = connection.prepareStatement(addProductQuery)) {
 
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes);
+			
 			prepSt.setInt(1, data.getMerchantOwnerId());
-			prepSt.setBinaryStream(2, productImageFile);
+			prepSt.setBinaryStream(2, inputStream, imageBytes.length);
 			prepSt.setString(3, data.getName());
 			prepSt.setString(4, data.getBrand());
 			prepSt.setString(5, data.getDescription());
@@ -561,5 +581,86 @@ public class DatabaseManager {
 
 	}
 
+	public ArrayList<Product> getMerchantData(int merchantId) {
+		
+		ArrayList<Product> merchantProducts = new ArrayList<>();
+		
+		String productQuery = "SELECT * FROM products WHERE merchant_id = ?";
+		
+		try(PreparedStatement productSt = connection.prepareStatement(productQuery)) {
+			
+			productSt.setInt(1, merchantId);
+			
+			ResultSet productResultSet = productSt.executeQuery();
+			
+			//Get the product loan terms of each product
+			String productLoanTermQuery = "SELECT * FROM product_loan_table WHERE product_id = ?";
+			try(PreparedStatement productLoanTermSt = connection.prepareStatement(productLoanTermQuery)) {
+				
+				while(productResultSet.next()) {				
+					int productId = productResultSet.getInt("product_id");
+					
+					productLoanTermSt.setInt(1, productId);
+					
+					ResultSet productLoanTermsResultSet = productLoanTermSt.executeQuery();
+					
+					ArrayList<ProductLoanTerm> productLoanTerms = new ArrayList<>();
+					while(productLoanTermsResultSet.next()) {		
+						
+						int monthsToPay = productLoanTermsResultSet.getInt("months_to_pay");
+						float interestRate = productLoanTermsResultSet.getFloat("interest_rate");
+						
+						ProductLoanTerm prodLoanTerm = new ProductLoanTerm(monthsToPay, interestRate);
+						productLoanTerms.add(prodLoanTerm);
+							
+						
+					}
+					
+					//Conversion of BLOB to ImageIcon
+					Blob imageBlob = productResultSet.getBlob("product_picture");
+					byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
+					Image image = null;
+					try {
+						image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ImageIcon productImage = new ImageIcon(image);
+					
+					Product prod = new Product(merchantId, 
+							productImage, 
+							productResultSet.getString("product_name"), 
+							productResultSet.getString("product_brand"),
+							productResultSet.getString("product_description"),
+							productResultSet.getString("product_specifications"),
+							productResultSet.getFloat("product_price"),
+							productResultSet.getInt("product_stocks_available"),
+							productResultSet.getString("product_category"),
+							productLoanTerms);
+					
+					merchantProducts.add(prod);
+					
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+
+		
+		return merchantProducts;
+		
+	}
 
 }
+
+
+
+
+
+
