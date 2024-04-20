@@ -30,6 +30,7 @@ public class DatabaseManager {
 	private static final String USER = "root";
 	private static final String PASSWORD = "homecredit123";
 
+	//For establishing a connection to the database
 	public void connect() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -84,7 +85,7 @@ public class DatabaseManager {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		//Retrieve the user id
 		String retrievedIdQuery = "SELECT user_id FROM users WHERE username = ? AND user_type = ?";
 
@@ -119,87 +120,6 @@ public class DatabaseManager {
 			e.printStackTrace();
 			return false;
 		}
-	}
-	
-	public boolean addProductForMerchant(int merchantUserId, ProductRegistrationData data) {
-		
-		int retrievedProductId = 0;
-		String addProductQuery = "INSERT INTO products (merchant_id, "
-				+ "product_picture, "
-				+ "product_name, "
-				+ "product_brand, "
-				+ "product_description, "
-				+ "product_specifications, "
-				+ "product_price, "
-				+ "product_stocks_available,"
-				+ "product_category) "
-				+ "VALUES (?,?,?,?,?,?,?,?,?)";
-		
-		FileInputStream productImageFile = null;
-		try {
-			productImageFile = new FileInputStream(new File(data.getProductImagePath()));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		
-		try(PreparedStatement prepSt = connection.prepareStatement(addProductQuery)) {
-			
-			prepSt.setInt(1, data.getMerchantOwnerId());
-			prepSt.setBinaryStream(2, productImageFile);
-			prepSt.setString(3, data.getName());
-			prepSt.setString(4, data.getBrand());
-			prepSt.setString(5, data.getDescription());
-			prepSt.setString(6, data.getSpecifications());
-			prepSt.setFloat(7, data.getPrice());
-			prepSt.setInt(8, data.getStocksAvailable());
-			prepSt.setString(9, data.getCategory());
-			
-			prepSt.executeUpdate();	
-			
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		//Retrieve the product id
-		String retrieveProductIdQuery = "SELECT * FROM products where product_name = ?";
-		
-		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductIdQuery)) {
-			
-			prepSt.setString(1, data.getName());
-			
-			ResultSet rs = prepSt.executeQuery();
-			
-			if(rs.next()) {
-				retrievedProductId = rs.getInt(1);
-			}
-			
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		} 
-		
-		//Send the product loans
-		String addProductLoans = "INSERT INTO product_loan_table (product_id, months_to_pay, interest_rate) VALUES (?, ? , ?) ";
-		
-		try (PreparedStatement prepSt = connection.prepareStatement(addProductLoans)){
-			
-			prepSt.setInt(1, retrievedProductId);
-			for(ProductLoanTerm prodLoanTerms : data.getProductLoans()) {
-				prepSt.setInt(2, prodLoanTerms.getMonthsToPay());
-				prepSt.setFloat(3, prodLoanTerms.getInterestRate());
-				
-				prepSt.executeUpdate();
-			}
-			
-			return true;
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
 	}
 
 	public boolean registerMerchantInDatabase(MerchantRegistrationData data) {
@@ -287,7 +207,7 @@ public class DatabaseManager {
 			prepSt.setString(7, data.getMerchantBarangayLocation());
 			prepSt.setString(8, data.getMerchantStreetLocation());
 			prepSt.setString(9, data.getMerchantAddress());
-			
+
 
 			prepSt.executeUpdate();
 
@@ -300,6 +220,7 @@ public class DatabaseManager {
 	}
 
 	public boolean registerLoanerInDatabase(LoanerRegistrationData data) {
+
 		String userType = UserRoles.LOANER.toString().toLowerCase();
 
 		int retrievedId = 0;
@@ -385,6 +306,87 @@ public class DatabaseManager {
 		}
 	}
 
+	public boolean addProductForMerchant(int merchantUserId, ProductRegistrationData data) {
+
+		int retrievedProductId = 0;
+		String addProductQuery = "INSERT INTO products (merchant_id, "
+				+ "product_picture, "
+				+ "product_name, "
+				+ "product_brand, "
+				+ "product_description, "
+				+ "product_specifications, "
+				+ "product_price, "
+				+ "product_stocks_available,"
+				+ "product_category) "
+				+ "VALUES (?,?,?,?,?,?,?,?,?)";
+
+		FileInputStream productImageFile = null;
+		try {
+			productImageFile = new FileInputStream(new File(data.getProductImagePath()));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
+		try(PreparedStatement prepSt = connection.prepareStatement(addProductQuery)) {
+
+			prepSt.setInt(1, data.getMerchantOwnerId());
+			prepSt.setBinaryStream(2, productImageFile);
+			prepSt.setString(3, data.getName());
+			prepSt.setString(4, data.getBrand());
+			prepSt.setString(5, data.getDescription());
+			prepSt.setString(6, data.getSpecifications());
+			prepSt.setFloat(7, data.getPrice());
+			prepSt.setInt(8, data.getStocksAvailable());
+			prepSt.setString(9, data.getCategory());
+
+			prepSt.executeUpdate();	
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		//Retrieve the product id
+		String retrieveProductIdQuery = "SELECT * FROM products where product_name = ?";
+
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductIdQuery)) {
+
+			prepSt.setString(1, data.getName());
+
+			ResultSet rs = prepSt.executeQuery();
+
+			if(rs.next()) {
+				retrievedProductId = rs.getInt(1);
+			}
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		} 
+
+		//Send the product loans
+		String addProductLoans = "INSERT INTO product_loan_table (product_id, months_to_pay, interest_rate) VALUES (?, ? , ?) ";
+
+		try (PreparedStatement prepSt = connection.prepareStatement(addProductLoans)){
+
+			prepSt.setInt(1, retrievedProductId);
+			for(ProductLoanTerm prodLoanTerms : data.getProductLoans()) {
+				prepSt.setInt(2, prodLoanTerms.getMonthsToPay());
+				prepSt.setFloat(3, prodLoanTerms.getInterestRate());
+
+				prepSt.executeUpdate();
+			}
+
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
 	public String checkDuplicateCommonFieldsInput(String username, String email, String fullName, String phoneNumber, String userType) {
 
 		if (HelperUtility.doesCommonValueExist(connection, "username", username, userType)) { 		//check for username duplication
@@ -438,11 +440,32 @@ public class DatabaseManager {
 		}
 	}
 
-	public int verifyLoginInput(String userType, String usernameEmail, String password) {
+	public String checkDuplicateProductOfMerchant(int merchantUserId, String productName) {
 		
+		String query = "SELECT product_name FROM products WHERE merchant_id = ? AND product_name = ?";
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
+			prepSt.setInt(1, merchantUserId);
+			prepSt.setString(2, productName);
+			
+			ResultSet rs = prepSt.executeQuery();
+			
+			if(rs.next()) {
+				return "Product name '" + productName + "' is already in use. Please choose a different name.";
+			}
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return "System error. Please try again later.";
+		}
+		return "ok";
+	}
+	
+	public int verifyLoginInput(String userType, String usernameEmail, String password) {
+
 		String checkCredentialsQuery = "SELECT password, user_id FROM users WHERE (username = ? OR email = ?) AND user_type = ?";
 		int retrievedUserId = 0; 
-		
+
 		try (PreparedStatement prepSt = connection.prepareStatement(checkCredentialsQuery)){
 
 			prepSt.setString(1, usernameEmail);
@@ -450,16 +473,16 @@ public class DatabaseManager {
 			prepSt.setString(3, userType);
 
 			ResultSet rs = prepSt.executeQuery();
-			
+
 			if(rs.next()) {
 				String retrievedPassword = rs.getString(1);
-				
+
 				if (!password.equals(retrievedPassword)) {
 					return 0;
 				} else {
 					retrievedUserId = rs.getInt(2);
 				}
-				
+
 			}
 
 		} catch (SQLException e) {
@@ -467,16 +490,16 @@ public class DatabaseManager {
 			e.printStackTrace();
 			return 0;
 		}
-		
+
 		//If the password is correct, get the merchant id using the user_id
 		String retrieveMerchantIdQuery = "SELECT merchant_id FROM merchant_table WHERE user_id = ?";
-		
+
 		try (PreparedStatement prepSt = connection.prepareStatement(retrieveMerchantIdQuery)){
 
 			prepSt.setInt(1, retrievedUserId);
 
 			ResultSet rs = prepSt.executeQuery();
-			
+
 			if(rs.next()) {
 				return rs.getInt(1);
 			}
@@ -486,20 +509,20 @@ public class DatabaseManager {
 			e.printStackTrace();
 			return 0;
 		}
-		
+
 	}
-	
+
 	public void getUserdata(int userId) {
 		HashMap <String, String> userData = new HashMap<>();
-		
+
 		String query = "SELECT * FROM users WHERE user_id = ?";
-		
+
 		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
-			
+
 			prepSt.setInt(1, userId);
-			
+
 			ResultSet rs = prepSt.executeQuery();
-			
+
 			if (rs.next()) {
 				String username = rs.getString("username");
 				String password = rs.getString("password");
@@ -510,7 +533,7 @@ public class DatabaseManager {
 				Date birthdate = rs.getDate("birthday");
 				String email = rs.getString("email");
 				String phoneNumber = rs.getString("phone_number");
-				
+
 				userData.put("username", username); 
 				userData.put("password", password);
 				userData.put("firstName", firstName);
@@ -524,19 +547,19 @@ public class DatabaseManager {
 
 				userData.put("email", email);
 				userData.put("phoneNumber", phoneNumber); 
-				
+
 				System.out.println(userData);
-				
-				
+
+
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-				
-		
+
+
 	}
-	
-	
+
+
 }

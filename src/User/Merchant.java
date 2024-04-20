@@ -161,4 +161,14 @@ public class Merchant extends User {
 			}
 		}
 	
+		//For database checking of duplicate product name
+		public static String checkDuplicateProductName(int merchantOwnerId, String productName) {
+			try {
+				dbManager.connect();
+				return dbManager.checkDuplicateProductOfMerchant(merchantOwnerId, productName);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 }

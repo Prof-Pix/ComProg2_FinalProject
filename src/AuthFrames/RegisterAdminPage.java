@@ -371,7 +371,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 
 					//Perform advance validations
 					//Checks if the inputs are invalid
-					if (!admin.isUserInputValid() && !admin.checkDuplicateInput().equals("ok")) {
+					if (!admin.isUserInputValid() || !admin.checkDuplicateInput().equals("ok")) {
 						
 						String errorText = admin.checkErrorInputRegistration();
 

@@ -100,6 +100,9 @@ public class MerchantFrame extends JFrame {
 
 	//Manage Products Panel
 	JPanel addProductPanel;
+	
+	//For tracking the current panel;
+	JPanel currentPanel;
 
 	/**
 	 * Launch the application.
@@ -146,7 +149,6 @@ public class MerchantFrame extends JFrame {
 
 		JMenuItem addProductMenuItem = new JMenuItem("Add Product");
 		manageProductMenu.add(addProductMenuItem);
-		addProductMenuItem.addActionListener(e -> showPanel(addProductPanel));
 
 		JMenuItem mntmNewMenuItem = new JMenuItem("View Products");
 		manageProductMenu.add(mntmNewMenuItem);
@@ -457,7 +459,9 @@ public class MerchantFrame extends JFrame {
 							productLoanTerms);
 
 					//Check if the inputs are invalid
-					if(!prod.isProductInputValid()) {
+					if(!prod.isProductInputValid() || !Merchant.checkDuplicateProductName(merchantUserId, productNameText).equals("ok")) {
+						String statusText = Merchant.checkDuplicateProductName(merchantUserId, productNameText);
+						
 						if (productPrice <= 0){
 							JOptionPane.showMessageDialog(null, "Please enter a valid price to continue", "Invalid Price", JOptionPane.WARNING_MESSAGE);
 							return;
@@ -465,7 +469,10 @@ public class MerchantFrame extends JFrame {
 						else if (productStocks < 0) {
 							JOptionPane.showMessageDialog(null, "Please enter a valid product stocks to continue", "Invalid Interest Rate", JOptionPane.WARNING_MESSAGE);
 							return;
-						} 
+						} else if (!statusText.equals("ok")) {
+							JOptionPane.showMessageDialog(null, statusText, "Existing Product!", JOptionPane.WARNING_MESSAGE);
+							return;
+						}
 					} 
 
 					//Check if the merchant has uploaded a product picture
@@ -505,6 +512,7 @@ public class MerchantFrame extends JFrame {
 					
 					
 					if(Merchant.addProduct(MERCHANT_USER_ID, productData)) {
+						//Empty all the fields
 						JOptionPane.showMessageDialog(null, "Your product is successfully added!", "Product Added", JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						JOptionPane.showMessageDialog(null, "Please try again later.", "Server Error!", JOptionPane.ERROR_MESSAGE);
@@ -706,7 +714,11 @@ public class MerchantFrame extends JFrame {
 	}
 
 	//For changing from one menu to another
-	private void showPanel(JPanel panel) {
-		panel.setVisible(true);
+	private void showAddProductPanel() {
+		if (currentPanel != null) {
+			
+		}
+		
+		
 	}
 }
