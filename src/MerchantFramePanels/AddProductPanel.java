@@ -69,7 +69,7 @@ public class AddProductPanel extends JPanel{
 	private static int MERCHANT_ID;
 
 	public AddProductPanel(int merchantId) {
-		setPreferredSize(new Dimension(1184, 642));
+		setPreferredSize(new Dimension(1184, 645));
 
 		AddProductPanel.MERCHANT_ID = merchantId;
 		setLayout(null);
@@ -268,7 +268,6 @@ public class AddProductPanel extends JPanel{
 
 		JScrollPane loanInterestTableScrollPane_1 = new JScrollPane();
 		loanInterestTableScrollPane_1.setBounds(28, 265, 528, 150);
-		loanInterestTableScrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		loanInterestTableScrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(loanInterestTableScrollPane_1);
 
@@ -277,7 +276,6 @@ public class AddProductPanel extends JPanel{
 
 		JScrollPane loanInterestTableScrollPane_1_1 = new JScrollPane();
 		loanInterestTableScrollPane_1_1.setBounds(28, 461, 528, 150);
-		loanInterestTableScrollPane_1_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		loanInterestTableScrollPane_1_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(loanInterestTableScrollPane_1_1);
 

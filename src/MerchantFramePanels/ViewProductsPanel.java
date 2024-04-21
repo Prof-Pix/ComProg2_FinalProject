@@ -28,6 +28,8 @@ public class ViewProductsPanel extends JPanel{
 	DatabaseManager dbManager = new DatabaseManager();
 	ArrayList<Product> merchantProducts;
 	
+	ArrayList<Product> filteredProductList;
+	
 	JComboBox sortByComboBox;
 	JComboBox filterCategComboBox;
 	JPanel productsPanel;
@@ -42,6 +44,8 @@ public class ViewProductsPanel extends JPanel{
 			e.printStackTrace();
 		}
 		
+		this.filteredProductList = merchantProducts;
+		
 		setLayout(null);
 
 		productsPanel = new JPanel();
@@ -52,11 +56,6 @@ public class ViewProductsPanel extends JPanel{
 		JScrollPane scrollPane = new JScrollPane(productsPanel); 
 		scrollPane.setBounds(10, 60, 1163, 570);
 		add(scrollPane); 
-		
-		for(Product product: merchantProducts) {
-			ProductTemplatePanel prodPanel = new ProductTemplatePanel(product);
-			productsPanel.add(prodPanel);
-		}
 
 		JLabel lblNewLabel = new JLabel("Sort by price:");
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -82,6 +81,15 @@ public class ViewProductsPanel extends JPanel{
 		add(lblFilterByCategory);
 
 		filterCategComboBox = new JComboBox();
+		filterCategComboBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				filterByCategory();
+				
+			}
+			
+		});	
 		filterCategComboBox.setModel(new DefaultComboBoxModel(new String[] {"--- Select a category ---", "Gadgets", "Electronics", "Appliances", "Sports", "Fashion", "Furniture", "Vehicles"}));
 		filterCategComboBox.setBounds(1010, 27, 163, 22);
 		add(filterCategComboBox);
@@ -93,6 +101,10 @@ public class ViewProductsPanel extends JPanel{
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(1174, 341, 10, 2);
 		add(separator_1);
+		
+		
+		//Adding the products
+		sortByFunction();
 	}
 	
 	public void sortByFunction() {
@@ -104,18 +116,18 @@ public class ViewProductsPanel extends JPanel{
 		switch(sortBySelectedIndex) {
 		case 0: {
 			//Sort the arraylist based on the months to pay (ascending order)
-			Collections.sort(merchantProducts, (o1, o2) -> Float.compare(o1.getPrice(), o2.getPrice()));
+			Collections.sort(filteredProductList, (o1, o2) -> Float.compare(o1.getPrice(), o2.getPrice()));
 			break;
 		}
 		case 1: {
 			//Sort the arraylist based on the months to pay (descending order)
-			Collections.sort(merchantProducts, (o1, o2) -> Float.compare(o2.getPrice(), o1.getPrice()));
+			Collections.sort(filteredProductList, (o1, o2) -> Float.compare(o2.getPrice(), o1.getPrice()));
 			break;
 		}
 			
 		}
 		
-		for(Product product: merchantProducts) {
+		for(Product product: filteredProductList) {
 			ProductTemplatePanel prodPanel = new ProductTemplatePanel(product);
 			productsPanel.add(prodPanel);
 		}
@@ -128,5 +140,37 @@ public class ViewProductsPanel extends JPanel{
 	
 	public void filterByCategory() {
 		
+		int filterCategoryIndex = filterCategComboBox.getSelectedIndex();
+		
+		
+		
+		if (filterCategoryIndex == 0) { //No selected Category
+			filteredProductList = merchantProducts;
+			sortByFunction();
+			return;
+		} 
+		
+		//Selected a category
+		String filterCategorySelected = (String) filterCategComboBox.getSelectedItem();
+		String filterCategory = filterCategorySelected.toLowerCase();
+		
+		
+		ArrayList<Product> tempFilteredList = new ArrayList<>();
+		
+		for (Product product : merchantProducts) {
+			if(product.getCategory().equals(filterCategory)) {
+				tempFilteredList.add(product);
+			}
+		}
+		filteredProductList = tempFilteredList;
+		sortByFunction();
+		
 	}
 }
+
+
+
+
+
+
+

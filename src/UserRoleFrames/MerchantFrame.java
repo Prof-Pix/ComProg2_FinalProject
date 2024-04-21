@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 import Database.DatabaseManager;
 import JComboBoxRenderers.MerchantCategoryRenderer;
 import MerchantFramePanels.AddProductPanel;
+import MerchantFramePanels.EditProductPanel;
 import MerchantFramePanels.ViewProductsPanel;
 import Products.Product;
 import Products.ProductLoanTerm;

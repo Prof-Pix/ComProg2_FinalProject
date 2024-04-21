@@ -32,11 +32,14 @@ public class ProductTemplatePanel extends JPanel{
 	private JTable loanInterestTable;
 	DefaultTableModel loanInterestTableModel;
 	
+	static Product productToDisplay;
+	
 	String loanInterestTableColumns[] = {"Months to pay", "Interest Rate"};
 	
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
 	
 	public ProductTemplatePanel(Product productData) {
+		ProductTemplatePanel.productToDisplay = productData;
 		setPreferredSize(new Dimension(275, 405));
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		setLayout(null);
@@ -57,12 +60,34 @@ public class ProductTemplatePanel extends JPanel{
 		add(lblPrice);
 		
 		JButton btnNewButton = new JButton("Edit");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 
+				int merchantOwnerId = productData.getMerchantOwnerId();
+				ImageIcon productImage = productData.getProductImage();
+				String productName = productData.getName();
+				String productBrand = productData.getBrand();
+				String productDescription = productData.getDescription();
+				String productSpecifications = productData.getSpecifications();
+				float productPrice = productData.getPrice();
+				int productStocks = productData.getStocksAvailable();
+				String productCategory = productData.getCategory();
+				ArrayList<ProductLoanTerm> productLoanTerms = new ArrayList<>(productData.getProductLoans());
+				
+				EditProductPanel.productData = new Product(merchantOwnerId, productImage, productName, productBrand , productDescription , productSpecifications , 
+						productPrice, productStocks, productCategory, productLoanTerms);
+				System.out.println("size: " + productData.getProductLoans().size());
+				EditProductPanel editProduct = new EditProductPanel();
+				editProduct.setVisible(true);
+			}
+		});
 		btnNewButton.setBounds(185, 32, 70, 23);
 		add(btnNewButton);
 		
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 			}
 		});
 		btnDelete.setBounds(185, 58, 70, 23);
