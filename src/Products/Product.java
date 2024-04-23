@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 public class Product {
 	
 	private int merchantOwnerId;
+	private String merchantName;
 	private ImageIcon productImage;
 	private String imageFilePath;
 	private String name;
@@ -48,11 +49,35 @@ public class Product {
 			this.productLoans = productLoans;
 		}
 	
+	public Product(int merchantOwnerId, String merchantName, ImageIcon productImage, String name, String brand, String description, String specifications,
+			 float price, int stocksAvailable, String category, ArrayList<ProductLoanTerm> productLoans) {
+			super();
+			this.merchantOwnerId = merchantOwnerId;
+			this.merchantName = merchantName;
+			this.productImage = productImage;
+			this.name = name;
+			this.brand = brand;
+			this.description = description;
+			this.specifications = specifications;
+			this.price = price;
+			this.stocksAvailable = stocksAvailable;
+			this.category = category;
+			this.productLoans = productLoans;
+		}
+	
 	public int getMerchantOwnerId() {
 		return merchantOwnerId;
 	}
 	public void setMerchantOwnerId(int merchantOwnerId) {
 		this.merchantOwnerId = merchantOwnerId;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
 	}
 
 	public String getImageFilePath() {

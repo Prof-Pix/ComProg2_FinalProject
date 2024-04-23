@@ -32,15 +32,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.SystemColor;
 
-public class ProductTemplatePanel extends JPanel{
+public class MarketPlaceProductTemplatePanel extends JPanel{
 	
 	static Product productToDisplay;
 
 	
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
 	
-	public ProductTemplatePanel(int merchantId, Product productData) {
-		ProductTemplatePanel.productToDisplay = productData;
+	public MarketPlaceProductTemplatePanel(Product productData) {
+		MarketPlaceProductTemplatePanel.productToDisplay = productData;
 		setPreferredSize(new Dimension(250, 320));
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		setLayout(null);
@@ -66,7 +66,7 @@ public class ProductTemplatePanel extends JPanel{
 		lblNewLabel_2.setBounds(15, 252, 64, 14);
 		add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_2_1 = new JLabel("Dolores Phone Store");
+		JLabel lblNewLabel_2_1 = new JLabel(productData.getMerchantName());
 		lblNewLabel_2_1.setFont(new Font("Dialog", Font.ITALIC, 12));
 		lblNewLabel_2_1.setBounds(77, 252, 173, 14);
 		add(lblNewLabel_2_1);
@@ -93,7 +93,14 @@ public class ProductTemplatePanel extends JPanel{
 		categoryLabel.setBounds(5, 5, 80, 18);
 		add(categoryLabel);
 		
-		JButton btnNewButton = new JButton("View Product");
+		JButton btnNewButton = new JButton("See details");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SeeDetailsProductPanel.productData = productData;
+				SeeDetailsProductPanel seeDetails = new SeeDetailsProductPanel();
+				seeDetails.setVisible(true);
+			}
+		});
 		btnNewButton.setBounds(126, 280, 114, 23);
 		add(btnNewButton);
 	}

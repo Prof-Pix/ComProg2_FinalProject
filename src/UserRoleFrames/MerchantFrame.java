@@ -109,7 +109,6 @@ public class MerchantFrame extends JFrame {
 		setResizable(false);
 
 		MerchantFrame.MERCHANT_ID = merchantId;
-		System.out.println(merchantId);
 		dbManager.connect();
 		dbManager.getUserdata(merchantId);
 

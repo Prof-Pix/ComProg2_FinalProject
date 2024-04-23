@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import LoanerFramePanels.MarketplacePanel;
+import MerchantFramePanels.AddProductPanel;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -18,6 +22,9 @@ public class LoanerFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	
+	//For tracking the current panel;
+	static JPanel currentPanel = null;
 
 	/**
 	 * Launch the application.
@@ -52,8 +59,12 @@ public class LoanerFrame extends JFrame {
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Edit Profile");
 		mnNewMenu.add(mntmNewMenuItem_2);
 		
-		JMenu mnNewMenu_1 = new JMenu("Marketplace");
-		menuBar.add(mnNewMenu_1);
+		JMenu marketplaceMenu = new JMenu("Marketplace");
+		menuBar.add(marketplaceMenu);
+		
+		JMenuItem shopProductsMenuItem = new JMenuItem("Shop Products");
+		shopProductsMenuItem.addActionListener(e -> showMarketPlacePanel());
+		marketplaceMenu.add(shopProductsMenuItem);
 		
 		JMenu mnNewMenu_2 = new JMenu("Manage Loans");
 		menuBar.add(mnNewMenu_2);
@@ -72,4 +83,18 @@ public class LoanerFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 	}
+	
+	//For changing from one menu to another
+		private void showMarketPlacePanel() {
+			
+			if (currentPanel != null) {
+				contentPane.remove(currentPanel);		
+			}
+			MarketplacePanel marketplacePanel = new MarketplacePanel();
+			currentPanel = marketplacePanel;
+			marketplacePanel.setBounds(0,0,1200,700);
+			contentPane.add(marketplacePanel);
+			contentPane.revalidate();
+			contentPane.repaint();
+		}
 }

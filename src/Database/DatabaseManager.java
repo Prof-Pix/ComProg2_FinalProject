@@ -800,6 +800,97 @@ public class DatabaseManager {
 
 	}
 	
+	public ArrayList<Product> getAllMerchantProducts() {
+		String query = "SELECT * FROM products";
+		
+		ArrayList<Product> merchantProducts = new ArrayList<>();
+		
+		try {
+			Statement retrieveSt = connection.createStatement();
+			
+			
+			ResultSet productResultSet = retrieveSt.executeQuery(query);
+			
+			//Get the product loan terms of each product
+			String productLoanTermQuery = "SELECT * FROM product_loan_table WHERE product_id = ?";
+			try(PreparedStatement productLoanTermSt = connection.prepareStatement(productLoanTermQuery)) {
+				
+				while(productResultSet.next()) {				
+					int productId = productResultSet.getInt("product_id");
+					
+					productLoanTermSt.setInt(1, productId);
+					
+					//Retrieval of Loan Terms
+					ResultSet productLoanTermsResultSet = productLoanTermSt.executeQuery();
+					
+					ArrayList<ProductLoanTerm> productLoanTerms = new ArrayList<>();
+					while(productLoanTermsResultSet.next()) {		
+						
+						int monthsToPay = productLoanTermsResultSet.getInt("months_to_pay");
+						float interestRate = productLoanTermsResultSet.getFloat("interest_rate");
+						
+						ProductLoanTerm prodLoanTerm = new ProductLoanTerm(monthsToPay, interestRate);
+						productLoanTerms.add(prodLoanTerm);	
+					}
+					
+					//Retrieve the merchant name
+					String merchantName = getMerchantName(productResultSet.getInt("merchant_id"));
+					
+					//Conversion of BLOB to ImageIcon
+					byte[] imageBytes = productResultSet.getBytes("product_picture");
+					ImageIcon imageIcon = new ImageIcon(imageBytes);		
+					
+					Product prod = new Product(productResultSet.getInt("merchant_id"), 
+							merchantName,
+							imageIcon, 
+							productResultSet.getString("product_name"), 
+							productResultSet.getString("product_brand"),
+							productResultSet.getString("product_description"),
+							productResultSet.getString("product_specifications"),
+							productResultSet.getFloat("product_price"),
+							productResultSet.getInt("product_stocks_available"),
+							productResultSet.getString("product_category"),
+							productLoanTerms);
+					
+					merchantProducts.add(prod);
+					
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return merchantProducts;
+	}
+	
+	public String getMerchantName(int merchantId) {
+		String query = "SELECT merchant_name FROM merchant_table WHERE merchant_id = ?";
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
+			prepSt.setInt(1, merchantId);
+			
+			ResultSet merchantNameSet = prepSt.executeQuery();
+			
+			if(merchantNameSet.next()) {
+				return merchantNameSet.getString("merchant_name");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return "Store Name";
+	}
+	
 }
 
 
