@@ -129,7 +129,7 @@ public class LoginPage extends JFrame {
 							break;
 						}
 						case "loaner": {
-							LoanerFrame lnFrame = new LoanerFrame();
+							LoanerFrame lnFrame = new LoanerFrame(returnId);
 							lnFrame.setVisible(true);
 							break;
 						}

@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.AbstractButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 public class HelperUtility {
@@ -30,6 +31,10 @@ public class HelperUtility {
      public static void closePage(JFrame frame) {
  		frame.dispose();
  	}
+     
+     public static void closeDialog(JDialog dialog) {
+    	 dialog.dispose();
+     }
      
      //FOR DUPLICATE CHECKING OF USERS FIELDS
 	     //FOR USERS DUPLICATE CHECKING

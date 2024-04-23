@@ -9,6 +9,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+
+import AuthFrames.LoginPage;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -17,6 +20,7 @@ import Database.DatabaseManager;
 import JComboBoxRenderers.MerchantCategoryRenderer;
 import MerchantFramePanels.AddProductPanel;
 import MerchantFramePanels.EditProductPanel;
+import MerchantFramePanels.PendingLoanRequestsPanel;
 import MerchantFramePanels.ViewProductsPanel;
 import Products.Product;
 import Products.ProductLoanTerm;
@@ -124,6 +128,22 @@ public class MerchantFrame extends JFrame {
 
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Edit Profile");
 		mnNewMenu_1.add(mntmNewMenuItem_3);
+		
+		JMenuItem logoutMenuItem = new JMenuItem("Logout");
+		logoutMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION);
+				
+				if(choice == JOptionPane.YES_OPTION) {
+					logout();
+				}
+				
+			}
+			
+		});
+		mnNewMenu_1.add(logoutMenuItem);
 
 		JMenu manageProductMenu = new JMenu("Manage Products");
 		menuBar.add(manageProductMenu);
@@ -138,6 +158,13 @@ public class MerchantFrame extends JFrame {
 
 		JMenu mnNewMenu_3 = new JMenu("Manage Loans");
 		menuBar.add(mnNewMenu_3);
+		
+		JMenuItem pendingLoansMenuItem = new JMenuItem("Pending Loans");
+		pendingLoansMenuItem.addActionListener(e -> showPendingLoansPanel());
+		mnNewMenu_3.add(pendingLoansMenuItem);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Ongoing Loans");
+		mnNewMenu_3.add(mntmNewMenuItem_1);
 
 		JMenu mnNewMenu_4 = new JMenu("Settings");
 		menuBar.add(mnNewMenu_4);
@@ -183,4 +210,24 @@ public class MerchantFrame extends JFrame {
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
+	
+	public static void showPendingLoansPanel() {
+		if(currentPanel != null) {
+			contentPane.remove(currentPanel);
+		}
+		
+		PendingLoanRequestsPanel pendingLoansPanel = new PendingLoanRequestsPanel(MERCHANT_ID);
+		currentPanel = pendingLoansPanel;
+		pendingLoansPanel.setBounds(0,0,1200,700);
+		contentPane.add(pendingLoansPanel);
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+	
+	//Logout
+			private void logout() {
+				HelperUtility.closePage(MerchantFrame.this);
+				LoginPage login = new LoginPage();
+				login.setVisible(true);
+			}
 }

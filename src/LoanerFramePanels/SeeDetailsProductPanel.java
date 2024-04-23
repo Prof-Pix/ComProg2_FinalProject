@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -19,8 +21,10 @@ import java.awt.Image;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import Database.DatabaseManager;
 import Products.Product;
 import Products.ProductLoanTerm;
+import User.Loaner;
 import Utilities.HelperUtility;
 
 import javax.swing.JTextArea;
@@ -35,10 +39,13 @@ import java.awt.Dialog.ModalityType;
 
 public class SeeDetailsProductPanel extends JDialog {
 
+	DatabaseManager dbManager = new DatabaseManager();
+
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	
 	static Product productData;
+	static int LOANER_ID;
 	
 	//For months to pay and interest rate
 	int selectedMonthsToPay;
@@ -196,9 +203,6 @@ public class SeeDetailsProductPanel extends JDialog {
 					selectedMonthsToPay = prodLoanTerm.getMonthsToPay();
 					selectedInterestRate = prodLoanTerm.getInterestRate();
 					
-					System.out.println(selectedMonthsToPay + selectedInterestRate);
-					
-					
 				}
 				
 			});;
@@ -215,6 +219,30 @@ public class SeeDetailsProductPanel extends JDialog {
 				JButton okButton = new JButton("Apply a loan!");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						int choice = JOptionPane.showConfirmDialog(null, "Send a request to " + productData.getMerchantName() + " for approval request?", "Send Loan Request", JOptionPane.YES_NO_OPTION);
+						
+						if(choice == JOptionPane.YES_OPTION) {
+							
+							//Perform retrieval of data
+							try {
+								dbManager.connect();
+								Loaner loanerData = dbManager.getLoanerData(LOANER_ID);
+								Product productToLoan = productData;
+								ProductLoanTerm prodLoanTerm = new ProductLoanTerm(selectedMonthsToPay, selectedInterestRate);
+								
+								if(dbManager.sendLoanRequest(LOANER_ID, loanerData, productToLoan, prodLoanTerm)) {
+									JOptionPane.showMessageDialog(null, "Loan request sent to " + productData.getMerchantName()+ ". Please wait to for the approval of the merchant. Thank you.", "Loan Request Sent Successfully", JOptionPane.INFORMATION_MESSAGE);
+									HelperUtility.closeDialog(SeeDetailsProductPanel.this);
+								}
+								
+							} catch (Exception ex) {
+								JOptionPane.showMessageDialog(null, "Server error. Please try again later.", "Server Error", JOptionPane.INFORMATION_MESSAGE);
+								ex.printStackTrace();
+							}
+							
+							
+							
+						}
 					}
 				});
 				okButton.setActionCommand("OK");

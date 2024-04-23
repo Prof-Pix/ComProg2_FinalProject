@@ -35,11 +35,12 @@ import java.awt.SystemColor;
 public class MarketPlaceProductTemplatePanel extends JPanel{
 	
 	static Product productToDisplay;
+	
 
 	
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
 	
-	public MarketPlaceProductTemplatePanel(Product productData) {
+	public MarketPlaceProductTemplatePanel(int loanerId, Product productData) {
 		MarketPlaceProductTemplatePanel.productToDisplay = productData;
 		setPreferredSize(new Dimension(250, 320));
 		setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -97,6 +98,7 @@ public class MarketPlaceProductTemplatePanel extends JPanel{
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SeeDetailsProductPanel.productData = productData;
+				SeeDetailsProductPanel.LOANER_ID = loanerId;
 				SeeDetailsProductPanel seeDetails = new SeeDetailsProductPanel();
 				seeDetails.setVisible(true);
 			}

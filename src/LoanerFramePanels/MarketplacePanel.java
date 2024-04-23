@@ -23,7 +23,7 @@ public class MarketplacePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public MarketplacePanel() {
+	public MarketplacePanel(int loanerId) {
 		
 		try {
 			dbManager.connect();
@@ -44,7 +44,7 @@ public class MarketplacePanel extends JPanel {
 		add(marketPlaceProductsPanel);
 		
 		for(Product product: filteredProductList) {
-			MarketPlaceProductTemplatePanel prodPanel = new MarketPlaceProductTemplatePanel(product);
+			MarketPlaceProductTemplatePanel prodPanel = new MarketPlaceProductTemplatePanel(loanerId, product);
 			marketPlaceProductsPanel.add(prodPanel);
 		}
 		
