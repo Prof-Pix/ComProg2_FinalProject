@@ -75,7 +75,7 @@ public class MerchantFrame extends JFrame {
 	private DatabaseManager dbManager = new DatabaseManager();
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+	private static JPanel contentPane;
 
 	private static int MERCHANT_ID;
 
@@ -83,7 +83,7 @@ public class MerchantFrame extends JFrame {
 	JPanel addProductPanel;
 	
 	//For tracking the current panel;
-	JPanel currentPanel = null;
+	static JPanel currentPanel = null;
 
 
 	/**
@@ -171,7 +171,7 @@ public class MerchantFrame extends JFrame {
 		contentPane.repaint();
 	}
 	
-	private void showViewProductsPanel() {
+	public static void showViewProductsPanel() {
 		
 		if (currentPanel != null) {
 			contentPane.remove(currentPanel);		

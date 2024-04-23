@@ -2,6 +2,8 @@ package MerchantFramePanels;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 
@@ -22,6 +24,8 @@ import javax.swing.table.JTableHeader;
 
 import Products.Product;
 import Products.ProductLoanTerm;
+import User.Merchant;
+import UserRoleFrames.MerchantFrame;
 import Utilities.HelperUtility;
 
 import java.awt.Color;
@@ -38,7 +42,7 @@ public class ProductTemplatePanel extends JPanel{
 	
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
 	
-	public ProductTemplatePanel(Product productData) {
+	public ProductTemplatePanel(int merchantId, Product productData) {
 		ProductTemplatePanel.productToDisplay = productData;
 		setPreferredSize(new Dimension(275, 405));
 		setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -46,17 +50,17 @@ public class ProductTemplatePanel extends JPanel{
 		
 		JLabel lblNewLabel = new JLabel(productData.getName());
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblNewLabel.setBounds(15, 182, 105, 14);
+		lblNewLabel.setBounds(15, 182, 235, 14);
 		add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel(productData.getBrand());
 		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblNewLabel_1.setBounds(15, 197, 105, 14);
+		lblNewLabel_1.setBounds(15, 197, 235, 14);
 		add(lblNewLabel_1);
 		
 		JLabel lblPrice = new JLabel("₱ " + String.valueOf(productData.getPrice()));
 		lblPrice.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblPrice.setBounds(15, 227, 105, 14);
+		lblPrice.setBounds(15, 227, 235, 14);
 		add(lblPrice);
 		
 		JButton btnNewButton = new JButton("Edit");
@@ -76,6 +80,7 @@ public class ProductTemplatePanel extends JPanel{
 				
 				EditProductPanel.productData = new Product(merchantOwnerId, productImage, productName, productBrand , productDescription , productSpecifications , 
 						productPrice, productStocks, productCategory, productLoanTerms);
+				EditProductPanel.MERCHANT_ID = merchantId;
 				System.out.println("size: " + productData.getProductLoans().size());
 				EditProductPanel editProduct = new EditProductPanel();
 				editProduct.setVisible(true);
@@ -87,7 +92,21 @@ public class ProductTemplatePanel extends JPanel{
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int result = JOptionPane.showConfirmDialog(null, 
+		                "Are you sure you want to delete this product?", 
+		                "Confirm Deletion", 
+		                JOptionPane.YES_NO_OPTION);
 
+		if (result == JOptionPane.YES_OPTION) {
+		   if(Merchant.deleteProduct(merchantId, productData.getName())) {
+			   JOptionPane.showMessageDialog(null, productData.getName() + " deleted successfully.", "Product Deleted", JOptionPane.INFORMATION_MESSAGE);
+			   MerchantFrame.showViewProductsPanel();
+		   }
+		   else {
+			   JOptionPane.showMessageDialog(null, "Please try again later.", "Server Error!", JOptionPane.ERROR_MESSAGE);
+		   }
+			
+		} 
 			}
 		});
 		btnDelete.setBounds(185, 58, 70, 23);

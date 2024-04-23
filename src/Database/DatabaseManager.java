@@ -23,6 +23,13 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage; 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.awt.Toolkit;
+
 import Products.Product;
 import Products.ProductLoanTerm;
 import Products.ProductRegistrationData;
@@ -331,28 +338,23 @@ public class DatabaseManager {
 				+ "product_category) "
 				+ "VALUES (?,?,?,?,?,?,?,?,?)";
 
-		Image image = data.getProductImage().getImage();
-		BufferedImage bufferedImage = (BufferedImage) image;
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			if (!ImageIO.write(bufferedImage, "jpg", baos)) { // Try JPG first
-			    if (!ImageIO.write(bufferedImage, "png", baos)) { // Then try PNG
-			          // ... Try other formats or handle if none work
-			    }
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		byte[] imageBytes = baos.toByteArray();
 		
+		File imageFile = new File(data.getImageFilePath());
 
 		try(PreparedStatement prepSt = connection.prepareStatement(addProductQuery)) {
+			
+			//For image
+			FileInputStream fileInputImage = null;
+			try {
+				fileInputImage = new FileInputStream(imageFile);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes);
 			
 			prepSt.setInt(1, data.getMerchantOwnerId());
-			prepSt.setBinaryStream(2, inputStream, imageBytes.length);
+			prepSt.setBlob(2, fileInputImage);
 			prepSt.setString(3, data.getName());
 			prepSt.setString(4, data.getBrand());
 			prepSt.setString(5, data.getDescription());
@@ -617,19 +619,11 @@ public class DatabaseManager {
 					}
 					
 					//Conversion of BLOB to ImageIcon
-					Blob imageBlob = productResultSet.getBlob("product_picture");
-					byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
-					Image image = null;
-					try {
-						image = ImageIO.read(new ByteArrayInputStream(imageBytes));
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					ImageIcon productImage = new ImageIcon(image);
+					byte[] imageBytes = productResultSet.getBytes("product_picture");
+					ImageIcon imageIcon = new ImageIcon(imageBytes);		
 					
 					Product prod = new Product(merchantId, 
-							productImage, 
+							imageIcon, 
 							productResultSet.getString("product_name"), 
 							productResultSet.getString("product_brand"),
 							productResultSet.getString("product_description"),
@@ -657,6 +651,155 @@ public class DatabaseManager {
 		
 	}
 
+	public boolean deleteMerchantProduct(int merchantId, String productName) {
+		
+		//THIS FOLLOWS A CHILD-PARENT DELETION
+		int retrievedProductId = 0;
+		
+		//Retrieve the product id
+				String retrieveProductIdQuery = "SELECT * FROM products where product_name = ?";
+
+				try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductIdQuery)) {
+
+					prepSt.setString(1, productName);
+
+					ResultSet rs = prepSt.executeQuery();
+
+					if(rs.next()) {
+						retrievedProductId = rs.getInt(1);
+					}
+
+				}catch(SQLException e) {
+					e.printStackTrace();
+					return false;
+				} 
+		
+		//First delete all the product loan terms
+		String deleteProductLoanTermsQuery = "DELETE FROM product_loan_table WHERE product_id = ?";
+		try(PreparedStatement prepSt = connection.prepareStatement(deleteProductLoanTermsQuery)) {
+			prepSt.setInt(1, retrievedProductId);
+			prepSt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		String deleteProductQuery = "DELETE FROM products WHERE merchant_id = ? AND product_name = ?";
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(deleteProductQuery)) {
+			prepSt.setInt(1, merchantId);
+			prepSt.setString(2, productName);
+			
+			prepSt.executeUpdate();
+			
+			return true;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+	
+	public boolean editMerchantProduct(int merchantId, ProductRegistrationData data, String originalProductName) {
+		
+		int retrievedProductId = 0;
+		String updateProductQuery = "UPDATE products "
+				+ "SET product_picture = ?,"
+				+ "product_name = ?, "
+				+ "product_brand = ?,"
+				+ "product_description = ?,"
+				+ "product_specifications = ?,"
+				+ "product_price = ?,"
+				+ "product_stocks_available = ?,"
+				+ "product_category = ?"
+				+ "WHERE merchant_id = ? AND product_name = ?";
+		
+		Image image = data.getProductImage().getImage();
+		BufferedImage bufferedImage = (BufferedImage) image;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			if (!ImageIO.write(bufferedImage, "jpg", baos)) { // Try JPG first
+			    if (!ImageIO.write(bufferedImage, "png", baos)) { // Then try PNG
+			          // ... Try other formats or handle if none work
+			    }
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		byte[] imageBytes = baos.toByteArray();
+		
+
+		try(PreparedStatement prepSt = connection.prepareStatement(updateProductQuery)) {
+
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes);
+			
+			prepSt.setBinaryStream(1, inputStream, imageBytes.length);
+			prepSt.setString(2, data.getName());
+			prepSt.setString(3, data.getBrand());
+			prepSt.setString(4, data.getDescription());
+			prepSt.setString(5, data.getSpecifications());
+			prepSt.setFloat(6, data.getPrice());
+			prepSt.setInt(7, data.getStocksAvailable());
+			prepSt.setString(8, data.getCategory());
+			prepSt.setInt(9, merchantId);
+			prepSt.setString(10, originalProductName);
+
+			prepSt.executeUpdate();	
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		//Retrieve the product id
+		String retrieveProductIdQuery = "SELECT * FROM products where product_name = ?";
+
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductIdQuery)) {
+
+			prepSt.setString(1, data.getName());
+
+			ResultSet rs = prepSt.executeQuery();
+
+			if(rs.next()) {
+				retrievedProductId = rs.getInt(1);
+			}
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		} 
+		
+		String deleteProductLoanTermsQuery = "DELETE FROM product_loan_table WHERE product_id = ?";
+		try(PreparedStatement prepSt = connection.prepareStatement(deleteProductLoanTermsQuery)) {
+			prepSt.setInt(1, retrievedProductId);
+			prepSt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		//Send the product loans
+		String addProductLoans = "INSERT INTO product_loan_table (product_id, months_to_pay, interest_rate) VALUES (?, ? , ?) ";
+
+		try (PreparedStatement prepSt = connection.prepareStatement(addProductLoans)){
+
+			prepSt.setInt(1, retrievedProductId);
+			for(ProductLoanTerm prodLoanTerms : data.getProductLoans()) {
+				prepSt.setInt(2, prodLoanTerms.getMonthsToPay());
+				prepSt.setFloat(3, prodLoanTerms.getInterestRate());
+
+				prepSt.executeUpdate();
+			}
+
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+	
 }
 
 

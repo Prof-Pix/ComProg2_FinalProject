@@ -9,6 +9,7 @@ public class ProductRegistrationData extends Product{
 
 	private int merchantOwnerId;
 	private ImageIcon productImage;
+	private String imageFilePath;
 	private String name;
 	private String brand;
 	private String description;
@@ -17,6 +18,23 @@ public class ProductRegistrationData extends Product{
 	private int stocksAvailable;
 	private String category;
 	private ArrayList<ProductLoanTerm> productLoans;
+	
+	public ProductRegistrationData(int merchantOwnerId, String imageFilePath, String name, String brand,
+			String description, String specifications, float price, int stocksAvailable, String category,
+			ArrayList<ProductLoanTerm> productLoans) {
+		super(merchantOwnerId, imageFilePath, name, brand, description, specifications, price, stocksAvailable, category,
+				productLoans);
+		this.merchantOwnerId = merchantOwnerId;
+		this.imageFilePath = imageFilePath;
+		this.name = name;
+		this.brand = brand;
+		this.description = description;
+		this.specifications = specifications;
+		this.price = price;
+		this.stocksAvailable = stocksAvailable;
+		this.category = category;
+		this.productLoans = productLoans;
+	}
 	
 	public ProductRegistrationData(int merchantOwnerId, ImageIcon productImage, String name, String brand,
 			String description, String specifications, float price, int stocksAvailable, String category,
@@ -34,5 +52,7 @@ public class ProductRegistrationData extends Product{
 		this.category = category;
 		this.productLoans = productLoans;
 	}
+	
+	
 
 }

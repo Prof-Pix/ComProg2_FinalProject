@@ -58,7 +58,7 @@ public class AddProductPanel extends JPanel{
 	JButton addProdLoanBtn;
 
 	JLabel productPicture;
-	private final ImageIcon DEFAULT_PRODUCT_IMAGE = new ImageIcon("D:\\APPLICATIONS\\Home_Credit\\src\\Images\\default_product_picture.jpg");
+	private final String DEFAULT_PRODUCT_IMAGE_PATH = "D:\\APPLICATIONS\\Home_Credit\\src\\Images\\default_product_picture.jpg";
 
 	JComboBox mfCategoryComboBox;
 
@@ -178,7 +178,8 @@ public class AddProductPanel extends JPanel{
 		productPicture = new JLabel();
 		productPicture.setBounds(28, 35, 150, 150);
 		//Scaling the image
-		Image originalImage = DEFAULT_PRODUCT_IMAGE.getImage();
+		ImageIcon iconImage = new ImageIcon(DEFAULT_PRODUCT_IMAGE_PATH);
+		Image originalImage = iconImage.getImage();
 		Image scaledImage = originalImage.getScaledInstance(productPicture.getWidth(), productPicture.getHeight(), Image.SCALE_SMOOTH);
 		ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
 		productPicture.setIcon(scaledImageIcon);
@@ -335,7 +336,7 @@ public class AddProductPanel extends JPanel{
 					float productPrice = Float.parseFloat(productPriceText);
 
 					Product prod = new Product(MERCHANT_ID, 
-							DEFAULT_PRODUCT_IMAGE,
+							DEFAULT_PRODUCT_IMAGE_PATH,
 							productNameText, 
 							productBrandText, 
 							descriptionText, 
@@ -364,12 +365,12 @@ public class AddProductPanel extends JPanel{
 
 					//Check if the merchant has uploaded a product picture
 					int choice;
-					ImageIcon productImage = DEFAULT_PRODUCT_IMAGE;
+					String productImagePath = DEFAULT_PRODUCT_IMAGE_PATH;
 					if (productPicture.getClientProperty("imagePath") != null) {
 						
 						//Get the uploaded picture path	
-						String productImagePath = (String) productPicture.getClientProperty("imagePath");
-						productImage = new ImageIcon(productImagePath);
+						productImagePath = (String) productPicture.getClientProperty("imagePath");
+						
 
 					} else {
 						choice = JOptionPane.showConfirmDialog(null, "You didn't upload any product picture. The system will use the default picture for your product. \n Do you wish to continue?", "Confirm Action", JOptionPane.YES_NO_OPTION);
@@ -381,13 +382,13 @@ public class AddProductPanel extends JPanel{
 
 						//The user clicked yes
 						//Use the default picture
-						productImage = DEFAULT_PRODUCT_IMAGE;
+						productImagePath = DEFAULT_PRODUCT_IMAGE_PATH;
 					}
 
 					//Proceed in sending the data to database
 
 					ProductRegistrationData productData = new ProductRegistrationData(MERCHANT_ID, 
-							productImage, 
+							productImagePath, 
 							productNameText, 
 							productBrandText, 
 							descriptionText, 

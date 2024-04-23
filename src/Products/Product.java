@@ -8,6 +8,7 @@ public class Product {
 	
 	private int merchantOwnerId;
 	private ImageIcon productImage;
+	private String imageFilePath;
 	private String name;
 	private String brand;
 	private String description;
@@ -17,11 +18,11 @@ public class Product {
 	private String category;
 	private ArrayList<ProductLoanTerm> productLoans;
 	
-	public Product(int merchantOwnerId, ImageIcon productImage, String name, String brand, String description, String specifications,
+	public Product(int merchantOwnerId, String imageFilePath, String name, String brand, String description, String specifications,
 		 float price, int stocksAvailable, String category, ArrayList<ProductLoanTerm> productLoans) {
 		super();
 		this.merchantOwnerId = merchantOwnerId;
-		this.productImage = productImage;
+		this.imageFilePath = imageFilePath;
 		this.name = name;
 		this.brand = brand;
 		this.description = description;
@@ -32,11 +33,34 @@ public class Product {
 		this.productLoans = productLoans;
 	}
 	
+	public Product(int merchantOwnerId, ImageIcon productImage, String name, String brand, String description, String specifications,
+			 float price, int stocksAvailable, String category, ArrayList<ProductLoanTerm> productLoans) {
+			super();
+			this.merchantOwnerId = merchantOwnerId;
+			this.productImage = productImage;
+			this.name = name;
+			this.brand = brand;
+			this.description = description;
+			this.specifications = specifications;
+			this.price = price;
+			this.stocksAvailable = stocksAvailable;
+			this.category = category;
+			this.productLoans = productLoans;
+		}
+	
 	public int getMerchantOwnerId() {
 		return merchantOwnerId;
 	}
 	public void setMerchantOwnerId(int merchantOwnerId) {
 		this.merchantOwnerId = merchantOwnerId;
+	}
+
+	public String getImageFilePath() {
+		return imageFilePath;
+	}
+
+	public void setImageFilePath(String imageFilePath) {
+		this.imageFilePath = imageFilePath;
 	}
 
 	public ImageIcon getProductImage() {

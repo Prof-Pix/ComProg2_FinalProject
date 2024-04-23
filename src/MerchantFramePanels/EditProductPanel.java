@@ -28,6 +28,8 @@ import javax.swing.table.JTableHeader;
 import JComboBoxRenderers.MerchantCategoryRenderer;
 import Products.Product;
 import Products.ProductLoanTerm;
+import Products.ProductRegistrationData;
+import User.Merchant;
 import UserEnums.MerchantCategory;
 import Utilities.HelperUtility;
 
@@ -60,12 +62,19 @@ public class EditProductPanel extends JDialog {
 	private JTextArea editPDescriptionField;
 	private JTextArea editPSpecificationsField;
 	
+	JButton saveChangesButton;
+	
 	
 	JLabel productPicture;
 	
 	private ArrayList<ProductLoanTerm> productLoanTerms = new ArrayList<>();
 
+	static String ORIGINAL_PRODUCT_NAME;
 	static Product productData;
+	static int MERCHANT_ID;
+	
+	boolean changesMade;
+	
 	private JTable loanInterestTable;
 	DefaultTableModel loanTableModel;
 	private String irColumnNames[] = { "Months to pay", "Interest Rate", "Potential Interest"};
@@ -88,6 +97,7 @@ public class EditProductPanel extends JDialog {
 	 * Create the dialog.
 	 */
 	public EditProductPanel() {
+		EditProductPanel.ORIGINAL_PRODUCT_NAME = productData.getName();
 		setTitle("Edit Product");
 
 		setModalityType(ModalityType.APPLICATION_MODAL);
@@ -261,8 +271,13 @@ public class EditProductPanel extends JDialog {
 		loanInterestTableHeader.setReorderingAllowed(false);
 		loanInterestTable.setDefaultRenderer(Object.class, loanInterestTablerRenderer);
 		
-		productLoanTerms = productData.getProductLoans();
-		System.out.println(productLoanTerms.size());
+		for(ProductLoanTerm prodLoanTerm : productData.getProductLoans()) {
+			
+			int monthsToPay = prodLoanTerm.getMonthsToPay();
+			float interestRate = prodLoanTerm.getInterestRate();
+			
+			productLoanTerms.add(new ProductLoanTerm(monthsToPay, interestRate));
+		}
 		//Sort the arraylist based on the months to pay (ascending order)
 		Collections.sort(productLoanTerms, (o1, o2) -> Integer.compare(o1.getMonthsToPay(), o2.getMonthsToPay()));
 
@@ -326,7 +341,110 @@ public class EditProductPanel extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton saveChangesButton = new JButton("Save Product Changes");
+				saveChangesButton = new JButton("Save Product Changes");
+				saveChangesButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						String productNameText = editPNameField.getText().trim();
+						String productBrandText = editPBrandField.getText().trim();
+						String productStocksText = editPStocksField.getText().trim();
+						int categorySelectedIndex = editPCategoryComboBox.getSelectedIndex();
+						String descriptionText = editPDescriptionField.getText().trim();
+						String specificationsText = editPSpecificationsField.getText().trim();
+						String productPriceText = editPPriceField.getText().trim();
+						int interestRateArrayListLength = productLoanTerms.size();
+						
+						System.out.println("changes has been made: " + hasChangesMade());
+						if(isInputEmpty() || !hasChangesMade()) {
+							//Check for the specific field that is empty
+							if (HelperUtility.isInputFieldEmpty(productNameText)) {
+								JOptionPane.showMessageDialog(null, "Please enter a product name to continue.", "Missing Product Name!", JOptionPane.ERROR_MESSAGE);
+								return;
+							} else if (HelperUtility.isInputFieldEmpty(productBrandText)) {
+								JOptionPane.showMessageDialog(null, "Please enter a product brand to continue.", "Missing Product Brand!", JOptionPane.ERROR_MESSAGE);
+								return;
+							} else if (HelperUtility.isInputFieldEmpty(productStocksText)) {
+								JOptionPane.showMessageDialog(null, "Please enter the product stocks to continue.", "Missing Product Stocks!", JOptionPane.ERROR_MESSAGE);
+								return;
+							} else if(categorySelectedIndex == -1) {
+								JOptionPane.showMessageDialog(null, "Please choose a category to continue.", "Missing Product Category!", JOptionPane.ERROR_MESSAGE);
+								return;
+							} else if (HelperUtility.isInputFieldEmpty(descriptionText)) {
+								JOptionPane.showMessageDialog(null, "Please enter a description to continue.", "Missing Product Description!", JOptionPane.ERROR_MESSAGE);
+								return;
+							} else if (HelperUtility.isInputFieldEmpty(specificationsText)) {
+								JOptionPane.showMessageDialog(null, "Please enter a specification to continue.", "Missing Product Specification!", JOptionPane.ERROR_MESSAGE);
+								return;
+							} else if (HelperUtility.isInputFieldEmpty(productPriceText)) {
+								JOptionPane.showMessageDialog(null, "Please enter a product price to continue.", "Missing Product Price!", JOptionPane.ERROR_MESSAGE);
+								return;
+							} else if (interestRateArrayListLength == 0) {
+								JOptionPane.showMessageDialog(null, "Please enter at least one interest rate with months to pay to continue.", "Missing Product Loan Term!", JOptionPane.ERROR_MESSAGE);
+								return;
+							} else if (!hasChangesMade()) {
+								JOptionPane.showMessageDialog(null, "No changes have been detected. Please modify at least one field to continue.", "Invalid Action", JOptionPane.WARNING_MESSAGE);
+								return;
+							}
+						}
+						
+						//Convert each string to text to their corresponding data type
+						int productStocks = Integer.parseInt(productStocksText);
+						String categorySelectedText = editPCategoryComboBox.getSelectedItem().toString();
+						float productPrice = Float.parseFloat(productPriceText);
+						ImageIcon productImage = productData.getProductImage();
+						
+						Product prod = new Product(MERCHANT_ID, 
+								productImage,
+								productNameText, 
+								productBrandText, 
+								descriptionText, 
+								specificationsText, 
+								productPrice, 
+								productStocks, 
+								categorySelectedText,
+								productLoanTerms);
+
+						//Check if the inputs are invalid
+						if(!prod.isProductInputValid() || !Merchant.checkDuplicateProductName(MERCHANT_ID, productNameText).equals("ok") || !changesMade) {
+							String statusText = Merchant.checkDuplicateProductName(MERCHANT_ID, productNameText);
+
+							if (productPrice <= 0){
+								JOptionPane.showMessageDialog(null, "Please enter a valid price to continue", "Invalid Price", JOptionPane.WARNING_MESSAGE);
+								return;
+							}
+							else if (productStocks < 0) {
+								JOptionPane.showMessageDialog(null, "Please enter a valid product stocks to continue", "Invalid Interest Rate", JOptionPane.WARNING_MESSAGE);
+								return;
+							} else if (!statusText.equals("ok")) {
+								if(!productNameText.equals(productData.getName()) ) {
+									JOptionPane.showMessageDialog(null, statusText, "Existing Product!", JOptionPane.WARNING_MESSAGE);
+									return;
+								}
+
+							} 
+						} 
+						
+						//Proceed in sending the data to database
+
+						ProductRegistrationData productData = new ProductRegistrationData(MERCHANT_ID, 
+								productImage, 
+								productNameText, 
+								productBrandText, 
+								descriptionText, 
+								specificationsText, 
+								productPrice, 
+								productStocks, 
+								categorySelectedText,
+								productLoanTerms);
+						
+						if(Merchant.editProduct(MERCHANT_ID, productData, ORIGINAL_PRODUCT_NAME)) {
+							JOptionPane.showMessageDialog(null, "Your product is successfully edit!", "Product Edited", JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							JOptionPane.showMessageDialog(null, "Please try again later.", "Server Error!", JOptionPane.ERROR_MESSAGE);
+						}
+						
+					}
+				});
 				saveChangesButton.setActionCommand("Cancel");
 				buttonPane.add(saveChangesButton);
 			}
@@ -510,4 +628,47 @@ public class EditProductPanel extends JDialog {
 					|| interestRateArrayListLength == 0;
 		}
 
+		private boolean hasChangesMade() {
+			String productNameText = editPNameField.getText().trim();
+			String productBrandText = editPBrandField.getText().trim();
+			String productStocksText = editPStocksField.getText().trim();
+			String categorySelectedText = editPCategoryComboBox.getSelectedItem().toString().toLowerCase();
+			String descriptionText = editPDescriptionField.getText().trim();
+			String specificationsText = editPSpecificationsField.getText().trim();
+			String productPriceText = editPPriceField.getText().trim();
+			
+			if (!productNameText.equals(productData.getName()) ||
+					!productBrandText.equals(productData.getBrand()) ||
+					!productStocksText.equals(String.valueOf(productData.getStocksAvailable())) ||
+					!categorySelectedText.equals(productData.getCategory()) ||
+					!descriptionText.equals(productData.getDescription()) ||
+					!specificationsText.equals(productData.getSpecifications()) ||
+					!productPriceText.equals(String.valueOf(productData.getPrice())) ||
+					productLoanTerms.size() != productData.getProductLoans().size()
+					) {
+
+				return true;
+				
+			}
+			
+			boolean prodLoanTermsModified = false;
+			
+			//if same size, check for changes
+			for(int i = 0; i < productLoanTerms.size() ; i++) {
+				if (productLoanTerms.get(i).getMonthsToPay() != productLoanTerms.get(i).getMonthsToPay() ||
+						(productLoanTerms.get(i).getInterestRate() != productLoanTerms.get(i).getInterestRate())) {
+					System.out.println(productLoanTerms.get(i).getMonthsToPay() != productLoanTerms.get(i).getMonthsToPay() ||
+						(productLoanTerms.get(i).getInterestRate() != productLoanTerms.get(i).getInterestRate()));
+					prodLoanTermsModified = true;
+					break;
+				}
+						
+			}
+			
+			if (prodLoanTermsModified == true) {
+				return true;
+			}
+			
+			return false;
+		}
 }

@@ -171,4 +171,24 @@ public class Merchant extends User {
 				return null;
 			}
 		}
+		
+		public static boolean editProduct(int merchantId, ProductRegistrationData data, String originalProductName) {
+			try {
+				dbManager.connect();
+				return dbManager.editMerchantProduct(merchantId, data, originalProductName);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		
+		public static boolean deleteProduct(int merchantId, String productName) {
+			try {
+				dbManager.connect();
+				return dbManager.deleteMerchantProduct(merchantId, productName);
+			} catch(Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
 }

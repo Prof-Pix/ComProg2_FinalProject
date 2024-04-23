@@ -34,8 +34,10 @@ public class ViewProductsPanel extends JPanel{
 	JComboBox filterCategComboBox;
 	JPanel productsPanel;
 	
+	static int MERCHANT_ID;
+	
 	public ViewProductsPanel(int merchantId) {
-		
+		ViewProductsPanel.MERCHANT_ID = merchantId;
 		//Establish a connection
 		try {
 			dbManager.connect();
@@ -128,7 +130,7 @@ public class ViewProductsPanel extends JPanel{
 		}
 		
 		for(Product product: filteredProductList) {
-			ProductTemplatePanel prodPanel = new ProductTemplatePanel(product);
+			ProductTemplatePanel prodPanel = new ProductTemplatePanel(MERCHANT_ID, product);
 			productsPanel.add(prodPanel);
 		}
 		
