@@ -10,6 +10,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 
@@ -18,11 +20,23 @@ import javax.swing.border.LineBorder;
 
 import Database.DatabaseManager;
 import LoanRequest.LoanRequest;
+import PaymentAccounts.BankAccount;
+import Utilities.HelperUtility;
 
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
+import java.awt.Dialog.ModalityType;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JToggleButton;
+import javax.swing.JScrollPane;
+import javax.swing.JCheckBox;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import java.awt.Dimension;
+import javax.swing.ScrollPaneConstants;
 
 public class DownPaymentLoanerPanel extends JDialog {
 	
@@ -30,17 +44,24 @@ public class DownPaymentLoanerPanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
+	private JTextField cardNumberField;
+	private JTextField cardExpDateField;
+	private JTextField mobileNumberField;
+	private JTextField pinCodeField;
+	JLabel totalPayment;
+	
+	JPanel payInAdvancePanel;
 	
 	JPanel selectEWalletPanel;
 	JPanel eWalletInformationPanel;
-	JPanel cardInformationPanel;
+	JPanel cardSecurityCodeFIeld;
 	
 	static LoanRequest LOAN_DETAILS;
+	
+	String paymentMethod;
+	
+	//For advance pay
+	JCheckBox[] monthCheckBoxes = new JCheckBox[9];
 
 	/**
 	 * Launch the application.
@@ -59,6 +80,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 	 * Create the dialog.
 	 */
 	public DownPaymentLoanerPanel(LoanRequest loanDetails) {
+		setModalityType(ModalityType.APPLICATION_MODAL);
 		//Get more information about the loan 
 		
 		try {
@@ -76,7 +98,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBounds(630, 39, 485, 95);
+		panel.setBounds(630, 75, 485, 95);
 		contentPanel.add(panel);
 		panel.setLayout(null);
 		
@@ -103,49 +125,10 @@ public class DownPaymentLoanerPanel extends JDialog {
 		eWalletButtonGroup.add(eWalletRadButton);
 		eWalletButtonGroup.add(bankPaymentRadButton);
 		
-		cardInformationPanel = new JPanel();
-		cardInformationPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		cardInformationPanel.setBounds(630, 145, 259, 232);
-		contentPanel.add(cardInformationPanel);
-		cardInformationPanel.setLayout(null);
-		
-		JLabel lblCardNumber = new JLabel("Card Number:");
-		lblCardNumber.setHorizontalAlignment(SwingConstants.LEFT);
-		lblCardNumber.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblCardNumber.setBounds(20, 27, 100, 14);
-		cardInformationPanel.add(lblCardNumber);
-		
-		textField = new JTextField();
-		textField.setBounds(20, 48, 213, 20);
-		cardInformationPanel.add(textField);
-		textField.setColumns(10);
-		
-		JLabel lblExpirationDatemmyy = new JLabel("Expiration date (MM/YY):");
-		lblExpirationDatemmyy.setHorizontalAlignment(SwingConstants.LEFT);
-		lblExpirationDatemmyy.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblExpirationDatemmyy.setBounds(20, 86, 213, 14);
-		cardInformationPanel.add(lblExpirationDatemmyy);
-		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(20, 107, 213, 20);
-		cardInformationPanel.add(textField_1);
-		
-		JLabel lblSecurityCode = new JLabel("Security Code: (CVV/CVC)");
-		lblSecurityCode.setHorizontalAlignment(SwingConstants.LEFT);
-		lblSecurityCode.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblSecurityCode.setBounds(20, 148, 213, 14);
-		cardInformationPanel.add(lblSecurityCode);
-		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(20, 169, 213, 20);
-		cardInformationPanel.add(textField_2);
-		
 		eWalletInformationPanel = new JPanel();
 		eWalletInformationPanel.setLayout(null);
 		eWalletInformationPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		eWalletInformationPanel.setBounds(630, 355, 259, 155);
+		eWalletInformationPanel.setBounds(630, 391, 259, 155);
 		contentPanel.add(eWalletInformationPanel);
 		
 		JLabel lblMobileNumber = new JLabel("Mobile Number:");
@@ -154,10 +137,10 @@ public class DownPaymentLoanerPanel extends JDialog {
 		lblMobileNumber.setBounds(20, 27, 100, 14);
 		eWalletInformationPanel.add(lblMobileNumber);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(20, 48, 213, 20);
-		eWalletInformationPanel.add(textField_3);
+		mobileNumberField = new JTextField();
+		mobileNumberField.setColumns(10);
+		mobileNumberField.setBounds(20, 48, 213, 20);
+		eWalletInformationPanel.add(mobileNumberField);
 		
 		JLabel lblPinCode = new JLabel("PIN Code:");
 		lblPinCode.setHorizontalAlignment(SwingConstants.LEFT);
@@ -165,14 +148,14 @@ public class DownPaymentLoanerPanel extends JDialog {
 		lblPinCode.setBounds(20, 86, 213, 14);
 		eWalletInformationPanel.add(lblPinCode);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(20, 107, 213, 20);
-		eWalletInformationPanel.add(textField_4);
+		pinCodeField = new JTextField();
+		pinCodeField.setColumns(10);
+		pinCodeField.setBounds(20, 107, 213, 20);
+		eWalletInformationPanel.add(pinCodeField);
 		
 		selectEWalletPanel = new JPanel();
 		selectEWalletPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		selectEWalletPanel.setBounds(630, 145, 485, 187);
+		selectEWalletPanel.setBounds(630, 181, 485, 187);
 		contentPanel.add(selectEWalletPanel);
 		selectEWalletPanel.setLayout(null);
 		
@@ -263,34 +246,245 @@ public class DownPaymentLoanerPanel extends JDialog {
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Downpayment Price:");
 		lblNewLabel_2_1.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblNewLabel_2_1.setBounds(31, 316, 153, 16);
+		lblNewLabel_2_1.setBounds(31, 255, 153, 16);
 		contentPanel.add(lblNewLabel_2_1);
 		
 		JLabel downPaymentPrice = new JLabel("₱ " + LOAN_DETAILS.getDownPaymentAmount());
 		downPaymentPrice.setFont(new Font("Dialog", Font.BOLD, 14));
-		downPaymentPrice.setBounds(196, 316, 235, 14);
+		downPaymentPrice.setBounds(196, 255, 235, 14);
 		contentPanel.add(downPaymentPrice);
 		
 		JLabel lblNewLabel_2_1_1 = new JLabel("Monthly Payments:");
 		lblNewLabel_2_1_1.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblNewLabel_2_1_1.setBounds(31, 355, 153, 16);
+		lblNewLabel_2_1_1.setBounds(31, 282, 153, 16);
 		contentPanel.add(lblNewLabel_2_1_1);
 		
 		JLabel lblPrice_1_1 = new JLabel("₱ " + LOAN_DETAILS.getMonthlyPayment() + " x " + LOAN_DETAILS.getLoanedProductMonthsToPay() + " months");
 		lblPrice_1_1.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblPrice_1_1.setBounds(196, 355, 235, 14);
+		lblPrice_1_1.setBounds(196, 282, 235, 14);
 		contentPanel.add(lblPrice_1_1);
+		
+		cardSecurityCodeFIeld = new JPanel();
+		cardSecurityCodeFIeld.setBounds(630, 181, 259, 232);
+		contentPanel.add(cardSecurityCodeFIeld);
+		cardSecurityCodeFIeld.setBorder(new LineBorder(new Color(0, 0, 0)));
+		cardSecurityCodeFIeld.setLayout(null);
+		
+		JLabel lblCardNumber = new JLabel("Card Number:");
+		lblCardNumber.setHorizontalAlignment(SwingConstants.LEFT);
+		lblCardNumber.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblCardNumber.setBounds(20, 27, 100, 14);
+		cardSecurityCodeFIeld.add(lblCardNumber);
+		
+		cardNumberField = new JTextField();
+		cardNumberField.setBounds(20, 48, 213, 20);
+		cardSecurityCodeFIeld.add(cardNumberField);
+		cardNumberField.setColumns(10);
+		
+		JLabel lblExpirationDatemmyy = new JLabel("Expiration date (MM/YY):");
+		lblExpirationDatemmyy.setHorizontalAlignment(SwingConstants.LEFT);
+		lblExpirationDatemmyy.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblExpirationDatemmyy.setBounds(20, 86, 213, 14);
+		cardSecurityCodeFIeld.add(lblExpirationDatemmyy);
+		
+		cardExpDateField = new JTextField();
+		cardExpDateField.setColumns(10);
+		cardExpDateField.setBounds(20, 107, 213, 20);
+		cardSecurityCodeFIeld.add(cardExpDateField);
+		
+		JLabel lblSecurityCode = new JLabel("Security Code: (CVV/CVC)");
+		lblSecurityCode.setHorizontalAlignment(SwingConstants.LEFT);
+		lblSecurityCode.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblSecurityCode.setBounds(20, 148, 213, 14);
+		cardSecurityCodeFIeld.add(lblSecurityCode);
+		
+		JTextField cardSecurityCodeField = new JTextField();
+		cardSecurityCodeField.setColumns(10);
+		cardSecurityCodeField.setBounds(20, 169, 213, 20);
+		cardSecurityCodeFIeld.add(cardSecurityCodeField);
+		
+		JLabel lblNewLabel_2_1_2 = new JLabel("Amount to pay:");
+		lblNewLabel_2_1_2.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblNewLabel_2_1_2.setBounds(630, 41, 122, 16);
+		contentPanel.add(lblNewLabel_2_1_2);
+		
+		totalPayment = new JLabel("₱ " + String.valueOf(LOAN_DETAILS.getDownPayment()));
+		totalPayment.setFont(new Font("Dialog", Font.BOLD, 14));
+		totalPayment.setBounds(762, 43, 235, 14);
+		contentPanel.add(totalPayment);
+		
+		
+		JToggleButton tglbtnNewToggleButton = new JToggleButton("Pay-in-advance");
+		tglbtnNewToggleButton.setFont(new Font("Dialog", Font.PLAIN, 12));
+		tglbtnNewToggleButton.setBounds(31, 319, 121, 23);
+		contentPanel.add(tglbtnNewToggleButton);
+		
+		JScrollPane payInAdvanceScrollPane = new JScrollPane();
+		payInAdvanceScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		payInAdvanceScrollPane.setBounds(31, 380, 300, 180);
+		contentPanel.add(payInAdvanceScrollPane);
+		
+		payInAdvancePanel = new JPanel();
+		payInAdvanceScrollPane.setViewportView(payInAdvancePanel);
+		payInAdvancePanel.setLayout(new BoxLayout(payInAdvancePanel, BoxLayout.Y_AXIS));
+		
+		
+
+		for(int  i = 0; i < 9; i++) {
+			JPanel panel_2 = new JPanel();
+			panel_2.setPreferredSize(new Dimension(298, 40));
+			panel_2.setMinimumSize(new Dimension(700, 40));
+			payInAdvancePanel.add(panel_2);
+			panel_2.setMaximumSize(new Dimension(700, 40));
+			panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
+			panel_2.add(Box.createRigidArea(new Dimension(20,0)));
+			
+			JCheckBox payCheckBox = new JCheckBox("");
+			payCheckBox.setHorizontalAlignment(SwingConstants.LEFT);
+			payCheckBox.setFont(new Font("Dialog", Font.PLAIN, 12));
+			monthCheckBoxes[i] = payCheckBox;
+			
+			if(i == 0) {
+				payCheckBox.setSelected(true);
+			} else if (i == 1) {
+				payCheckBox.setEnabled(true);
+			}
+			else {
+				payCheckBox.setEnabled(false);
+			}
+			
+			payCheckBox.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JCheckBox clickedCheckBox = (JCheckBox) e.getSource();
+					int clickedIndex = findIndexOfClickedCheckbox(clickedCheckBox);
+					
+					
+					if(monthCheckBoxes[clickedIndex].isSelected()) {
+						for(int i = clickedIndex + 1; i >= 0 ; i--) {
+							if(clickedIndex != monthCheckBoxes.length && clickedIndex != monthCheckBoxes.length - 1) {
+								monthCheckBoxes[i].setEnabled(true);
+							}
+						}
+					} else {
+						for(int i = clickedIndex + 1; i < monthCheckBoxes.length; i++) {
+							
+							if(clickedIndex != monthCheckBoxes.length) {
+								monthCheckBoxes[i].setEnabled(false);
+								
+								monthCheckBoxes[i].setSelected(false);
+							}
+							
+							
+						}
+					}
+					updateTotalPayment();
+					
+					
+				}
+				
+			});
+			
+			panel_2.add(monthCheckBoxes[i]);
+			panel_2.add(Box.createRigidArea(new Dimension(20,0)));
+			
+			JLabel payMonthLabel = new JLabel("12");
+			payMonthLabel.setMaximumSize(new Dimension(30, 14));
+			payMonthLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+			panel_2.add(payMonthLabel);
+			panel_2.add(Box.createRigidArea(new Dimension(50,0)));
+			
+			
+			JLabel payAmountLabel = new JLabel("1990");
+			payAmountLabel.setMaximumSize(new Dimension(100, 14));
+			payAmountLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+			panel_2.add(payAmountLabel);
+			panel_2.add(Box.createRigidArea(new Dimension(20,0)));
+		}
+		
+		
+		
+		JLabel lblMonth = new JLabel("Month");
+		lblMonth.setFont(new Font("Dialog", Font.PLAIN, 12));
+		lblMonth.setBounds(98, 353, 37, 14);
+		contentPanel.add(lblMonth);
+		
+		JLabel lblAmountDue = new JLabel("Amount Due");
+		lblAmountDue.setFont(new Font("Dialog", Font.PLAIN, 12));
+		lblAmountDue.setBounds(177, 354, 74, 14);
+		contentPanel.add(lblAmountDue);
+
+		
+			
+		cardSecurityCodeFIeld.setVisible(false);
 		
 		
 		selectEWalletPanel.setVisible(false);
 		eWalletInformationPanel.setVisible(false);
-		cardInformationPanel.setVisible(false);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("Continue Payment");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						if(paymentMethod.equals("bank")) {
+							
+							String cardNumberText = cardNumberField.getText();
+							String cardExpDateText = cardExpDateField.getText();
+							String cardSecurityCodeText = cardSecurityCodeField.getText();
+							
+							
+							//Check for empty inputs
+							boolean isInputEmpty = HelperUtility.isInputFieldEmpty(cardNumberText) || 
+									HelperUtility.isInputFieldEmpty(cardExpDateText) || 
+									HelperUtility.isInputFieldEmpty(cardSecurityCodeText); 
+							
+							if(isInputEmpty) {
+								if(HelperUtility.isInputFieldEmpty(cardNumberText)) {
+									JOptionPane.showMessageDialog(null, "Please enter a card number to continue", "Missing Card Number", JOptionPane.WARNING_MESSAGE);
+									return;
+								} else if (HelperUtility.isInputFieldEmpty(cardExpDateText)) {
+									JOptionPane.showMessageDialog(null, "Please enter a card expiration date to continue", "Missing Card Expiration Date", JOptionPane.WARNING_MESSAGE);
+									return;
+								} else if (HelperUtility.isInputFieldEmpty(cardSecurityCodeText)) {
+									JOptionPane.showMessageDialog(null, "Please enter a card security code to continue", "Missing Card Security Code", JOptionPane.WARNING_MESSAGE);
+									return;
+								}
+							}
+							
+							String CARD_NUMBER_REGEX = "^\\d{11}$";
+							String CARD_EXP_DATE_REGEX = "^(0[1-9]|1[0-2])/[1-9][1-9]$";
+							String CARD_SEC_CODE_REGEX = "^\\d{3}$";
+							boolean isInputValid = cardNumberText.matches(CARD_NUMBER_REGEX) && cardExpDateText.matches(CARD_EXP_DATE_REGEX) && cardSecurityCodeText.matches(CARD_SEC_CODE_REGEX);
+							
+							System.out.println(cardNumberText.matches(CARD_NUMBER_REGEX));
+							System.out.println(cardExpDateText.matches(CARD_EXP_DATE_REGEX));
+							System.out.println(cardSecurityCodeText.matches(CARD_SEC_CODE_REGEX));
+							if(isInputValid) {
+								
+								float downPayment = LOAN_DETAILS.getDownPaymentAmount();
+								if((BankAccount.balance - downPayment) < 0 ) {
+									JOptionPane.showMessageDialog(null, "Insufficient Balance", "Invalid Action", JOptionPane.ERROR_MESSAGE);
+									return;
+								} else {
+									System.out.println("Bank Balance: " + BankAccount.balance);
+									System.out.println("After deducting: " + (BankAccount.balance - downPayment));
+								}
+								
+							} else {
+								JOptionPane.showMessageDialog(null, "Invalid Input", "Invalid Action", JOptionPane.ERROR_MESSAGE);
+							}
+							
+							
+						}
+						
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -301,18 +495,78 @@ public class DownPaymentLoanerPanel extends JDialog {
 	private void showCardInformation() {
 		selectEWalletPanel.setVisible(false);
 		eWalletInformationPanel.setVisible(false);
-		cardInformationPanel.setVisible(true);
+		cardSecurityCodeFIeld.setVisible(true);
+		paymentMethod = "bank";
 	}
 	
 	private void showEWalletInformation() {
 		eWalletInformationPanel.setVisible(true);
-		cardInformationPanel.setVisible(false);
+		cardSecurityCodeFIeld.setVisible(false);
 		selectEWalletPanel.setVisible(true);
+		paymentMethod = "ewallet";
 	}
 	
 	private void showEWalletSelection() {
 		eWalletInformationPanel.setVisible(false);
-		cardInformationPanel.setVisible(false);
+		cardSecurityCodeFIeld.setVisible(false);
 		selectEWalletPanel.setVisible(true);
+		paymentMethod = "ewallet";
 	}
+	
+	private void refreshPayInAdvanceTable() {
+		for(int  i = 0; i < 9; i++) {
+			JPanel panel_2 = new JPanel();
+			panel_2.setPreferredSize(new Dimension(298, 40));
+			panel_2.setMinimumSize(new Dimension(700, 40));
+			payInAdvancePanel.add(panel_2);
+			panel_2.setMaximumSize(new Dimension(700, 40));
+			panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
+			panel_2.add(Box.createRigidArea(new Dimension(20,0)));
+			
+			JCheckBox payCheckBox = new JCheckBox("");
+			payCheckBox.setHorizontalAlignment(SwingConstants.LEFT);
+			payCheckBox.setFont(new Font("Dialog", Font.PLAIN, 12));
+			panel_2.add(payCheckBox);
+			panel_2.add(Box.createRigidArea(new Dimension(20,0)));
+			
+			JLabel payMonthLabel = new JLabel("12");
+			payMonthLabel.setMaximumSize(new Dimension(30, 14));
+			payMonthLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+			panel_2.add(payMonthLabel);
+			panel_2.add(Box.createRigidArea(new Dimension(50,0)));
+			
+			
+			JLabel payAmountLabel = new JLabel("1990");
+			payAmountLabel.setMaximumSize(new Dimension(100, 14));
+			payAmountLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+			panel_2.add(payAmountLabel);
+			panel_2.add(Box.createRigidArea(new Dimension(20,0)));
+		}
+
+		
+	}
+	
+	private int findIndexOfClickedCheckbox(JCheckBox clickedCheckbox) {
+	    for (int i = 0; i < monthCheckBoxes.length; i++) {
+	        if (monthCheckBoxes[i] == clickedCheckbox) {
+	            return i;
+	        }
+	    }
+	    return -1; // Error handling if checkbox not found
+	}
+	
+	public void updateTotalPayment() {
+		
+		int checkBoxChecked = 0;
+		for(JCheckBox checkbox : monthCheckBoxes) {
+			if(checkbox != null && checkbox.isSelected()) {
+				checkBoxChecked ++;
+			}
+		}
+		
+		totalPayment.setText("₱ " + String.valueOf(LOAN_DETAILS.getMonthlyPayment() * checkBoxChecked + LOAN_DETAILS.getDownPayment())); ;
+		
+	}
+	
 }

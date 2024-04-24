@@ -170,28 +170,28 @@ public class ApprovedLoansPanel extends JPanel {
 						loanRequestPanel.setLayout(new BoxLayout(loanRequestPanel, BoxLayout.X_AXIS));
 
 						loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-						JLabel lblNewLabel = new JLabel("Samsung A54");
+						JLabel lblNewLabel = new JLabel(loanReq.getLoanedProductName());
 						lblNewLabel.setMaximumSize(new Dimension(130, 14));
 						lblNewLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 						loanRequestPanel.add(lblNewLabel);
 
 						loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-						JLabel lblNewLabel_1 = new JLabel("₱ 9000");
+						JLabel lblNewLabel_1 = new JLabel("₱ " + String.valueOf(loanReq.getLoanedProductPrice()));
 						lblNewLabel_1.setMaximumSize(new Dimension(100, 14));
 						lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 12));
 						loanRequestPanel.add(lblNewLabel_1);
 						loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-						JLabel lblNewLabel_3 = new JLabel("6 months @ 3%");
+						JLabel lblNewLabel_3 = new JLabel(String.valueOf(loanReq.getLoanedProductMonthsToPay()) +  " months @ " + String.valueOf(loanReq.getLoanedProductInterestRate() * 100) + "%");
 						lblNewLabel_3.setMaximumSize(new Dimension(125, 14));
 						lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 12));
 						loanRequestPanel.add(lblNewLabel_3);
 						loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-						JLabel lblNewLabel_2 = new JLabel("Rhem Gorgs Salvador");
+						JLabel lblNewLabel_2 = new JLabel(loanReq.getLoanerName());
 						lblNewLabel_2.setMaximumSize(new Dimension(150, 14));
 						lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 12));
 						loanRequestPanel.add(lblNewLabel_2);
 						loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-						JLabel lblNewLabel_4 = new JLabel("02-02-2024");
+						JLabel lblNewLabel_4 = new JLabel(loanReq.getLoanRequestDate().toString());
 						lblNewLabel_4.setMaximumSize(new Dimension(100, 14));
 						lblNewLabel_4.setFont(new Font("Dialog", Font.PLAIN, 12));
 						loanRequestPanel.add(lblNewLabel_4);
@@ -199,7 +199,7 @@ public class ApprovedLoansPanel extends JPanel {
 						Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 0));
 						loanRequestPanel.add(rigidArea_1);
 
-						JLabel lblNewLabel_4_1 = new JLabel("02-02-2024");
+						JLabel lblNewLabel_4_1 = new JLabel(loanReq.getLoanApproveDate().toString());
 						lblNewLabel_4_1.setMaximumSize(new Dimension(125, 14));
 						lblNewLabel_4_1.setFont(new Font("Dialog", Font.PLAIN, 12));
 						loanRequestPanel.add(lblNewLabel_4_1);
@@ -239,4 +239,5 @@ public class ApprovedLoansPanel extends JPanel {
 			e.printStackTrace();
 		}
 	}
+	
 }
