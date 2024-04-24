@@ -27,10 +27,6 @@ import javax.swing.ImageIcon;
 import LoanRequest.LoanRequest;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage; 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.awt.Toolkit;
 
 import Products.Product;
@@ -1277,7 +1273,7 @@ public class DatabaseManager {
 		
 	}
 	
-public ArrayList<LoanRequest> getApprovedRejectedLoans(int loanerId) {
+    public ArrayList<LoanRequest> getApprovedRejectedLoans(int loanerId) {
 		
 		ArrayList<LoanRequest> pendingLoans = new ArrayList<>();
 		String query = "SELECT * FROM merchant_loans_list_table WHERE loaner_id = ?";
@@ -1326,7 +1322,98 @@ public ArrayList<LoanRequest> getApprovedRejectedLoans(int loanerId) {
 		
 	}
 	
-	
+	public LoanRequest getLoanRequestInformation(LoanRequest loanReq) {
+		
+		String retrieveProductImageQuery = "SELECT product_picture , product_brand FROM products WHERE merchant_id = ? AND product_id = ? ";
+		
+		ImageIcon productImage = null;
+		String productBrand = null;
+		String merchantName = null;
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductImageQuery)) {
+			try {
+				prepSt.setInt(1, loanReq.getMerchantId());
+				prepSt.setInt(2, loanReq.getProductId());
+				
+				ResultSet productSet = prepSt.executeQuery();
+				
+				while(productSet.next()) {
+					
+					//Conversion of BLOB to ImageIcon
+					byte[] imageBytes = productSet.getBytes("product_picture");
+					productImage = new ImageIcon(imageBytes);
+					
+					productBrand = productSet.getString("product_brand");
+					
+					
+				}
+ 				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		String retrieveMerchantName = "SELECT merchant_name FROM merchant_table WHERE merchant_id = ?";
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveMerchantName)) {
+			prepSt.setInt(1, loanReq.getMerchantId());
+			
+			ResultSet merchantSet = prepSt.executeQuery();
+			
+			while(merchantSet.next()) {
+				merchantName = merchantSet.getString("merchant_name");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		public LoanRequest(int merchantId, 
+//				String merchantName, 
+//				int loanerId, 
+//				int productId, 
+//				String loanedProductName,
+//				String loanedProductBrand, 
+//				ImageIcon loanedProductPicture, 
+//				float loanedProductPrice,
+//				int loanedProductMonthsToPay, 
+//				float loanedProductInterestRate, 
+//				String loanerName, 
+//				LocalDate loanRequestDate,
+//				LocalDate loanApproveDate, 
+//				LocalDate loanRejectDate, 
+//				boolean isPending, boolean isRejected,
+//				boolean isApproved)
+		
+		
+		LoanRequest newLoanReq = new LoanRequest(loanReq.getMerchantId() , 
+				merchantName, 
+				loanReq.getLoanerId(), 
+				loanReq.getProductId(), 
+				loanReq.getLoanedProductName(), 
+				productBrand, 
+				productImage, 
+				loanReq.getLoanedProductPrice(), 
+				loanReq.getLoanedProductMonthsToPay(), 
+				loanReq.getLoanedProductInterestRate(), 
+				loanReq.getLoanerName(), 
+				loanReq.getLoanRequestDate(), 
+				loanReq.getLoanApproveDate(), 
+				loanReq.getLoanRejectDate(), 
+				loanReq.isPending(), 
+				loanReq.isRejected(), 
+				loanReq.isApproved());
+		
+		return newLoanReq;
+		
+	}
+    
 }
 
 

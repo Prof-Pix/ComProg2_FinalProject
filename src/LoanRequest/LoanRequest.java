@@ -2,12 +2,17 @@ package LoanRequest;
 
 import java.time.LocalDate;
 
+import javax.swing.ImageIcon;
+
 public class LoanRequest {
 	
 	private int merchantId;
+	private String merchantName;
 	private int loanerId;
 	private int productId;
 	private String loanedProductName;
+	private String loanedProductBrand;
+	private ImageIcon loanedProductPicture;
 	private float loanedProductPrice;
 	private int loanedProductMonthsToPay;
 	private float loanedProductInterestRate;
@@ -19,6 +24,40 @@ public class LoanRequest {
 	private boolean isRejected;
 	private boolean isApproved;
 	
+	private float downPaymentAmount;
+	private float monthlyPayment;
+	
+	//For Payment
+	public LoanRequest(int merchantId, String merchantName, int loanerId, int productId, String loanedProductName,
+			String loanedProductBrand, ImageIcon loanedProductPicture, float loanedProductPrice,
+			int loanedProductMonthsToPay, float loanedProductInterestRate, String loanerName, LocalDate loanRequestDate,
+			LocalDate loanApproveDate, LocalDate loanRejectDate, boolean isPending, boolean isRejected,
+			boolean isApproved) {
+
+		this.merchantId = merchantId;
+		this.merchantName = merchantName;
+		this.loanerId = loanerId;
+		this.productId = productId;
+		this.loanedProductName = loanedProductName;
+		this.loanedProductBrand = loanedProductBrand;
+		this.loanedProductPicture = loanedProductPicture;
+		this.loanedProductPrice = loanedProductPrice;
+		this.loanedProductMonthsToPay = loanedProductMonthsToPay;
+		this.loanedProductInterestRate = loanedProductInterestRate;
+		this.loanerName = loanerName;
+		this.loanRequestDate = loanRequestDate;
+		this.loanApproveDate = loanApproveDate;
+		this.loanRejectDate = loanRejectDate;
+		this.isPending = isPending;
+		this.isRejected = isRejected;
+		this.isApproved = isApproved;
+		
+		//20% of the product price
+		this.downPaymentAmount = (float) (loanedProductPrice * 0.20);
+		//Price - downpayment divide by months multiply by interest rate 
+		this.monthlyPayment = ((loanedProductPrice - downPaymentAmount) / loanedProductMonthsToPay)  + (((loanedProductPrice - downPaymentAmount) / loanedProductMonthsToPay) *  loanedProductInterestRate);
+		
+	}
 	
 	//For Approved/Reject
 	public LoanRequest(int merchantId, int loanerId, int productId, String loanedProductName, float loanedProductPrice,
@@ -40,6 +79,8 @@ public class LoanRequest {
 		this.isPending = isPending;
 		this.isRejected = isRejected;
 		this.isApproved = isApproved;
+		
+		
 	}
 	
 	//For Pending
@@ -58,6 +99,14 @@ public class LoanRequest {
 		this.isPending = isPending;
 	}
 	
+	//For downpayment
+	public float getDownPayment() {
+		return downPaymentAmount;
+	}
+	
+	public void setDownPayment(float downPaymentAmount) {
+		this.downPaymentAmount = downPaymentAmount;
+	}
 
 	public int getMerchantId() {
 		return merchantId;
@@ -142,5 +191,45 @@ public class LoanRequest {
 	}
 	public void setApproved(boolean isApproved) {
 		this.isApproved = isApproved;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
+
+	public String getLoanedProductBrand() {
+		return loanedProductBrand;
+	}
+
+	public void setLoanedProductBrand(String loanedProductBrand) {
+		this.loanedProductBrand = loanedProductBrand;
+	}
+
+	public ImageIcon getLoanedProductPicture() {
+		return loanedProductPicture;
+	}
+
+	public void setLoanedProductPicture(ImageIcon loanedProductPicture) {
+		this.loanedProductPicture = loanedProductPicture;
+	}
+
+	public float getDownPaymentAmount() {
+		return downPaymentAmount;
+	}
+
+	public void setDownPaymentAmount(float downPaymentAmount) {
+		this.downPaymentAmount = downPaymentAmount;
+	}
+
+	public float getMonthlyPayment() {
+		return monthlyPayment;
+	}
+
+	public void setMonthlyPayment(float monthlyPayment) {
+		this.monthlyPayment = monthlyPayment;
 	}
 }

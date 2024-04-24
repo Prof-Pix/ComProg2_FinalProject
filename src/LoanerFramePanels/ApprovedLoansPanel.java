@@ -205,8 +205,18 @@ public class ApprovedLoansPanel extends JPanel {
 						loanRequestPanel.add(lblNewLabel_4_1);
 						loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
 
-						JButton btnNewButton = new JButton("Pay Downpayment");
-						loanRequestPanel.add(btnNewButton);
+						JButton payDownpaymentButton = new JButton("Pay Downpayment");
+						payDownpaymentButton.addActionListener(new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								DownPaymentLoanerPanel dpLoaner = new DownPaymentLoanerPanel(loanReq);
+								dpLoaner.setVisible(true);
+								
+							}
+							
+						});
+						loanRequestPanel.add(payDownpaymentButton);
 
 						Component rigidArea = Box.createRigidArea(new Dimension(10, 0));
 						loanRequestPanel.add(rigidArea);
