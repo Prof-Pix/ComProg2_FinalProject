@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 
 public class Product {
 	
+	private int productId;
 	private int merchantOwnerId;
 	private String merchantName;
 	private ImageIcon productImage;
@@ -19,6 +20,26 @@ public class Product {
 	private String category;
 	private ArrayList<ProductLoanTerm> productLoans;
 	
+	//All attributes constructor
+	public Product(int productId, int merchantOwnerId, String merchantName, ImageIcon productImage,
+			String imageFilePath, String name, String brand, String description, String specifications, float price,
+			int stocksAvailable, String category, ArrayList<ProductLoanTerm> productLoans) {
+		super();
+		this.productId = productId;
+		this.merchantOwnerId = merchantOwnerId;
+		this.merchantName = merchantName;
+		this.productImage = productImage;
+		this.imageFilePath = imageFilePath;
+		this.name = name;
+		this.brand = brand;
+		this.description = description;
+		this.specifications = specifications;
+		this.price = price;
+		this.stocksAvailable = stocksAvailable;
+		this.category = category;
+		this.productLoans = productLoans;
+	}
+
 	public Product(int merchantOwnerId, String imageFilePath, String name, String brand, String description, String specifications,
 		 float price, int stocksAvailable, String category, ArrayList<ProductLoanTerm> productLoans) {
 		super();
@@ -65,6 +86,14 @@ public class Product {
 			this.productLoans = productLoans;
 		}
 	
+	public int getProductId() {
+		return productId;
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
 	public int getMerchantOwnerId() {
 		return merchantOwnerId;
 	}

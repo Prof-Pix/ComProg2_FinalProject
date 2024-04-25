@@ -11,6 +11,9 @@ public class Loaner extends User {
 	
 	DatabaseManager dbManager = new DatabaseManager();
 
+	//
+	private int loanerId;
+	
 	//User Attributes
 	private String username;
 	private String password;
@@ -30,6 +33,36 @@ public class Loaner extends User {
 	
 	private static final String USER_TYPE = UserRoles.LOANER.toString().toLowerCase();
 
+	//All attributes
+	public Loaner(int loanerId, String username, 
+			String password, 
+			String firstName, 
+			String middleName, 
+			String lastName,
+			String gender,
+			LocalDate birthdate, 
+			int age, 
+			String email, 
+			String phoneNumber, 
+			String sourceOfIncome, 
+			String occupation, 
+			String monthlyIncome) {
+		super(username, password, firstName, middleName, lastName, gender, birthdate, age, email, phoneNumber);
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		fullName = this.getFullName();
+		this.birthdate = birthdate;
+		this.age = age;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.sourceOfIncome = sourceOfIncome;
+		this.occupation = occupation;
+		this.monthlyIncome = monthlyIncome;
+	}
+
+	//Without Loaner ID
 	public Loaner(String username, 
 			String password, 
 			String firstName, 
@@ -59,6 +92,14 @@ public class Loaner extends User {
 		this.occupation = occupation;
 		this.monthlyIncome = monthlyIncome;
 		// TODO Auto-generated constructor stub
+	}
+
+	public int getLoanerId() {
+		return loanerId;
+	}
+
+	public void setLoanerId(int loanerId) {
+		this.loanerId = loanerId;
 	}
 
 	public String getSourceOfIncome() {

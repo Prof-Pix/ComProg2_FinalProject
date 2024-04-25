@@ -10,6 +10,7 @@ import UserEnums.UserRoles;
 
 public class Merchant extends User {
 	
+	private int merchantId;
 	
 	static DatabaseManager dbManager = new DatabaseManager();
 	
@@ -35,7 +36,34 @@ public class Merchant extends User {
 	
 	private static final String USER_TYPE = UserRoles.MERCHANT.toString().toLowerCase();;
 
-	
+	//All attributes
+	public Merchant(int merchantId, String username, String password, String firstName, String middleName, String lastName, String gender,
+			LocalDate birthdate, int age, String email, String phoneNumber, String merchantName,
+			String merchantCategory, String merchantRegionLocation, String merchantProvinceLocation, String merchantCityLocation, String merchantBarangayLocation, String merchantStreetLocation) {
+		super(username, password, firstName, middleName, lastName, gender, birthdate, age, email, phoneNumber);
+		
+		this.merchantId = merchantId;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.birthdate = birthdate;
+		this.age = age;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		fullName = this.getFullName();
+		this.merchantName = merchantName;
+		this.merchantCategory = merchantCategory;
+		this.merchantRegionLocation = merchantRegionLocation;
+		this.merchantProvinceLocation = merchantProvinceLocation;
+		this.merchantCityLocation = merchantCityLocation;
+		this.merchantBarangayLocation = merchantBarangayLocation;
+		this.merchantStreetLocation = merchantStreetLocation;
+		this.merchantAddress = merchantStreetLocation + "," + merchantBarangayLocation + "," + merchantCityLocation + "," + merchantProvinceLocation + "," + merchantRegionLocation;
+	}
+
 	public Merchant(String username, String password, String firstName, String middleName, String lastName, String gender,
 			LocalDate birthdate, int age, String email, String phoneNumber, String merchantName,
 			String merchantCategory, String merchantRegionLocation, String merchantProvinceLocation, String merchantCityLocation, String merchantBarangayLocation, String merchantStreetLocation) {
@@ -61,6 +89,14 @@ public class Merchant extends User {
 		this.merchantBarangayLocation = merchantBarangayLocation;
 		this.merchantStreetLocation = merchantStreetLocation;
 		this.merchantAddress = merchantStreetLocation + "," + merchantBarangayLocation + "," + merchantCityLocation + "," + merchantProvinceLocation + "," + merchantRegionLocation;
+	}
+
+	public int getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(int merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	public String getMerchantName() {

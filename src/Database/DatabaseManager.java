@@ -934,69 +934,7 @@ public class DatabaseManager {
 		return "Store Name";
 	}
 
-	public Loaner getLoanerData(int loanerId) {
-
-		//Retrieve first the user id
-		int retrieveUserId = 0;
-		String retrieveUserIdQuery = "SELECT * FROM loaner_table WHERE loaner_id = ?";
-
-		try(PreparedStatement userIdRetrieveSt = connection.prepareStatement(retrieveUserIdQuery)) {
-			userIdRetrieveSt.setInt(1, loanerId);
-
-			ResultSet loanerDataSet = userIdRetrieveSt.executeQuery();
-
-			if(loanerDataSet.next()) {
-				retrieveUserId = loanerDataSet.getInt("user_id");
-			}
-
-			//Get the user data
-			String retrieveUserDataQuery = "SELECT * FROM users WHERE user_id = ?";
-
-			try(PreparedStatement userDataRetrieveSt = connection.prepareStatement(retrieveUserDataQuery)) {
-
-				userDataRetrieveSt.setInt(1, retrieveUserId);
-
-				ResultSet userDataSet = userDataRetrieveSt.executeQuery();
-
-				if(userDataSet.next()) {
-					// For the birthdate
-					LocalDate birthdate = userDataSet.getDate("birthday").toLocalDate();
-
-					Loaner loaner = new Loaner(userDataSet.getString("username"),
-							userDataSet.getString("password"),
-							userDataSet.getString("first_name"),
-							userDataSet.getString("middle_name"),
-							userDataSet.getString("last_name"),
-							userDataSet.getString("gender"),
-							birthdate,
-							userDataSet.getInt("age"),
-							userDataSet.getString("email"),
-							userDataSet.getString("phone_number"),
-							loanerDataSet.getString("source_of_income"),
-							loanerDataSet.getString("occupation"),
-							loanerDataSet.getString("monthly_income")
-							);
-
-					return loaner;
-				}
-
-				return null;
-
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-
-
-	}
+	
 
 
 	public boolean sendLoanRequest(int loanerId, Loaner loanerData, Product productData, ProductLoanTerm productLoanTerm) {
@@ -1005,9 +943,9 @@ public class DatabaseManager {
 		int retrievedProductId = 0;
 
 		//Retrieve the product id
-		String retrieveProductIdQuery = "SELECT * FROM products WHERE merchant_id = ? AND product_name = ?";
+		String retrieveProductQuery = "SELECT * FROM products WHERE merchant_id = ? AND product_name = ?";
 
-		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductIdQuery)) {
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductQuery)) {
 
 			prepSt.setInt(1, productData.getMerchantOwnerId());
 			prepSt.setString(2, productData.getName());
@@ -1023,18 +961,7 @@ public class DatabaseManager {
 			return false;
 		} 
 
-		String addProductQuery = "INSERT INTO products (merchant_id, "
-				+ "product_picture, "
-				+ "product_name, "
-				+ "product_brand, "
-				+ "product_description, "
-				+ "product_specifications, "
-				+ "product_price, "
-				+ "product_stocks_available,"
-				+ "product_category) "
-				+ "VALUES (?,?,?,?,?,?,?,?,?)";
-
-		String sendLoanRequestQuery = "INSERT INTO merchant_loans_list_table(merchant_id,"
+		String sendLoanRequestQuery = "INSERT INTO loan_request_table(merchant_id,"
 				+ "loaner_id,"
 				+ "product_id,"
 				+ "loaned_product_name,"
@@ -1070,7 +997,7 @@ public class DatabaseManager {
 
 
 	public ArrayList<LoanRequest> getPendingLoanRequest(int merchantId) {
-		String retrieveLoanRequest = "SELECT * FROM merchant_loans_list_table WHERE merchant_id = ?";
+		String retrieveLoanRequest = "SELECT * FROM loan_request_table WHERE merchant_id = ?";
 
 		ArrayList<LoanRequest> loanRequests = new ArrayList<>();
 
@@ -1101,9 +1028,9 @@ public class DatabaseManager {
 			return null;
 		}
 	}
-	
+
 	public ArrayList<LoanRequest> getApprovedRejectedLoanRequest(int merchantId) {
-		String retrieveLoanRequest = "SELECT * FROM merchant_loans_list_table WHERE merchant_id = ?";
+		String retrieveLoanRequest = "SELECT * FROM loan_request_table WHERE merchant_id = ?";
 
 		ArrayList<LoanRequest> loanRequests = new ArrayList<>();
 
@@ -1112,12 +1039,12 @@ public class DatabaseManager {
 			prepSt.setInt(1, merchantId);
 
 			ResultSet loanRequestSet = prepSt.executeQuery();
-			
-			
+
+
 			while(loanRequestSet.next()) {
-				
+
 				boolean isPending = loanRequestSet.getBoolean("is_pending");
-				
+
 				if(!isPending) {
 					LoanRequest loanReq = new LoanRequest(loanRequestSet.getInt("merchant_id"), loanRequestSet.getInt("loaner_id"),
 							loanRequestSet.getInt("product_id"),
@@ -1135,8 +1062,8 @@ public class DatabaseManager {
 
 					loanRequests.add(loanReq);
 				}
-				
-				
+
+
 			}
 			return loanRequests;
 
@@ -1151,7 +1078,7 @@ public class DatabaseManager {
 
 		//Retrieve the merchant_loan_id
 		int retrievedLoanId = 0;
-		String retrieveLoanIdQuery = "SELECT merchant_loan_id FROM merchant_loans_list_table WHERE merchant_id = ? AND loaner_id = ? AND product_id = ? AND is_pending = ?";
+		String retrieveLoanIdQuery = "SELECT loan_request_id FROM loan_request_table WHERE merchant_id = ? AND loaner_id = ? AND product_id = ? AND is_pending = ?";
 
 		try(PreparedStatement prepSt = connection.prepareStatement(retrieveLoanIdQuery)) {
 			prepSt.setInt(1, merchantId);
@@ -1163,9 +1090,9 @@ public class DatabaseManager {
 
 			if(loanIdSet.next()) {
 				retrievedLoanId = loanIdSet.getInt("merchant_loan_id");
-				
-				String approveQuery = "UPDATE merchant_loans_list_table SET is_pending = ? , is_approved = ?, is_rejected = ? , loan_approve_date = ?, loan_reject_date = ? WHERE merchant_loan_id = ? AND is_pending = ?";
-				
+
+				String approveQuery = "UPDATE loan_request_table SET is_pending = ? , is_approved = ?, is_rejected = ? , loan_approve_date = ?, loan_reject_date = ? WHERE loan_request_id = ? AND is_pending = ?";
+
 				try(PreparedStatement prepStt = connection.prepareStatement(approveQuery)) {
 					prepStt.setBoolean(1, false);
 					prepStt.setBoolean(2, true);
@@ -1174,15 +1101,15 @@ public class DatabaseManager {
 					prepStt.setDate(5, java.sql.Date.valueOf(LocalDate.now()));
 					prepStt.setInt(6, retrievedLoanId);
 					prepStt.setBoolean(7, true);
-					
+
 					prepStt.executeUpdate();
 					return true;
 				}
-				
+
 			}
 
 			return false;
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1190,12 +1117,12 @@ public class DatabaseManager {
 		}
 
 	}
-	
+
 	public boolean rejectRequest(int merchantId, int loanerId, int productId, String decision) {
 
 		//Retrieve the merchant_loan_id
 		int retrievedLoanId = 0;
-		String retrieveLoanIdQuery = "SELECT merchant_loan_id FROM merchant_loans_list_table WHERE merchant_id = ? AND loaner_id = ? AND product_id = ? AND is_pending = ?";
+		String retrieveLoanIdQuery = "SELECT loan_request_id FROM loan_request_table WHERE merchant_id = ? AND loaner_id = ? AND product_id = ? AND is_pending = ?";
 
 		try(PreparedStatement prepSt = connection.prepareStatement(retrieveLoanIdQuery)) {
 			prepSt.setInt(1, merchantId);
@@ -1206,10 +1133,10 @@ public class DatabaseManager {
 			ResultSet loanIdSet = prepSt.executeQuery();
 
 			if(loanIdSet.next()) {
-				retrievedLoanId = loanIdSet.getInt("merchant_loan_id");
-				
-				String approveQuery = "UPDATE merchant_loans_list_table SET is_pending = ? , is_approved = ?, is_rejected = ? , loan_approve_date = ?, loan_reject_date = ? WHERE merchant_loan_id = ? AND is_pending = ?";
-				
+				retrievedLoanId = loanIdSet.getInt("loan_request_id");
+
+				String approveQuery = "UPDATE loan_request_table SET is_pending = ? , is_approved = ?, is_rejected = ? , loan_approve_date = ?, loan_reject_date = ? WHERE loan_request_id = ? AND is_pending = ?";
+
 				try(PreparedStatement prepStt = connection.prepareStatement(approveQuery)) {
 					prepStt.setBoolean(1, false);
 					prepStt.setBoolean(2, false);
@@ -1218,15 +1145,15 @@ public class DatabaseManager {
 					prepStt.setDate(5, java.sql.Date.valueOf(LocalDate.now()));
 					prepStt.setInt(6, retrievedLoanId);
 					prepStt.setBoolean(7, true);
-					
+
 					prepStt.executeUpdate();
 					return true;
 				}
-				
+
 			}
 
 			return false;
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1234,19 +1161,19 @@ public class DatabaseManager {
 		}
 
 	}
-	
+
 	//FOR LOANER
 	public ArrayList<LoanRequest> getPendingLoans(int loanerId) {
-		
+
 		ArrayList<LoanRequest> pendingLoans = new ArrayList<>();
-		String query = "SELECT * FROM merchant_loans_list_table WHERE loaner_id = ?";
-		
+		String query = "SELECT * FROM loan_request_table WHERE loaner_id = ?";
+
 		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
-			
+
 			prepSt.setInt(1, loanerId);
-			
+
 			ResultSet pendingLoansSet = prepSt.executeQuery();
-			
+
 			while(pendingLoansSet.next()) {
 				LoanRequest loanReq = new LoanRequest(pendingLoansSet.getInt("merchant_id"), pendingLoansSet.getInt("loaner_id"),
 						pendingLoansSet.getInt("product_id"),
@@ -1257,38 +1184,38 @@ public class DatabaseManager {
 						pendingLoansSet.getString("loaner_name"),
 						pendingLoansSet.getDate("loan_request_date").toLocalDate(),
 						pendingLoansSet.getBoolean("is_pending"));
-				
+
 				pendingLoans.add(loanReq);
-				
+
 			}
-			
+
 			return pendingLoans;
-			
-			
+
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
-	
-    public ArrayList<LoanRequest> getApprovedRejectedLoans(int loanerId) {
-		
+
+	public ArrayList<LoanRequest> getApprovedRejectedLoans(int loanerId) {
+
 		ArrayList<LoanRequest> pendingLoans = new ArrayList<>();
-		String query = "SELECT * FROM merchant_loans_list_table WHERE loaner_id = ?";
-		
+		String query = "SELECT * FROM loan_request_table WHERE loaner_id = ?";
+
 		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
-			
+
 			prepSt.setInt(1, loanerId);
-			
+
 			ResultSet pendingLoansSet = prepSt.executeQuery();
-			
+
 			while(pendingLoansSet.next()) {
-				
+
 				boolean isPending = pendingLoansSet.getBoolean("is_pending");
 				System.out.println(isPending);
-				
+
 				if(!isPending) {
 					LoanRequest loanReq = new LoanRequest(pendingLoansSet.getInt("merchant_id"), pendingLoansSet.getInt("loaner_id"),
 							pendingLoansSet.getInt("product_id"),
@@ -1303,95 +1230,95 @@ public class DatabaseManager {
 							pendingLoansSet.getBoolean("is_pending"),
 							pendingLoansSet.getBoolean("is_rejected"),
 							pendingLoansSet.getBoolean("is_approved"));
-					
+
 					pendingLoans.add(loanReq);
 				}
-				
-				
-				
+
+
+
 			}
-			
+
 			return pendingLoans;
-			
-			
+
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
-	
+
 	public LoanRequest getLoanRequestInformation(LoanRequest loanReq) {
-		
+
 		String retrieveProductImageQuery = "SELECT product_picture , product_brand FROM products WHERE merchant_id = ? AND product_id = ? ";
-		
+
 		ImageIcon productImage = null;
 		String productBrand = null;
 		String merchantName = null;
-		
+
 		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductImageQuery)) {
 			try {
 				prepSt.setInt(1, loanReq.getMerchantId());
 				prepSt.setInt(2, loanReq.getProductId());
-				
+
 				ResultSet productSet = prepSt.executeQuery();
-				
+
 				while(productSet.next()) {
-					
+
 					//Conversion of BLOB to ImageIcon
 					byte[] imageBytes = productSet.getBytes("product_picture");
 					productImage = new ImageIcon(imageBytes);
-					
+
 					productBrand = productSet.getString("product_brand");
-					
-					
+
+
 				}
- 				
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		String retrieveMerchantName = "SELECT merchant_name FROM merchant_table WHERE merchant_id = ?";
-		
+
 		try(PreparedStatement prepSt = connection.prepareStatement(retrieveMerchantName)) {
 			prepSt.setInt(1, loanReq.getMerchantId());
-			
+
 			ResultSet merchantSet = prepSt.executeQuery();
-			
+
 			while(merchantSet.next()) {
 				merchantName = merchantSet.getString("merchant_name");
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-//		public LoanRequest(int merchantId, 
-//				String merchantName, 
-//				int loanerId, 
-//				int productId, 
-//				String loanedProductName,
-//				String loanedProductBrand, 
-//				ImageIcon loanedProductPicture, 
-//				float loanedProductPrice,
-//				int loanedProductMonthsToPay, 
-//				float loanedProductInterestRate, 
-//				String loanerName, 
-//				LocalDate loanRequestDate,
-//				LocalDate loanApproveDate, 
-//				LocalDate loanRejectDate, 
-//				boolean isPending, boolean isRejected,
-//				boolean isApproved)
-		
-		
+
+		//		public LoanRequest(int merchantId, 
+		//				String merchantName, 
+		//				int loanerId, 
+		//				int productId, 
+		//				String loanedProductName,
+		//				String loanedProductBrand, 
+		//				ImageIcon loanedProductPicture, 
+		//				float loanedProductPrice,
+		//				int loanedProductMonthsToPay, 
+		//				float loanedProductInterestRate, 
+		//				String loanerName, 
+		//				LocalDate loanRequestDate,
+		//				LocalDate loanApproveDate, 
+		//				LocalDate loanRejectDate, 
+		//				boolean isPending, boolean isRejected,
+		//				boolean isApproved)
+
+
 		LoanRequest newLoanReq = new LoanRequest(loanReq.getMerchantId() , 
 				merchantName, 
 				loanReq.getLoanerId(), 
@@ -1409,11 +1336,147 @@ public class DatabaseManager {
 				loanReq.isPending(), 
 				loanReq.isRejected(), 
 				loanReq.isApproved());
-		
+
 		return newLoanReq;
-		
+
 	}
-    
+
+
+	
+	//For each classes
+	
+	public Loaner getLoanerData(int loanerId) {
+
+		//Retrieve first the user id
+		int retrieveUserId = 0;
+		String retrieveUserIdQuery = "SELECT * FROM loaner_table WHERE loaner_id = ?";
+
+		try(PreparedStatement userIdRetrieveSt = connection.prepareStatement(retrieveUserIdQuery)) {
+			userIdRetrieveSt.setInt(1, loanerId);
+
+			ResultSet loanerDataSet = userIdRetrieveSt.executeQuery();
+
+			if(loanerDataSet.next()) {
+				retrieveUserId = loanerDataSet.getInt("user_id");
+			}
+
+			//Get the user data
+			String retrieveUserDataQuery = "SELECT * FROM users WHERE user_id = ?";
+
+			try(PreparedStatement userDataRetrieveSt = connection.prepareStatement(retrieveUserDataQuery)) {
+
+				userDataRetrieveSt.setInt(1, retrieveUserId);
+
+				ResultSet userDataSet = userDataRetrieveSt.executeQuery();
+
+				if(userDataSet.next()) {
+					// For the birthdate
+					LocalDate birthdate = userDataSet.getDate("birthday").toLocalDate();
+
+					Loaner loaner = new Loaner(loanerDataSet.getInt("loaner_id"),
+							userDataSet.getString("username"),
+							userDataSet.getString("password"),
+							userDataSet.getString("first_name"),
+							userDataSet.getString("middle_name"),
+							userDataSet.getString("last_name"),
+							userDataSet.getString("gender"),
+							birthdate,
+							userDataSet.getInt("age"),
+							userDataSet.getString("email"),
+							userDataSet.getString("phone_number"),
+							loanerDataSet.getString("source_of_income"),
+							loanerDataSet.getString("occupation"),
+							loanerDataSet.getString("monthly_income")
+							);
+
+					return loaner;
+				}
+
+				return null;
+
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+
+	}
+
+	public Product getProductData(int merchantId, String productName) {
+
+		String retrieveProductQuery = "SELECT * FROM products WHERE merchant_id = ? AND product_name = ?";
+
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductQuery)) {
+
+			prepSt.setInt(1, merchantId);
+			prepSt.setString(2, productName);
+
+			ResultSet productSet = prepSt.executeQuery();
+
+			if(productSet.next()) {
+
+				//Get the product loan terms of each product
+				ArrayList<ProductLoanTerm> productLoanTerms = new ArrayList<>();
+				String productLoanTermQuery = "SELECT * FROM product_loan_table WHERE product_id = ?";
+
+				try(PreparedStatement productLoanTermSt = connection.prepareStatement(productLoanTermQuery)) {
+
+					if(productSet.next()) {				
+						int productId = productSet.getInt("product_id");
+
+						productLoanTermSt.setInt(1, productId);
+
+						ResultSet productLoanTermsResultSet = productLoanTermSt.executeQuery();
+
+						while(productLoanTermsResultSet.next()) {		
+
+							int monthsToPay = productLoanTermsResultSet.getInt("months_to_pay");
+							float interestRate = productLoanTermsResultSet.getFloat("interest_rate");
+
+							ProductLoanTerm prodLoanTerm = new ProductLoanTerm(monthsToPay, interestRate);
+							productLoanTerms.add(prodLoanTerm);
+
+
+						}
+					}
+
+					//Conversion of BLOB to ImageIcon
+					byte[] imageBytes = productSet.getBytes("product_picture");
+					ImageIcon imageIcon = new ImageIcon(imageBytes);
+
+					Product productRetrieved = new Product(merchantId, 
+							imageIcon, 
+							productSet.getString("product_name"), 
+							productSet.getString("product_brand"),
+							productSet.getString("product_description"),
+							productSet.getString("product_specifications"),
+							productSet.getFloat("product_price"),
+							productSet.getInt("product_stocks_available"),
+							productSet.getString("product_category"),
+							productLoanTerms);
+
+					return productRetrieved;
+
+				} catch(SQLException e) {
+					e.printStackTrace();
+					return null;
+				} 
+
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+	}
 }
 
 

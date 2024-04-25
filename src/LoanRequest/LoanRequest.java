@@ -4,11 +4,19 @@ import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
 
+import Products.Product;
+import User.Loaner;
+import User.Merchant;
+
 public class LoanRequest {
 	
 	private int merchantId;
 	private String merchantName;
 	private int loanerId;
+	private Merchant merchantLoanData;
+	private Product productToLoanData;
+	private Loaner loanerLoanData;
+	
 	private int productId;
 	private String loanedProductName;
 	private String loanedProductBrand;
@@ -16,6 +24,7 @@ public class LoanRequest {
 	private float loanedProductPrice;
 	private int loanedProductMonthsToPay;
 	private float loanedProductInterestRate;
+	
 	private String loanerName;
 	private LocalDate loanRequestDate;
 	private LocalDate loanApproveDate;
@@ -231,5 +240,29 @@ public class LoanRequest {
 
 	public void setMonthlyPayment(float monthlyPayment) {
 		this.monthlyPayment = monthlyPayment;
+	}
+
+	public Merchant getMerchantLoanData() {
+		return merchantLoanData;
+	}
+
+	public void setMerchantLoanData(Merchant merchantLoanData) {
+		this.merchantLoanData = merchantLoanData;
+	}
+
+	public Product getProductToLoanData() {
+		return productToLoanData;
+	}
+
+	public void setProductToLoanData(Product productToLoanData) {
+		this.productToLoanData = productToLoanData;
+	}
+
+	public Loaner getLoanerLoanData() {
+		return loanerLoanData;
+	}
+
+	public void setLoanerLoanData(Loaner loanerLoanData) {
+		this.loanerLoanData = loanerLoanData;
 	}
 }
