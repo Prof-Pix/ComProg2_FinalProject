@@ -25,6 +25,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import ChatBot.Faqs;
 import Loan.Loan;
 import Loan.LoanRequest;
 import Loan.LoanSchedule;
@@ -659,6 +660,7 @@ public class DatabaseManager {
 
 	}
 
+	//Decide what to do (to delete the product completely or avoid deleting once there is an ongoing loan)
 	public boolean deleteMerchantProduct(int merchantId, int productId) {
 
 		System.out.println(productId);
@@ -826,29 +828,7 @@ public class DatabaseManager {
 		return "Store Name";
 	}
 
-	public boolean sendLoanRequest(int loanerId, Loaner loanerData, Product productData, ProductLoanTerm productLoanTerm) {
-
-		//THIS FOLLOWS A CHILD-PARENT DELETION
-		int retrievedProductId = 0;
-
-		//Retrieve the product id
-		String retrieveProductQuery = "SELECT * FROM products WHERE merchant_id = ? AND product_name = ?";
-
-		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductQuery)) {
-
-			prepSt.setInt(1, productData.getMerchantOwnerId());
-			prepSt.setString(2, productData.getName());
-
-			ResultSet rs = prepSt.executeQuery();
-
-			if(rs.next()) {
-				retrievedProductId = rs.getInt(1);
-			}
-
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		} 
+	public boolean sendLoanRequest(Loaner loanerData, Product productData, ProductLoanTerm selectedProductLoanTerm) {
 
 		String sendLoanRequestQuery = "INSERT INTO loan_request_table(merchant_id,"
 				+ "loaner_id,"
@@ -861,10 +841,10 @@ public class DatabaseManager {
 
 		try(PreparedStatement prepSt = connection.prepareStatement(sendLoanRequestQuery)) {
 			prepSt.setInt(1, productData.getMerchantOwnerId());
-			prepSt.setInt(2, loanerId);
-			prepSt.setInt(3, retrievedProductId);
-			prepSt.setInt(4, productLoanTerm.getMonthsToPay());
-			prepSt.setFloat(5, productLoanTerm.getInterestRate());
+			prepSt.setInt(2, loanerData.getLoanerId());
+			prepSt.setInt(3, productData.getProductId());
+			prepSt.setInt(4, selectedProductLoanTerm.getMonthsToPay());
+			prepSt.setFloat(5, selectedProductLoanTerm.getInterestRate());
 			prepSt.setDate(6, java.sql.Date.valueOf(LocalDate.now()) );
 			prepSt.setBoolean(7, true);
 
@@ -1188,44 +1168,66 @@ public class DatabaseManager {
 
 
 	//For each classes
-	public Merchant getMerchantData(int merchantId) {
-		//Retrieve first the user id
-		int retrieveUserId = 0;
-		String retrieveUserIdQuery = "SELECT * FROM merchant_table WHERE merchant_id = ?";
-
-		try(PreparedStatement userIdRetrieveSt = connection.prepareStatement(retrieveUserIdQuery)) {
-			userIdRetrieveSt.setInt(1, merchantId);
-
-			ResultSet merchantDataSet = userIdRetrieveSt.executeQuery();
-
-			if(merchantDataSet.next()) {
-				retrieveUserId = merchantDataSet.getInt("user_id");
+	public Admin getAdminData(int admindId) {
+		String retrieveAdminDataQuery = "SELECT * FROM users INNER JOIN admin_table ON users.user_id = admin_table.user_id WHERE admin_id = ?";
+		
+		try(PreparedStatement adminDataRetrieveSt = connection.prepareStatement(retrieveAdminDataQuery)) {
+			
+			adminDataRetrieveSt.setInt(1, admindId);
+			
+			ResultSet adminDataSet = adminDataRetrieveSt.executeQuery();
+			
+			if(adminDataSet.next()) {
+				LocalDate birthdate = adminDataSet.getDate("birthday").toLocalDate();
+				
+				Admin admin = new Admin(adminDataSet.getInt("admin_id"),
+						adminDataSet.getString("username"),
+						adminDataSet.getString("password"),
+						adminDataSet.getString("first_name"),
+						adminDataSet.getString("middle_name"),
+						adminDataSet.getString("last_name"),
+						adminDataSet.getString("gender"),
+						birthdate,
+						adminDataSet.getInt("age"),
+						adminDataSet.getString("email"),
+						adminDataSet.getString("phone_number"));
+				
+				return admin;
 			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+	
+	public Merchant getMerchantData(int merchantId) {
 
 			//Get the user data
-			String retrieveUserDataQuery = "SELECT * FROM users WHERE user_id = ?";
+			String retrieveMerchantDataQuery = "SELECT * FROM users INNER JOIN merchant_table ON users.user_id = merchant_table.user_id WHERE merchant_id = ?";
 
-			try(PreparedStatement userDataRetrieveSt = connection.prepareStatement(retrieveUserDataQuery)) {
+			try(PreparedStatement merchantDataRetrieveSt = connection.prepareStatement(retrieveMerchantDataQuery)) {
+				merchantDataRetrieveSt.setInt(1, merchantId);
 
-				userDataRetrieveSt.setInt(1, retrieveUserId);
+				ResultSet merchantDataSet = merchantDataRetrieveSt.executeQuery();
 
-				ResultSet userDataSet = userDataRetrieveSt.executeQuery();
-
-				if(userDataSet.next()) {
+				if(merchantDataSet.next()) {
 					// For the birthdate
-					LocalDate birthdate = userDataSet.getDate("birthday").toLocalDate();
+					LocalDate birthdate = merchantDataSet.getDate("birthday").toLocalDate();
 
 					Merchant merchant = new Merchant(merchantDataSet.getInt("merchant_id"),
-							userDataSet.getString("username"),
-							userDataSet.getString("password"),
-							userDataSet.getString("first_name"),
-							userDataSet.getString("middle_name"),
-							userDataSet.getString("last_name"),
-							userDataSet.getString("gender"),
+							merchantDataSet.getString("username"),
+							merchantDataSet.getString("password"),
+							merchantDataSet.getString("first_name"),
+							merchantDataSet.getString("middle_name"),
+							merchantDataSet.getString("last_name"),
+							merchantDataSet.getString("gender"),
 							birthdate,
-							userDataSet.getInt("age"),
-							userDataSet.getString("email"),
-							userDataSet.getString("phone_number"),
+							merchantDataSet.getInt("age"),
+							merchantDataSet.getString("email"),
+							merchantDataSet.getString("phone_number"),
 							merchantDataSet.getString("merchant_name"),
 							merchantDataSet.getString("merchant_category"),
 							merchantDataSet.getString("merchant_region_location"),
@@ -1247,53 +1249,34 @@ public class DatabaseManager {
 				return null;
 			}
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
 
 	}
 
 	public Loaner getLoanerData(int loanerId) {
 
-		//Retrieve first the user id
-		int retrieveUserId = 0;
-		String retrieveUserIdQuery = "SELECT * FROM loaner_table WHERE loaner_id = ?";
+		
+			String retrieveLoanerDataQuery = "SELECT * FROM users INNER JOIN loaner_table ON users.user_id = loaner_table.user_id WHERE loaner_id = ?";
 
-		try(PreparedStatement userIdRetrieveSt = connection.prepareStatement(retrieveUserIdQuery)) {
-			userIdRetrieveSt.setInt(1, loanerId);
+			try(PreparedStatement loanerDataRetrieveSt = connection.prepareStatement(retrieveLoanerDataQuery)) {
+				loanerDataRetrieveSt.setInt(1, loanerId);
+				
+				ResultSet loanerDataSet = loanerDataRetrieveSt.executeQuery();
 
-			ResultSet loanerDataSet = userIdRetrieveSt.executeQuery();
-
-			if(loanerDataSet.next()) {
-				retrieveUserId = loanerDataSet.getInt("user_id");
-			}
-
-			//Get the user data
-			String retrieveUserDataQuery = "SELECT * FROM users WHERE user_id = ?";
-
-			try(PreparedStatement userDataRetrieveSt = connection.prepareStatement(retrieveUserDataQuery)) {
-
-				userDataRetrieveSt.setInt(1, retrieveUserId);
-
-				ResultSet userDataSet = userDataRetrieveSt.executeQuery();
-
-				if(userDataSet.next()) {
+				if(loanerDataSet.next()) {
 					// For the birthdate
-					LocalDate birthdate = userDataSet.getDate("birthday").toLocalDate();
+					LocalDate birthdate = loanerDataSet.getDate("birthday").toLocalDate();
 
 					Loaner loaner = new Loaner(loanerDataSet.getInt("loaner_id"),
-							userDataSet.getString("username"),
-							userDataSet.getString("password"),
-							userDataSet.getString("first_name"),
-							userDataSet.getString("middle_name"),
-							userDataSet.getString("last_name"),
-							userDataSet.getString("gender"),
+							loanerDataSet.getString("username"),
+							loanerDataSet.getString("password"),
+							loanerDataSet.getString("first_name"),
+							loanerDataSet.getString("middle_name"),
+							loanerDataSet.getString("last_name"),
+							loanerDataSet.getString("gender"),
 							birthdate,
-							userDataSet.getInt("age"),
-							userDataSet.getString("email"),
-							userDataSet.getString("phone_number"),
+							loanerDataSet.getInt("age"),
+							loanerDataSet.getString("email"),
+							loanerDataSet.getString("phone_number"),
 							loanerDataSet.getString("source_of_income"),
 							loanerDataSet.getString("occupation"),
 							loanerDataSet.getString("monthly_income")
@@ -1310,12 +1293,6 @@ public class DatabaseManager {
 				e.printStackTrace();
 				return null;
 			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
 
 
 	}
@@ -1805,6 +1782,59 @@ public class DatabaseManager {
 	}
 
 
+	public ArrayList<Merchant> getAllMerchants() {
+		ArrayList<Merchant> allMerchants = new ArrayList<>();
+		
+		String getAllMerchantQuery = "SELECT * FROM merchant_table";
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(getAllMerchantQuery)) {
+			
+			ResultSet allMerchantsSet = prepSt.executeQuery();
+			
+			while(allMerchantsSet.next()) {
+				int merchantId = allMerchantsSet.getInt("merchant_id");
+				Merchant merch = getMerchantData(merchantId);
+				System.out.println(merch.getMerchantId());
+				
+				allMerchants.add(merch);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return allMerchants;
+		
+	}
+	
+	public ArrayList<Faqs> getAllFaqs() {
+		ArrayList<Faqs> faqs = new ArrayList<>();
+		
+		String retrieveFaqsQuery = "SELECT * FROM faqs_table";
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveFaqsQuery)) {
+			ResultSet faqsSet = prepSt.executeQuery();
+			
+			
+			while(faqsSet.next()) {
+				Faqs faq = new Faqs(faqsSet.getInt("faq_id"),
+						faqsSet.getString("faq_title"),
+						faqsSet.getString("faq_query"),
+						faqsSet.getString("faq_answer"),
+						faqsSet.getString("faq_user_type"));
+				
+				faqs.add(faq);
+			}
+			
+			return faqs;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 }
 
 

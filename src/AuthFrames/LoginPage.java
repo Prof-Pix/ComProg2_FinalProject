@@ -119,7 +119,7 @@ public class LoginPage extends JFrame {
 
 						switch(userType) {
 						case "admin" : {
-							AdminFrame adFrame = new AdminFrame();
+							AdminFrame adFrame = new AdminFrame(returnId);
 							adFrame.setVisible(true);
 							break;
 						}

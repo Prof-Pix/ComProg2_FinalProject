@@ -5,16 +5,29 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import AdminFramePanels.ManageMerchantPanel;
+import AdminFramePanels.ViewProfilePanel;
+import LoanerFramePanels.RejectedLoansPanel;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class AdminFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	
+	//For tracking the current panel;
+	static JPanel currentPanel = null;
+	
+	private static int ADMIN_ID;
 
 	/**
 	 * Launch the application.
@@ -23,7 +36,7 @@ public class AdminFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AdminFrame frame = new AdminFrame();
+					AdminFrame frame = new AdminFrame(ADMIN_ID);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -35,39 +48,73 @@ public class AdminFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminFrame() {
+	public AdminFrame(int adminId) {
+		
+		AdminFrame.ADMIN_ID = adminId;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 700);
+		setBounds(100, 100, 1180, 643);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("Profile");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem viewProfileMenuItem = new JMenuItem("View Profile");
+		viewProfileMenuItem.addActionListener(e -> showViewProfilePanel());
+		mnNewMenu.add(viewProfileMenuItem);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Edit Profile");
+		mnNewMenu.add(mntmNewMenuItem_3);
+		
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Logout");
+		mnNewMenu.add(mntmNewMenuItem_4);
+		
+		JMenu mnNewMenu_1 = new JMenu("Manage Users");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem manageMerchantMenuItem = new JMenuItem("Manage Merchants");
+		manageMerchantMenuItem.addActionListener(e -> showManageMerchant());
+		mnNewMenu_1.add(manageMerchantMenuItem);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Manage Loaners");
+		mnNewMenu_1.add(mntmNewMenuItem_1);
+		
+		JMenu mnNewMenu_2 = new JMenu("Manage FAQS");
+		menuBar.add(mnNewMenu_2);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Edit FAQS");
+		mnNewMenu_2.add(mntmNewMenuItem_2);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(128, 0, 0));
-		panel.setBounds(0, 0, 154, 661);
-		contentPane.add(panel);
-		panel.setLayout(null);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(28, 11, 94, 73);
-		panel.add(panel_1);
-		
-		JButton btnNewButton = new JButton("Profile");
-		btnNewButton.setBounds(28, 110, 89, 23);
-		panel.add(btnNewButton);
-		
-		JButton btnA = new JButton("Manage Merchants");
-		btnA.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnA.setBounds(10, 154, 116, 23);
-		panel.add(btnA);
-		
-		JButton btnManageLoans = new JButton("Manage Loaner");
-		btnManageLoans.setBounds(10, 194, 116, 23);
-		panel.add(btnManageLoans);
+	}
+	
+	
+	private void showViewProfilePanel() {
+		if (currentPanel != null) {
+			contentPane.remove(currentPanel);		
+		}
+		ViewProfilePanel viewProfilePanel = new ViewProfilePanel(ADMIN_ID);
+		currentPanel = viewProfilePanel;
+		viewProfilePanel.setBounds(0,0,1200,700);
+		contentPane.add(viewProfilePanel);
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+	
+	private void showManageMerchant() {
+		if (currentPanel != null) {
+			contentPane.remove(currentPanel);		
+		}
+		ManageMerchantPanel manageMerchantPanel = new ManageMerchantPanel();
+		currentPanel = manageMerchantPanel;
+		manageMerchantPanel.setBounds(0,0,1200,700);
+		contentPane.add(manageMerchantPanel);
+		contentPane.revalidate();
+		contentPane.repaint();
 	}
 }

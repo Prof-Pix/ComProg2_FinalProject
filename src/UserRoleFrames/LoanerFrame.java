@@ -7,12 +7,14 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import AuthFrames.LoginPage;
+import ChatBot.HelpCenterChatBotDialog;
 import LoanerFramePanels.ApprovedLoansPanel;
 import LoanerFramePanels.MarketplacePanel;
 import LoanerFramePanels.OngoingLoansPanel;
 import LoanerFramePanels.PendingLoansPanel;
 import LoanerFramePanels.RejectedLoansPanel;
 import LoanerFramePanels.SeeDetailsProductPanel;
+import LoanerFramePanels.ViewProfilePanel;
 import MerchantFramePanels.AddProductPanel;
 import Utilities.HelperUtility;
 
@@ -69,6 +71,10 @@ public class LoanerFrame extends JFrame {
 		JMenu mnNewMenu = new JMenu("Profile");
 		menuBar.add(mnNewMenu);
 		
+		JMenuItem viewProfileMenuItem = new JMenuItem("View Profile");
+		viewProfileMenuItem.addActionListener(e -> showViewProfilePanel());
+		mnNewMenu.add(viewProfileMenuItem);
+		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Edit Profile");
 		mnNewMenu.add(mntmNewMenuItem_2);
 		
@@ -117,8 +123,18 @@ public class LoanerFrame extends JFrame {
 		JMenu mnNewMenu_3 = new JMenu("Settings");
 		menuBar.add(mnNewMenu_3);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("FAQS");
-		mnNewMenu_3.add(mntmNewMenuItem);
+		JMenuItem faqsMenuItem = new JMenuItem("FAQS");
+		faqsMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				HelpCenterChatBotDialog chatBot = new HelpCenterChatBotDialog("loaner");
+				chatBot.setVisible(true);
+			}
+			
+		});
+		mnNewMenu_3.add(faqsMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("About HomeCredit");
 		mnNewMenu_3.add(mntmNewMenuItem_1);
@@ -179,6 +195,18 @@ public class LoanerFrame extends JFrame {
 			currentPanel = ongoingLoanPanel;
 			ongoingLoanPanel.setBounds(0,0,1200,700);
 			contentPane.add(ongoingLoanPanel);
+			contentPane.revalidate();
+			contentPane.repaint();
+		}
+		
+		private void showViewProfilePanel() {
+			if (currentPanel != null) {
+				contentPane.remove(currentPanel);		
+			}
+			ViewProfilePanel viewProfilePanel = new ViewProfilePanel(LOANER_ID);
+			currentPanel = viewProfilePanel;
+			viewProfilePanel.setBounds(0,0,1200,700);
+			contentPane.add(viewProfilePanel);
 			contentPane.revalidate();
 			contentPane.repaint();
 		}

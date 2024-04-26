@@ -11,6 +11,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import AuthFrames.LoginPage;
+import ChatBot.HelpCenterChatBotDialog;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -24,6 +25,7 @@ import MerchantFramePanels.OngoingLoansPanel;
 import MerchantFramePanels.PendingLoanRequestsPanel;
 import MerchantFramePanels.PendingLoansPanel;
 import MerchantFramePanels.ViewProductsPanel;
+import MerchantFramePanels.ViewProfilePanel;
 import Products.Product;
 import Products.ProductLoanTerm;
 import Products.ProductRegistrationData;
@@ -127,6 +129,10 @@ public class MerchantFrame extends JFrame {
 
 		JMenu mnNewMenu_1 = new JMenu("Profile");
 		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem viewProfileMenuItem = new JMenuItem("View Profile");
+		viewProfileMenuItem.addActionListener(e -> showViewProfilePanel());
+		mnNewMenu_1.add(viewProfileMenuItem);
 
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Edit Profile");
 		mnNewMenu_1.add(mntmNewMenuItem_3);
@@ -176,8 +182,19 @@ public class MerchantFrame extends JFrame {
 		JMenu mnNewMenu_4 = new JMenu("Settings");
 		menuBar.add(mnNewMenu_4);
 
-		JMenuItem mntmNewMenuItem_4 = new JMenuItem("FAQS");
-		mnNewMenu_4.add(mntmNewMenuItem_4);
+		JMenuItem faqsMenuItem = new JMenuItem("FAQS");
+		faqsMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				// TODO Auto-generated method stub
+				HelpCenterChatBotDialog chatBot = new HelpCenterChatBotDialog("merchant");
+				chatBot.setVisible(true);
+			}
+			
+		});
+		mnNewMenu_4.add(faqsMenuItem);
 
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("About HomeCredit");
 		mnNewMenu_4.add(mntmNewMenuItem_5);
@@ -191,7 +208,7 @@ public class MerchantFrame extends JFrame {
 
 	}
 	//For changing from one menu to another
-	private void showAddProductPanel() {
+	public void showAddProductPanel() {
 		
 		if (currentPanel != null) {
 			contentPane.remove(currentPanel);		
@@ -218,7 +235,7 @@ public class MerchantFrame extends JFrame {
 		contentPane.repaint();
 	}
 	
-	public static void showOngoingLoansPanel() {
+	public void showOngoingLoansPanel() {
 		if(currentPanel != null) {
 			contentPane.remove(currentPanel);
 		}
@@ -231,7 +248,7 @@ public class MerchantFrame extends JFrame {
 		contentPane.repaint();
 	}
 	
-	public static void showPendingLoanPanel() {
+	public void showPendingLoanPanel() {
 		if(currentPanel != null) {
 			contentPane.remove(currentPanel);
 		}
@@ -244,7 +261,7 @@ public class MerchantFrame extends JFrame {
 		contentPane.repaint();
 	}
 	
-	public static void showPendingLoanRequestPanel() {
+	public void showPendingLoanRequestPanel() {
 		if(currentPanel != null) {
 			contentPane.remove(currentPanel);
 		}
@@ -253,6 +270,19 @@ public class MerchantFrame extends JFrame {
 		currentPanel = pendingLoanRequestPanel;
 		pendingLoanRequestPanel.setBounds(0,0,1200,700);
 		contentPane.add(pendingLoanRequestPanel);
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+	
+	public  void showViewProfilePanel() {
+		if(currentPanel != null) {
+			contentPane.remove(currentPanel);
+		}
+		
+		ViewProfilePanel viewProfilePanel = new ViewProfilePanel(MERCHANT_ID);
+		currentPanel = viewProfilePanel;
+		viewProfilePanel.setBounds(0,0,1200,700);
+		contentPane.add(viewProfilePanel);
 		contentPane.revalidate();
 		contentPane.repaint();
 	}

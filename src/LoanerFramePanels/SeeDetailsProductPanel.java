@@ -230,7 +230,7 @@ public class SeeDetailsProductPanel extends JDialog {
 								Product productToLoan = productData;
 								ProductLoanTerm prodLoanTerm = new ProductLoanTerm(selectedMonthsToPay, selectedInterestRate);
 								
-								if(dbManager.sendLoanRequest(LOANER_ID, loanerData, productToLoan, prodLoanTerm)) {
+								if(dbManager.sendLoanRequest(loanerData, productToLoan, prodLoanTerm)) {
 									JOptionPane.showMessageDialog(null, "Loan request sent to " + productData.getMerchantName()+ ". Please wait to for the approval of the merchant. Thank you.", "Loan Request Sent Successfully", JOptionPane.INFORMATION_MESSAGE);
 									HelperUtility.closeDialog(SeeDetailsProductPanel.this);
 								}

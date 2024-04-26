@@ -8,6 +8,9 @@ import Database.DatabaseManager;
 import MerchantFramePanels.ProductTemplatePanel;
 import Products.Product;
 import javax.swing.border.LineBorder;
+
+import AdminFramePanels.MerchantTemplatePanel;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 

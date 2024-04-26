@@ -11,6 +11,7 @@ public class Admin extends User {
 	//For Database Connection
 	DatabaseManager dbManager = new DatabaseManager();
 	
+	private int adminId;
 	private String username;
 	private String password;
 	private String firstName;
@@ -24,11 +25,12 @@ public class Admin extends User {
 	private String phoneNumber;
 	
 	private static final String USER_TYPE = UserRoles.ADMIN.toString().toLowerCase();
-	
-	public Admin(String username, String password, String firstName, String middleName, String lastName, String gender, LocalDate birthdate,
+
+	public Admin(int adminId, String username, String password, String firstName, String middleName, String lastName, String gender, LocalDate birthdate,
 			int age, String email, String phoneNumber) {
 		super(username, password, firstName, middleName, lastName, gender, birthdate, age, email, phoneNumber);
 		
+		this.adminId = adminId;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -40,6 +42,31 @@ public class Admin extends User {
 		this.phoneNumber = phoneNumber;
 		fullName = this.getFullName();
 	}	
+	
+	public Admin( String username, String password, String firstName, String middleName, String lastName, String gender, LocalDate birthdate,
+			int age, String email, String phoneNumber) {
+		super(username, password, firstName, middleName, lastName, gender, birthdate, age, email, phoneNumber);
+		
+
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.birthdate = birthdate;
+		this.age = age;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		fullName = this.getFullName();
+	}	
+	
+	public int getAdminId() {
+		return adminId;
+	}
+
+	public void setAdminId(int adminId) {
+		this.adminId = adminId;
+	}
 	
 	//For database registration
 	public boolean registerAdmin(AdminRegistrationData data) {

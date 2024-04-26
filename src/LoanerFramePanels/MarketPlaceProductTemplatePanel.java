@@ -34,6 +34,11 @@ import java.awt.SystemColor;
 
 public class MarketPlaceProductTemplatePanel extends JPanel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	static Product productToDisplay;
 
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
