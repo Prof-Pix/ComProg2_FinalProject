@@ -147,7 +147,7 @@ public class LoginPage extends JFrame {
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(128, 0, 0));
-		panel.setBounds(0, 0, 450, 461);
+		panel.setBounds(-17, 0, 450, 461);
 		contentPane.add(panel);
 		
 	}

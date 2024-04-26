@@ -19,6 +19,7 @@ import javax.swing.JRadioButton;
 import javax.swing.border.LineBorder;
 
 import Database.DatabaseManager;
+import Loan.Loan;
 import Loan.LoanRequest;
 import PaymentAccounts.BankAccount;
 import PaymentAccounts.EWalletAccount;
@@ -61,20 +62,22 @@ public class LoanPaymentPanel extends JDialog {
 	JPanel eWalletInformationPanel;
 	JPanel cardSecurityCodeFIeld;
 	
-	static LoanRequest LOAN_DETAILS;
+	static LoanRequest LOAN_REQUEST_DETAILS;
+	static Loan LOAN_DETAILS;
 	
 	String paymentMethod;
 	float totalPayment;
 	
 	//For advance pay
 	ArrayList<JCheckBox> monthCheckBoxes = new ArrayList<>();
+	private JLabel remainingBalance;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			LoanPaymentPanel dialog = new LoanPaymentPanel(LOAN_DETAILS);
+			LoanPaymentPanel dialog = new LoanPaymentPanel(LOAN_REQUEST_DETAILS, LOAN_DETAILS);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -85,10 +88,11 @@ public class LoanPaymentPanel extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public LoanPaymentPanel(LoanRequest loanDetails) {
+	public LoanPaymentPanel(LoanRequest loanReqDetails, Loan loanDetails) {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		
 		//Get more information about the loan 
+		LoanPaymentPanel.LOAN_REQUEST_DETAILS = loanReqDetails;
 		LoanPaymentPanel.LOAN_DETAILS = loanDetails;
 	
 		
@@ -215,23 +219,23 @@ public class LoanPaymentPanel extends JDialog {
 		productImageLabel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		productImageLabel.setBounds(31, 24, 220, 220);
 		//Scaling the image
-		Image originalImage = LOAN_DETAILS.getProductToLoanData().getProductImage().getImage();
+		Image originalImage = LOAN_REQUEST_DETAILS.getProductToLoanData().getProductImage().getImage();
 		Image scaledImage = originalImage.getScaledInstance(productImageLabel.getWidth(), productImageLabel.getHeight(), Image.SCALE_SMOOTH);
 		ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
 		productImageLabel.setIcon(scaledImageIcon);
 		contentPanel.add(productImageLabel);
 		
-		JLabel lblProductName = new JLabel(LOAN_DETAILS.getProductToLoanData().getName());
+		JLabel lblProductName = new JLabel(LOAN_REQUEST_DETAILS.getProductToLoanData().getName());
 		lblProductName.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblProductName.setBounds(291, 24, 235, 14);
 		contentPanel.add(lblProductName);
 		
-		JLabel lblNewLabel_1 = new JLabel(LOAN_DETAILS.getProductToLoanData().getBrand());
+		JLabel lblNewLabel_1 = new JLabel(LOAN_REQUEST_DETAILS.getProductToLoanData().getBrand());
 		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 14));
 		lblNewLabel_1.setBounds(291, 41, 235, 19);
 		contentPanel.add(lblNewLabel_1);
 		
-		JLabel lblPrice = new JLabel("₱ " + String.valueOf(LOAN_DETAILS.getProductToLoanData().getPrice()));
+		JLabel lblPrice = new JLabel("₱ " + String.valueOf(LOAN_REQUEST_DETAILS.getProductToLoanData().getPrice()));
 		lblPrice.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblPrice.setBounds(291, 79, 235, 14);
 		contentPanel.add(lblPrice);
@@ -241,7 +245,7 @@ public class LoanPaymentPanel extends JDialog {
 		lblNewLabel_2.setBounds(291, 104, 89, 14);
 		contentPanel.add(lblNewLabel_2);
 		
-		JLabel merchantName = new JLabel(LOAN_DETAILS.getMerchantLoanData().getMerchantName());
+		JLabel merchantName = new JLabel(LOAN_REQUEST_DETAILS.getMerchantLoanData().getMerchantName());
 		merchantName.setFont(new Font("Dialog", Font.ITALIC, 14));
 		merchantName.setBounds(370, 104, 173, 14);
 		contentPanel.add(merchantName);
@@ -251,20 +255,20 @@ public class LoanPaymentPanel extends JDialog {
 		lblNewLabel_2_1.setBounds(31, 255, 153, 16);
 		contentPanel.add(lblNewLabel_2_1);
 		
-		JLabel downPaymentPrice = new JLabel("₱ " + LOAN_DETAILS.getDownPaymentAmount());
-		downPaymentPrice.setFont(new Font("Dialog", Font.BOLD, 14));
-		downPaymentPrice.setBounds(252, 256, 235, 14);
-		contentPanel.add(downPaymentPrice);
+		remainingBalance = new JLabel("₱ " + LOAN_DETAILS.getRemainingBalance());
+		remainingBalance.setFont(new Font("Dialog", Font.BOLD, 14));
+		remainingBalance.setBounds(252, 256, 235, 14);
+		contentPanel.add(remainingBalance);
 		
 		JLabel lblNewLabel_2_1_1 = new JLabel("Remaining Months to Pay:");
 		lblNewLabel_2_1_1.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblNewLabel_2_1_1.setBounds(31, 282, 201, 16);
 		contentPanel.add(lblNewLabel_2_1_1);
 		
-		JLabel lblPrice_1_1 = new JLabel("₱ " + LOAN_DETAILS.getMonthlyPayment() + " x " + LOAN_DETAILS.getLoanedProductMonthsToPay() + " months");
-		lblPrice_1_1.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblPrice_1_1.setBounds(252, 283, 235, 14);
-		contentPanel.add(lblPrice_1_1);
+		JLabel monthsToPay = new JLabel(String.valueOf(LOAN_DETAILS.getRemainingMonthsToPay()));
+		monthsToPay.setFont(new Font("Dialog", Font.BOLD, 14));
+		monthsToPay.setBounds(252, 283, 235, 14);
+		contentPanel.add(monthsToPay);
 		
 		cardSecurityCodeFIeld = new JPanel();
 		cardSecurityCodeFIeld.setBounds(630, 181, 259, 232);
@@ -310,7 +314,7 @@ public class LoanPaymentPanel extends JDialog {
 		lblNewLabel_2_1_2.setBounds(630, 41, 122, 16);
 		contentPanel.add(lblNewLabel_2_1_2);
 		
-		totalPaymentText = new JLabel("₱ " + String.valueOf(LOAN_DETAILS.getDownPayment()));
+		totalPaymentText = new JLabel("₱ " + String.valueOf(LOAN_REQUEST_DETAILS.getMonthlyPayment()));
 		totalPaymentText.setFont(new Font("Dialog", Font.BOLD, 14));
 		totalPaymentText.setBounds(762, 43, 235, 14);
 		contentPanel.add(totalPaymentText);
@@ -318,10 +322,15 @@ public class LoanPaymentPanel extends JDialog {
 		payInAdvanceScrollPane = new JScrollPane();
 		payInAdvanceScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		payInAdvanceScrollPane.setBounds(31, 356, 300, 180);
-		payInAdvanceScrollPane.setVisible(false);
 		contentPanel.add(payInAdvanceScrollPane);
 		
-		for(int  i = 0; i < LOAN_DETAILS.getLoanedProductMonthsToPay(); i++) {
+		payInAdvancePanel = new JPanel();
+		payInAdvanceScrollPane.setViewportView(payInAdvancePanel);
+		payInAdvancePanel.setLayout(new BoxLayout(payInAdvancePanel, BoxLayout.Y_AXIS));
+		
+		int counter = 0;
+
+		for(int  i = LOAN_DETAILS.getPaidMonths() + 1; i <= LOAN_REQUEST_DETAILS.getLoanedProductMonthsToPay() ; i++) {
 			
 			JPanel panel_2 = new JPanel();
 			panel_2.setPreferredSize(new Dimension(298, 40));
@@ -337,9 +346,9 @@ public class LoanPaymentPanel extends JDialog {
 			payCheckBox.setFont(new Font("Dialog", Font.PLAIN, 12));
 			monthCheckBoxes.add(payCheckBox);
 			
-			if(i == 0) {
+			if(counter == 0) {
 				payCheckBox.setSelected(true);
-			} else if (i == 1) {
+			} else if (counter == 1) {
 				payCheckBox.setEnabled(true);
 			}
 			else {
@@ -379,24 +388,24 @@ public class LoanPaymentPanel extends JDialog {
 				
 			});
 			
-			panel_2.add(monthCheckBoxes.get(i));
+			panel_2.add(monthCheckBoxes.get(counter));
 			panel_2.add(Box.createRigidArea(new Dimension(20,0)));
 			
-			JLabel payMonthLabel = new JLabel(String.valueOf(i+1));
+			JLabel payMonthLabel = new JLabel(String.valueOf(i));
 			payMonthLabel.setMaximumSize(new Dimension(30, 14));
 			payMonthLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 			panel_2.add(payMonthLabel);
 			panel_2.add(Box.createRigidArea(new Dimension(50,0)));
 			
 			
-			JLabel payAmountLabel = new JLabel("₱ " + LOAN_DETAILS.getMonthlyPayment());
+			JLabel payAmountLabel = new JLabel("₱ " + LOAN_REQUEST_DETAILS.getMonthlyPayment());
 			payAmountLabel.setMaximumSize(new Dimension(100, 14));
 			payAmountLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 			panel_2.add(payAmountLabel);
 			panel_2.add(Box.createRigidArea(new Dimension(20,0)));
 
+			counter++;
 		}
-		payInAdvanceScrollPane.setVisible(false);
 		
 		
 		lblMonth = new JLabel("Month");
@@ -410,14 +419,6 @@ public class LoanPaymentPanel extends JDialog {
 		lblAmountDue.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblAmountDue.setBounds(177, 331, 74, 14);
 		contentPanel.add(lblAmountDue);
-		
-		payInAdvancePanel = new JPanel();
-		payInAdvancePanel.setBounds(31, 356, 298, 178);
-		contentPanel.add(payInAdvancePanel);
-		payInAdvancePanel.setLayout(new BoxLayout(payInAdvancePanel, BoxLayout.Y_AXIS));
-
-		lblMonth.setVisible(false);
-		lblAmountDue.setVisible(false);
 			
 		cardSecurityCodeFIeld.setVisible(false);
 		
@@ -432,7 +433,7 @@ public class LoanPaymentPanel extends JDialog {
 				JButton okButton = new JButton("Continue Payment");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						System.out.println(loanDetails.getLoanerId());
+						System.out.println(loanReqDetails.getLoanerId());
 						if(paymentMethod.equals("bank")) {
 							
 							String cardNumberText = cardNumberField.getText();
@@ -531,7 +532,7 @@ public class LoanPaymentPanel extends JDialog {
 							}
 										
 							dbManager.connect();
-							if(dbManager.setLoanRequestToOngoing(loanDetails, monthsPaidInAdvance)) {
+							if(dbManager.payOnGoingLoan(LOAN_DETAILS, monthsPaidInAdvance)) {
 								JOptionPane.showMessageDialog(null, "Payment Successful", "Invalid Action", JOptionPane.INFORMATION_MESSAGE);
 								HelperUtility.closeDialog(LoanPaymentPanel.this);
 							} else {
@@ -588,7 +589,7 @@ public class LoanPaymentPanel extends JDialog {
 				checkBoxChecked ++;
 			}
 		}
-		totalPayment = LOAN_DETAILS.getMonthlyPayment() * checkBoxChecked + LOAN_DETAILS.getDownPayment();
+		totalPayment = LOAN_REQUEST_DETAILS.getMonthlyPayment() * checkBoxChecked;
 		totalPaymentText.setText("₱ " + String.valueOf(totalPayment)); ;
 		
 	}

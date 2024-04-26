@@ -766,8 +766,8 @@ public class DatabaseManager {
 				prepSt.setFloat(3, prodLoanTerms.getInterestRate());
 
 				prepSt.executeUpdate();
-				
-				
+
+
 			}
 
 			return true;
@@ -788,14 +788,14 @@ public class DatabaseManager {
 
 
 			ResultSet productResultSet = retrieveSt.executeQuery(query);
-			
-			 
+
+
 			while(productResultSet.next()) {
 				int productId = productResultSet.getInt("product_id");
 				Product prod = getProductData(productId);
 				merchantProducts.add(prod);
 			}
-			
+
 
 
 		} catch (SQLException e) {
@@ -1186,7 +1186,7 @@ public class DatabaseManager {
 
 	}
 
-	
+
 	//For each classes
 	public Merchant getMerchantData(int merchantId) {
 		//Retrieve first the user id
@@ -1357,7 +1357,7 @@ public class DatabaseManager {
 					//Conversion of BLOB to ImageIcon
 					byte[] imageBytes = productSet.getBytes("product_picture");
 					ImageIcon imageIcon = new ImageIcon(imageBytes);
-					
+
 					//For merchant name
 					String merchantName = getMerchantName(productSet.getInt("merchant_id"));
 
@@ -1408,43 +1408,97 @@ public class DatabaseManager {
 		}
 		return "Store Name";
 	}
-	
-	
+
+	public LoanRequest getLoanRequestData(int loanerId , int loanRequestId) {
+
+		String query = "SELECT * FROM loan_request_table WHERE loaner_id = ? AND loan_request_id = ?";
+
+		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
+
+			prepSt.setInt(1, loanerId);
+			prepSt.setInt(2, loanRequestId);
+
+			ResultSet loanRequestSet = prepSt.executeQuery();
+
+			if(loanRequestSet.next()) {
+
+				int productId =  loanRequestSet.getInt("product_id");
+				int merchantId =  loanRequestSet.getInt("merchant_id");
+
+				Product productToLoan = getProductData(productId);
+				Loaner loanerLoan = getLoanerData(loanerId);
+				Merchant merchantLoan = getMerchantData(merchantId);
+
+				LoanRequest loanReq = new LoanRequest(loanRequestId, loanRequestSet.getInt("merchant_id"), 
+						loanRequestSet.getInt("loaner_id"),
+						loanRequestSet.getInt("product_id"),
+						merchantLoan,
+						productToLoan,
+						loanerLoan,
+						loanRequestSet.getInt("months_to_pay"),
+						loanRequestSet.getFloat("interest_rate"),
+						loanRequestSet.getDate("loan_request_date").toLocalDate(),
+						loanRequestSet.getDate("loan_approve_date").toLocalDate(),
+						loanRequestSet.getDate("loan_reject_date").toLocalDate(),
+						loanRequestSet.getBoolean("is_pending"),
+						loanRequestSet.getBoolean("is_rejected"),
+						loanRequestSet.getBoolean("is_approved"),
+						loanRequestSet.getBoolean("is_downpayment_pending"),
+						loanRequestSet.getBoolean("is_downpayment_paid"),
+						loanRequestSet.getBoolean("is_cancelled"));
+
+				return loanReq;
+
+
+			}
+			return null;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public boolean setLoanRequestToOngoing(LoanRequest loanReq, int monthsPaidInAdvance) {
-		
+
 		//Set the status of loans
 		String updateLoanRequestStatusQuery = "UPDATE loan_request_table "
 				+ "SET is_downpayment_pending = ?,"
 				+ "is_downpayment_paid = ?,"
 				+ "is_cancelled = ? "
 				+ "WHERE loan_request_id = ?";
-		
+
 		System.out.println(loanReq.getLoanRequestId());
-		
+
 		try(PreparedStatement prepSt = connection.prepareStatement(updateLoanRequestStatusQuery)) {
 			prepSt.setBoolean(1, false);
 			prepSt.setBoolean(2, true);
 			prepSt.setBoolean(3, false);
 			prepSt.setInt(4, loanReq.getLoanRequestId());
-			
+
 			prepSt.executeUpdate();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return false;
 		}
-		
+
 		//For loan id
 		String loanId = String.valueOf(HelperUtility.generateRandomId());
-		
+
 		//For the loan start date
 		LocalDate localStartDate = LocalDate.now();
 		Date startDate = Date.valueOf(localStartDate);
-		
+
+		float totalInterestedPrice = loanReq.getDownPayment() + ((loanReq.getMonthlyPayment()*loanReq.getLoanedProductMonthsToPay()));
+
 		int remainingMonthsToPay = loanReq.getLoanedProductMonthsToPay() - monthsPaidInAdvance;
 		float paidBalance = loanReq.getDownPaymentAmount() + (loanReq.getMonthlyPayment() * monthsPaidInAdvance);
-		float remainingBalance = loanReq.getProductToLoanData().getPrice() - paidBalance;
-		
+		float remainingBalance = totalInterestedPrice - paidBalance;
+
+
+
 		String addLoanQuery = "INSERT INTO loan_table (loan_id,"
 				+ "loan_request_id, "
 				+ "merchant_id,"
@@ -1458,7 +1512,7 @@ public class DatabaseManager {
 				+ "paid_months,"
 				+ "paid_balance,"
 				+ "loan_status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?, ?)";
-		
+
 		try(PreparedStatement prepSt = connection.prepareStatement(addLoanQuery)) {
 			prepSt.setString(1, loanId);
 			prepSt.setInt(2, loanReq.getLoanRequestId());
@@ -1468,27 +1522,27 @@ public class DatabaseManager {
 			prepSt.setDate(6, startDate);
 			prepSt.setFloat(7, loanReq.getMonthlyPayment());
 			prepSt.setInt(8, remainingMonthsToPay);
-			prepSt.setFloat(9, loanReq.getProductToLoanData().getPrice());
+			prepSt.setFloat(9, totalInterestedPrice);
 			prepSt.setFloat(10, remainingBalance);
 			prepSt.setInt(11, monthsPaidInAdvance);
 			prepSt.setFloat(12, paidBalance);
 			prepSt.setString(13, "active");
-			
+
 			prepSt.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		String addScheduleLoanQuery = "INSERT INTO loan_schedule_table (loan_id,"
 				+ "loan_month,"
 				+ "loan_schedule_date,"
 				+ "loan_schedule_amount,"
 				+ "status, "
 				+ "is_due) VALUES(?,?,?,?,?,?)";
-		
+
 		String addScheduleLoanPaidQuery = "INSERT INTO loan_schedule_table (loan_id,"
 				+ "loan_month,"
 				+ "loan_schedule_date,"
@@ -1496,20 +1550,20 @@ public class DatabaseManager {
 				+ "loan_paid_date, "
 				+ "status, "
 				+ "is_due) VALUES(?,?,?,?,?,?, ?)";
-		
+
 		//
 		for(int i = 1; i <= loanReq.getLoanedProductMonthsToPay(); i++) {
-			
+
 			int loanMonth = i;
-			
-			
+
+
 			if(monthsPaidInAdvance >= i) {
-				
+
 				//The schedule date is also the paid date when it is already paid
 				LocalDate loanPaidDate = localStartDate;
 				Date paidDate =  Date.valueOf(loanPaidDate);
 				String status = "paid";
-				
+
 				try(PreparedStatement prepSt = connection.prepareStatement(addScheduleLoanPaidQuery)) {
 					prepSt.setString(1, loanId);
 					prepSt.setInt(2, loanMonth);
@@ -1518,23 +1572,23 @@ public class DatabaseManager {
 					prepSt.setDate(5, paidDate);
 					prepSt.setString(6, status);
 					prepSt.setBoolean(7, false);
-					
+
 					prepSt.executeUpdate();
-		
+
 				} catch (SQLException e) {
-					
+
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return false;
 				}
-				
-				
+
+
 			} else {
 				LocalDate localScheduleDate = localStartDate.plus(i - monthsPaidInAdvance, ChronoUnit.MONTHS);
 				Date scheduleDate =  Date.valueOf(localScheduleDate);
-				
+
 				String status = "notpaid";
-				
+
 				try(PreparedStatement prepSt = connection.prepareStatement(addScheduleLoanQuery)) {
 					prepSt.setString(1, loanId);
 					prepSt.setInt(2, loanMonth);
@@ -1542,54 +1596,155 @@ public class DatabaseManager {
 					prepSt.setFloat(4, loanReq.getMonthlyPayment());
 					prepSt.setString(5, status);
 					prepSt.setBoolean(6, false);
-					
+
 					prepSt.executeUpdate();
 				} catch (SQLException e) {
-					
+
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return false;
 				}
 			}
 
-			
+
 		}
-		
-		
+
+
 
 		return true;
-		
-		
+
+
 	}
-	
+
+	public boolean payOnGoingLoan(Loan loan, int monthsPaidOnPayment) {
+
+
+		int remainingMonthsToPay = loan.getRemainingMonthsToPay() - monthsPaidOnPayment;
+		float remainingBalance = loan.getRemainingBalance() - (loan.getMonthlyPayment() * monthsPaidOnPayment);
+		float paidBalance = loan.getPaidBalance() + (loan.getMonthlyPayment() * monthsPaidOnPayment);
+		int monthsPaid = loan.getPaidMonths() + monthsPaidOnPayment;
+
+		if(remainingMonthsToPay == 0) {
+			String updateLoanCompleteQuery = "UPDATE loan_table "
+					+ "SET remaining_months_to_pay = ?, "
+					+ "remaining_balance = ? ,"
+					+ "paid_months = ?,"
+					+ "paid_balance = ?,"
+					+ "loan_status = ? "
+					+ "WHERE loan_id = ?";
+
+			try(PreparedStatement prepSt = connection.prepareStatement(updateLoanCompleteQuery)) {
+
+				prepSt.setInt(1, remainingMonthsToPay);
+				prepSt.setFloat(2, remainingBalance);
+				prepSt.setInt(3, monthsPaid);
+				prepSt.setFloat(4, paidBalance);
+				prepSt.setString(5, "complete");
+				prepSt.setString(6, loan.getLoanId());
+
+				prepSt.executeUpdate();
+
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		} else {
+			String updateLoanQuery = "UPDATE loan_table "
+					+ "SET remaining_months_to_pay = ?, "
+					+ "remaining_balance = ? ,"
+					+ "paid_months = ?,"
+					+ "paid_balance = ?"
+					+ "WHERE loan_id = ?";
+
+			try(PreparedStatement prepSt = connection.prepareStatement(updateLoanQuery)) {
+
+				prepSt.setInt(1, remainingMonthsToPay);
+				prepSt.setFloat(2, remainingBalance);
+				prepSt.setInt(3, monthsPaid);
+				prepSt.setFloat(4, paidBalance);
+				prepSt.setString(5, loan.getLoanId());
+
+				prepSt.executeUpdate();
+
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+		//Update Loan Schedule
+
+		for(LoanSchedule loanSched : loan.getLoanSchedule()) {
+
+
+
+			if(loanSched.getStatus().equals("notpaid") && loanSched.getLoanMonth() <= monthsPaid) {
+
+
+
+				String updateLoanScheduleQuery = "UPDATE loan_schedule_table "
+						+ "SET loan_paid_date = ? ,"
+						+ "status = ? "
+						+ "WHERE loan_id = ? AND loan_schedule_id = ?";
+
+				//For the loan start date
+				LocalDate localCurrentDate = LocalDate.now();
+				Date currentDate = Date.valueOf(localCurrentDate);
+
+				try(PreparedStatement prepSt = connection.prepareStatement(updateLoanScheduleQuery)) {
+					prepSt.setDate(1, currentDate);
+					prepSt.setString(2, "paid");
+					prepSt.setString(3, loanSched.getLoanId());
+					prepSt.setInt(4, loanSched.getLoanScheduleId());
+
+					prepSt.executeUpdate();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return false;
+							
+				}
+
+
+			}
+
+		}
+		return true;
+
+	}
+
 	public ArrayList<Loan> getOngoingLoans(int loanerId) {
-		
+
 		ArrayList<Loan> loans = new ArrayList<>();
-		
+
 		String getOngoingLoans = "SELECT * FROM loan_table WHERE loaner_id = ?";
-		
+
 		try(PreparedStatement prepSt = connection.prepareStatement(getOngoingLoans)) {
 			prepSt.setInt(1, loanerId);
-			
+
 			ResultSet ongoingLoanSet = prepSt.executeQuery();
-			
+
 			while(ongoingLoanSet.next()) {
-				
+
 				ArrayList<LoanSchedule> loanSchedules = new ArrayList<>();
-				
+
 				String loanId = ongoingLoanSet.getString("loan_id");
-				
+
 				//Get each loan schedule
 				String getLoanScheduleQuery = "SELECT * FROM loan_schedule_table WHERE loan_id = ?";
-				
+
 				try(PreparedStatement prepStt = connection.prepareStatement(getLoanScheduleQuery)) {
 					prepStt.setString(1, loanId);
-					
+
 					ResultSet loanScheduleSet = prepStt.executeQuery();
-					
-					
+
+
 					while(loanScheduleSet.next()) {
-						
+
 						if(loanScheduleSet.getDate("loan_paid_date") == null) {
 							LoanSchedule loanSched = new LoanSchedule(loanScheduleSet.getInt("loan_schedule_id"),
 									loanScheduleSet.getString("loan_id"),
@@ -1615,12 +1770,12 @@ public class DatabaseManager {
 									);
 							loanSchedules.add(loanSched);
 						}
-							
-						
+
+
 					}
 				}
-				
-				
+
+
 				Loan ln = new Loan(ongoingLoanSet.getString("loan_id"),
 						ongoingLoanSet.getInt("loan_request_id"),
 						ongoingLoanSet.getInt("merchant_id"),
@@ -1635,13 +1790,13 @@ public class DatabaseManager {
 						ongoingLoanSet.getString("loan_status"),
 						loanSchedules
 						);
-				
+
 				loans.add(ln);
 			}
-			
+
 			return loans;
-			
-			
+
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1649,7 +1804,7 @@ public class DatabaseManager {
 		}
 	}
 
-	
+
 }
 
 

@@ -169,7 +169,7 @@ public class MerchantFrame extends JFrame {
 		ongoingLoansMenuItem.addActionListener(e -> showOngoingLoansPanel());
 		
 		JMenuItem pendingLoansMenuItem = new JMenuItem("Pending Loans");
-		pendingLoansMenuItem.addActionListener(null);
+		pendingLoansMenuItem.addActionListener(e -> showPendingLoanPanel());
 		mnNewMenu_3.add(pendingLoansMenuItem);
 		mnNewMenu_3.add(ongoingLoansMenuItem);
 
