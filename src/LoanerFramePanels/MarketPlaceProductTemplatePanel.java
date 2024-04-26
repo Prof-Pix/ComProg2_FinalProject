@@ -35,9 +35,7 @@ import java.awt.SystemColor;
 public class MarketPlaceProductTemplatePanel extends JPanel{
 	
 	static Product productToDisplay;
-	
 
-	
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
 	
 	public MarketPlaceProductTemplatePanel(int loanerId, Product productData) {

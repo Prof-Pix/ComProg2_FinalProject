@@ -74,6 +74,7 @@ public class EditProductPanel extends JDialog {
 	static int MERCHANT_ID;
 	
 	boolean changesMade;
+	boolean hasUploadedNewPicture = false;
 	
 	private JTable loanInterestTable;
 	DefaultTableModel loanTableModel;
@@ -354,7 +355,6 @@ public class EditProductPanel extends JDialog {
 						String productPriceText = editPPriceField.getText().trim();
 						int interestRateArrayListLength = productLoanTerms.size();
 						
-						System.out.println("changes has been made: " + hasChangesMade());
 						if(isInputEmpty() || !hasChangesMade()) {
 							//Check for the specific field that is empty
 							if (HelperUtility.isInputFieldEmpty(productNameText)) {
@@ -391,6 +391,7 @@ public class EditProductPanel extends JDialog {
 						int productStocks = Integer.parseInt(productStocksText);
 						String categorySelectedText = editPCategoryComboBox.getSelectedItem().toString();
 						float productPrice = Float.parseFloat(productPriceText);
+						
 						ImageIcon productImage = productData.getProductImage();
 						
 						Product prod = new Product(MERCHANT_ID, 
@@ -426,7 +427,7 @@ public class EditProductPanel extends JDialog {
 						
 						//Proceed in sending the data to database
 
-						ProductRegistrationData productData = new ProductRegistrationData(MERCHANT_ID, 
+						ProductRegistrationData productRegData = new ProductRegistrationData(MERCHANT_ID, 
 								productImage, 
 								productNameText, 
 								productBrandText, 
@@ -437,7 +438,8 @@ public class EditProductPanel extends JDialog {
 								categorySelectedText,
 								productLoanTerms);
 						
-						if(Merchant.editProduct(MERCHANT_ID, productData, ORIGINAL_PRODUCT_NAME)) {
+						if(Merchant.editProduct(MERCHANT_ID, productRegData, productData.getProductId())) {
+							System.out.println(productData.getProductId());
 							JOptionPane.showMessageDialog(null, "Your product is successfully edit!", "Product Edited", JOptionPane.INFORMATION_MESSAGE);
 						} else {
 							JOptionPane.showMessageDialog(null, "Please try again later.", "Server Error!", JOptionPane.ERROR_MESSAGE);
@@ -605,6 +607,7 @@ public class EditProductPanel extends JDialog {
 			productPicture.setIcon(scaledImageIcon);
 			productPicture.putClientProperty("imagePath", selectedFile.getAbsolutePath());
 		}
+		hasUploadedNewPicture = true;
 	}
 	
 	//For validating each inputs
@@ -666,6 +669,10 @@ public class EditProductPanel extends JDialog {
 			}
 			
 			if (prodLoanTermsModified == true) {
+				return true;
+			}
+			
+			if (hasUploadedNewPicture == true) {
 				return true;
 			}
 			

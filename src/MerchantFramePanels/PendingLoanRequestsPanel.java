@@ -14,7 +14,7 @@ import java.awt.Component;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import Database.DatabaseManager;
-import LoanRequest.LoanRequest;
+import Loan.LoanRequest;
 import Products.Product;
 import User.Loaner;
 
@@ -107,13 +107,13 @@ public class PendingLoanRequestsPanel extends JPanel {
 				loanRequestPanel.setLayout(new BoxLayout(loanRequestPanel, BoxLayout.X_AXIS));
 				
 				loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-				JLabel lblNewLabel = new JLabel(loanReq.getLoanedProductName());
+				JLabel lblNewLabel = new JLabel(loanReq.getProductToLoanData().getName());
 				lblNewLabel.setMaximumSize(new Dimension(175, 14));
 				lblNewLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 				loanRequestPanel.add(lblNewLabel);
 				
 				loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-				JLabel lblNewLabel_1 = new JLabel(String.valueOf("₱ " + loanReq.getLoanedProductPrice()));
+				JLabel lblNewLabel_1 = new JLabel(String.valueOf("₱ " + loanReq.getProductToLoanData().getPrice()));
 				lblNewLabel_1.setMaximumSize(new Dimension(125, 14));
 				lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 12));
 				loanRequestPanel.add(lblNewLabel_1);
@@ -123,7 +123,7 @@ public class PendingLoanRequestsPanel extends JPanel {
 				lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 12));
 				loanRequestPanel.add(lblNewLabel_3);
 				loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-				JLabel lblNewLabel_2 = new JLabel(loanReq.getLoanerName());
+				JLabel lblNewLabel_2 = new JLabel(loanReq.getLoanerLoanData().getFullName());
 				lblNewLabel_2.setMaximumSize(new Dimension(200, 14));
 				lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 12));
 				loanRequestPanel.add(lblNewLabel_2);

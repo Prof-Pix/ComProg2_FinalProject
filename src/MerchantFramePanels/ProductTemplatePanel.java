@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import Database.DatabaseManager;
 import Products.Product;
 import Products.ProductLoanTerm;
 import User.Merchant;
@@ -33,6 +34,8 @@ import java.awt.Dimension;
 import java.awt.SystemColor;
 
 public class ProductTemplatePanel extends JPanel{
+	
+	DatabaseManager dbManager = new DatabaseManager();
 	private JTable loanInterestTable;
 	DefaultTableModel loanInterestTableModel;
 	
@@ -66,22 +69,10 @@ public class ProductTemplatePanel extends JPanel{
 		JButton btnNewButton = new JButton("Edit");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 
-				int merchantOwnerId = productData.getMerchantOwnerId();
-				ImageIcon productImage = productData.getProductImage();
-				String productName = productData.getName();
-				String productBrand = productData.getBrand();
-				String productDescription = productData.getDescription();
-				String productSpecifications = productData.getSpecifications();
-				float productPrice = productData.getPrice();
-				int productStocks = productData.getStocksAvailable();
-				String productCategory = productData.getCategory();
-				ArrayList<ProductLoanTerm> productLoanTerms = new ArrayList<>(productData.getProductLoans());
 				
-				EditProductPanel.productData = new Product(merchantOwnerId, productImage, productName, productBrand , productDescription , productSpecifications , 
-						productPrice, productStocks, productCategory, productLoanTerms);
+				dbManager.connect();
+				EditProductPanel.productData = dbManager.getProductData(productData.getProductId());
 				EditProductPanel.MERCHANT_ID = merchantId;
-				System.out.println("size: " + productData.getProductLoans().size());
 				EditProductPanel editProduct = new EditProductPanel();
 				editProduct.setVisible(true);
 			}
@@ -98,7 +89,7 @@ public class ProductTemplatePanel extends JPanel{
 		                JOptionPane.YES_NO_OPTION);
 
 		if (result == JOptionPane.YES_OPTION) {
-		   if(Merchant.deleteProduct(merchantId, productData.getName())) {
+		   if(Merchant.deleteProduct(merchantId, productData.getProductId())) {
 			   JOptionPane.showMessageDialog(null, productData.getName() + " deleted successfully.", "Product Deleted", JOptionPane.INFORMATION_MESSAGE);
 			   MerchantFrame.showViewProductsPanel();
 		   }

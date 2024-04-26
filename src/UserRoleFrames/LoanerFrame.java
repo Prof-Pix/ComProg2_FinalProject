@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import AuthFrames.LoginPage;
 import LoanerFramePanels.ApprovedLoansPanel;
 import LoanerFramePanels.MarketplacePanel;
+import LoanerFramePanels.OngoingLoansPanel;
 import LoanerFramePanels.PendingLoansPanel;
 import LoanerFramePanels.RejectedLoansPanel;
 import LoanerFramePanels.SeeDetailsProductPanel;
@@ -109,6 +110,10 @@ public class LoanerFrame extends JFrame {
 		rejectedLoanReqMenuItem.addActionListener(e -> showRejectedLoanPanel());
 		mnNewMenu_2.add(rejectedLoanReqMenuItem);
 		
+		JMenuItem ongoingLoansMenuItem = new JMenuItem("Ongoing Loans");
+		ongoingLoansMenuItem.addActionListener(e -> showOngoingLoanPanel());
+		mnNewMenu_2.add(ongoingLoansMenuItem);
+		
 		JMenu mnNewMenu_3 = new JMenu("Settings");
 		menuBar.add(mnNewMenu_3);
 		
@@ -162,6 +167,18 @@ public class LoanerFrame extends JFrame {
 			currentPanel = approvedLoanPanel;
 			approvedLoanPanel.setBounds(0,0,1200,700);
 			contentPane.add(approvedLoanPanel);
+			contentPane.revalidate();
+			contentPane.repaint();
+		}
+		
+		private void showOngoingLoanPanel() {
+			if (currentPanel != null) {
+				contentPane.remove(currentPanel);		
+			}
+			OngoingLoansPanel ongoingLoanPanel = new OngoingLoansPanel(LOANER_ID);
+			currentPanel = ongoingLoanPanel;
+			ongoingLoanPanel.setBounds(0,0,1200,700);
+			contentPane.add(ongoingLoanPanel);
 			contentPane.revalidate();
 			contentPane.repaint();
 		}

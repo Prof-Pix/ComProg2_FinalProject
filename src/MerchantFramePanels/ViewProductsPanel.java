@@ -41,7 +41,7 @@ public class ViewProductsPanel extends JPanel{
 		//Establish a connection
 		try {
 			dbManager.connect();
-			merchantProducts = dbManager.getMerchantData(merchantId);
+			merchantProducts = dbManager.getMerchantProductData(merchantId);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -22,14 +22,13 @@ public class Product {
 	
 	//All attributes constructor
 	public Product(int productId, int merchantOwnerId, String merchantName, ImageIcon productImage,
-			String imageFilePath, String name, String brand, String description, String specifications, float price,
+			 String name, String brand, String description, String specifications, float price,
 			int stocksAvailable, String category, ArrayList<ProductLoanTerm> productLoans) {
 		super();
 		this.productId = productId;
 		this.merchantOwnerId = merchantOwnerId;
 		this.merchantName = merchantName;
 		this.productImage = productImage;
-		this.imageFilePath = imageFilePath;
 		this.name = name;
 		this.brand = brand;
 		this.description = description;

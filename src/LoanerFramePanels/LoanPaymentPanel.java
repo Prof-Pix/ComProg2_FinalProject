@@ -40,7 +40,7 @@ import javax.swing.BoxLayout;
 import java.awt.Dimension;
 import javax.swing.ScrollPaneConstants;
 
-public class DownPaymentLoanerPanel extends JDialog {
+public class LoanPaymentPanel extends JDialog {
 	
 	DatabaseManager dbManager = new DatabaseManager();
 
@@ -51,7 +51,6 @@ public class DownPaymentLoanerPanel extends JDialog {
 	private JTextField mobileNumberField;
 	private JTextField pinCodeField;
 	JLabel totalPaymentText;
-	JToggleButton payInAdvanceToggle;
 	JScrollPane payInAdvanceScrollPane;
 	JLabel lblMonth;
 	JLabel lblAmountDue;
@@ -75,7 +74,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DownPaymentLoanerPanel dialog = new DownPaymentLoanerPanel(LOAN_DETAILS);
+			LoanPaymentPanel dialog = new LoanPaymentPanel(LOAN_DETAILS);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -86,12 +85,11 @@ public class DownPaymentLoanerPanel extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DownPaymentLoanerPanel(LoanRequest loanDetails) {
+	public LoanPaymentPanel(LoanRequest loanDetails) {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		
 		//Get more information about the loan 
-		DownPaymentLoanerPanel.LOAN_DETAILS = loanDetails;
-		System.out.println(LOAN_DETAILS.getLoanerId());
+		LoanPaymentPanel.LOAN_DETAILS = loanDetails;
 	
 		
 		setBounds(100, 100, 1184, 640);
@@ -248,24 +246,24 @@ public class DownPaymentLoanerPanel extends JDialog {
 		merchantName.setBounds(370, 104, 173, 14);
 		contentPanel.add(merchantName);
 		
-		JLabel lblNewLabel_2_1 = new JLabel("Downpayment Price:");
+		JLabel lblNewLabel_2_1 = new JLabel("Remaining Balance:");
 		lblNewLabel_2_1.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblNewLabel_2_1.setBounds(31, 255, 153, 16);
 		contentPanel.add(lblNewLabel_2_1);
 		
 		JLabel downPaymentPrice = new JLabel("₱ " + LOAN_DETAILS.getDownPaymentAmount());
 		downPaymentPrice.setFont(new Font("Dialog", Font.BOLD, 14));
-		downPaymentPrice.setBounds(196, 255, 235, 14);
+		downPaymentPrice.setBounds(252, 256, 235, 14);
 		contentPanel.add(downPaymentPrice);
 		
-		JLabel lblNewLabel_2_1_1 = new JLabel("Monthly Payments:");
+		JLabel lblNewLabel_2_1_1 = new JLabel("Remaining Months to Pay:");
 		lblNewLabel_2_1_1.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblNewLabel_2_1_1.setBounds(31, 282, 153, 16);
+		lblNewLabel_2_1_1.setBounds(31, 282, 201, 16);
 		contentPanel.add(lblNewLabel_2_1_1);
 		
 		JLabel lblPrice_1_1 = new JLabel("₱ " + LOAN_DETAILS.getMonthlyPayment() + " x " + LOAN_DETAILS.getLoanedProductMonthsToPay() + " months");
 		lblPrice_1_1.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblPrice_1_1.setBounds(196, 282, 235, 14);
+		lblPrice_1_1.setBounds(252, 283, 235, 14);
 		contentPanel.add(lblPrice_1_1);
 		
 		cardSecurityCodeFIeld = new JPanel();
@@ -317,32 +315,11 @@ public class DownPaymentLoanerPanel extends JDialog {
 		totalPaymentText.setBounds(762, 43, 235, 14);
 		contentPanel.add(totalPaymentText);
 		
-		
-		payInAdvanceToggle = new JToggleButton("Pay-in-advance");
-		
-		payInAdvanceToggle.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				togglePayInAdvanceButton();
-				
-				
-			}		
-		
-		});
-		payInAdvanceToggle.setFont(new Font("Dialog", Font.PLAIN, 12));
-		payInAdvanceToggle.setBounds(31, 319, 121, 23);
-		contentPanel.add(payInAdvanceToggle);
-		
 		payInAdvanceScrollPane = new JScrollPane();
 		payInAdvanceScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		payInAdvanceScrollPane.setBounds(31, 380, 300, 180);
+		payInAdvanceScrollPane.setBounds(31, 356, 300, 180);
 		payInAdvanceScrollPane.setVisible(false);
 		contentPanel.add(payInAdvanceScrollPane);
-		
-		payInAdvancePanel = new JPanel();
-		payInAdvanceScrollPane.setViewportView(payInAdvancePanel);
-		payInAdvancePanel.setLayout(new BoxLayout(payInAdvancePanel, BoxLayout.Y_AXIS));
 		
 		for(int  i = 0; i < LOAN_DETAILS.getLoanedProductMonthsToPay(); i++) {
 			
@@ -425,14 +402,19 @@ public class DownPaymentLoanerPanel extends JDialog {
 		lblMonth = new JLabel("Month");
 		
 		lblMonth.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblMonth.setBounds(98, 353, 37, 14);
+		lblMonth.setBounds(98, 331, 37, 14);
 		contentPanel.add(lblMonth);
 		
 		lblAmountDue = new JLabel("Amount Due");
 		
 		lblAmountDue.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblAmountDue.setBounds(177, 354, 74, 14);
+		lblAmountDue.setBounds(177, 331, 74, 14);
 		contentPanel.add(lblAmountDue);
+		
+		payInAdvancePanel = new JPanel();
+		payInAdvancePanel.setBounds(31, 356, 298, 178);
+		contentPanel.add(payInAdvancePanel);
+		payInAdvancePanel.setLayout(new BoxLayout(payInAdvancePanel, BoxLayout.Y_AXIS));
 
 		lblMonth.setVisible(false);
 		lblAmountDue.setVisible(false);
@@ -499,7 +481,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 							
 							JOptionPane.showMessageDialog(null, "Payment Successful", "Invalid Action", JOptionPane.INFORMATION_MESSAGE);
 							
-							HelperUtility.closeDialog(DownPaymentLoanerPanel.this);
+							HelperUtility.closeDialog(LoanPaymentPanel.this);
 						
 						} else if(paymentMethod.equals("ewallet")) {
 							String mobileNumberText = mobileNumberField.getText();
@@ -551,7 +533,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 							dbManager.connect();
 							if(dbManager.setLoanRequestToOngoing(loanDetails, monthsPaidInAdvance)) {
 								JOptionPane.showMessageDialog(null, "Payment Successful", "Invalid Action", JOptionPane.INFORMATION_MESSAGE);
-								HelperUtility.closeDialog(DownPaymentLoanerPanel.this);
+								HelperUtility.closeDialog(LoanPaymentPanel.this);
 							} else {
 								JOptionPane.showMessageDialog(null, "Server Error", "Invalid Credentials", JOptionPane.ERROR_MESSAGE);
 							}
@@ -587,41 +569,6 @@ public class DownPaymentLoanerPanel extends JDialog {
 		cardSecurityCodeFIeld.setVisible(false);
 		selectEWalletPanel.setVisible(true);
 		paymentMethod = "ewallet";
-	}
-	
-	private void togglePayInAdvanceButton() {		
-
-		if(payInAdvanceToggle.isSelected()) {
-			
-				for(int i = 0; i < monthCheckBoxes.size(); i++) {
-					if(i == 0) {
-						monthCheckBoxes.get(i).setSelected(true);
-					} else if (i == 1 && monthCheckBoxes.size() > 1) {
-						monthCheckBoxes.get(i).setEnabled(true);
-					}
-					else {
-						monthCheckBoxes.get(i).setEnabled(false);
-					}
-				}
-			
-			payInAdvanceScrollPane.setVisible(true);
-			lblMonth.setVisible(true);
-			lblAmountDue.setVisible(true);
-			
-			
-			
-			
-		} else {
-			for(int i = 0; i < monthCheckBoxes.size() ; i++) {
-				monthCheckBoxes.get(i).setSelected(false);
-			}
-			payInAdvanceScrollPane.setVisible(false);
-			lblMonth.setVisible(false);
-			lblAmountDue.setVisible(false);
-			
-		}
-		updateTotalPayment();
-		
 	}
 	
 	private int findIndexOfClickedCheckbox(JCheckBox clickedCheckbox) {

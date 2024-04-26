@@ -208,20 +208,20 @@ public class Merchant extends User {
 			}
 		}
 		
-		public static boolean editProduct(int merchantId, ProductRegistrationData data, String originalProductName) {
+		public static boolean editProduct(int merchantId, ProductRegistrationData data, int productId) {
 			try {
 				dbManager.connect();
-				return dbManager.editMerchantProduct(merchantId, data, originalProductName);
+				return dbManager.editMerchantProduct(merchantId, data, productId);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
 			}
 		}
 		
-		public static boolean deleteProduct(int merchantId, String productName) {
+		public static boolean deleteProduct(int merchantId, int productId) {
 			try {
 				dbManager.connect();
-				return dbManager.deleteMerchantProduct(merchantId, productName);
+				return dbManager.deleteMerchantProduct(merchantId, productId);
 			} catch(Exception e) {
 				e.printStackTrace();
 				return false;

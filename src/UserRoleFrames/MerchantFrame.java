@@ -20,7 +20,9 @@ import Database.DatabaseManager;
 import JComboBoxRenderers.MerchantCategoryRenderer;
 import MerchantFramePanels.AddProductPanel;
 import MerchantFramePanels.EditProductPanel;
+import MerchantFramePanels.OngoingLoansPanel;
 import MerchantFramePanels.PendingLoanRequestsPanel;
+import MerchantFramePanels.PendingLoansPanel;
 import MerchantFramePanels.ViewProductsPanel;
 import Products.Product;
 import Products.ProductLoanTerm;
@@ -159,12 +161,17 @@ public class MerchantFrame extends JFrame {
 		JMenu mnNewMenu_3 = new JMenu("Manage Loans");
 		menuBar.add(mnNewMenu_3);
 		
-		JMenuItem pendingLoansMenuItem = new JMenuItem("Pending Loans");
-		pendingLoansMenuItem.addActionListener(e -> showPendingLoansPanel());
-		mnNewMenu_3.add(pendingLoansMenuItem);
+		JMenuItem loanRequestMenuItem = new JMenuItem("Loan Requests");
+		loanRequestMenuItem.addActionListener(e -> showPendingLoanRequestPanel());
+		mnNewMenu_3.add(loanRequestMenuItem);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Ongoing Loans");
-		mnNewMenu_3.add(mntmNewMenuItem_1);
+		JMenuItem ongoingLoansMenuItem = new JMenuItem("Ongoing Loans");
+		ongoingLoansMenuItem.addActionListener(e -> showOngoingLoansPanel());
+		
+		JMenuItem pendingLoansMenuItem = new JMenuItem("Pending Loans");
+		pendingLoansMenuItem.addActionListener(null);
+		mnNewMenu_3.add(pendingLoansMenuItem);
+		mnNewMenu_3.add(ongoingLoansMenuItem);
 
 		JMenu mnNewMenu_4 = new JMenu("Settings");
 		menuBar.add(mnNewMenu_4);
@@ -211,15 +218,41 @@ public class MerchantFrame extends JFrame {
 		contentPane.repaint();
 	}
 	
-	public static void showPendingLoansPanel() {
+	public static void showOngoingLoansPanel() {
 		if(currentPanel != null) {
 			contentPane.remove(currentPanel);
 		}
 		
-		PendingLoanRequestsPanel pendingLoansPanel = new PendingLoanRequestsPanel(MERCHANT_ID);
+		OngoingLoansPanel ongoingLoansPanel = new OngoingLoansPanel(MERCHANT_ID);
+		currentPanel = ongoingLoansPanel;
+		ongoingLoansPanel.setBounds(0,0,1200,700);
+		contentPane.add(ongoingLoansPanel);
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+	
+	public static void showPendingLoanPanel() {
+		if(currentPanel != null) {
+			contentPane.remove(currentPanel);
+		}
+		
+		PendingLoansPanel pendingLoansPanel = new PendingLoansPanel(MERCHANT_ID);
 		currentPanel = pendingLoansPanel;
 		pendingLoansPanel.setBounds(0,0,1200,700);
 		contentPane.add(pendingLoansPanel);
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+	
+	public static void showPendingLoanRequestPanel() {
+		if(currentPanel != null) {
+			contentPane.remove(currentPanel);
+		}
+		
+		PendingLoanRequestsPanel pendingLoanRequestPanel = new PendingLoanRequestsPanel(MERCHANT_ID);
+		currentPanel = pendingLoanRequestPanel;
+		pendingLoanRequestPanel.setBounds(0,0,1200,700);
+		contentPane.add(pendingLoanRequestPanel);
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
