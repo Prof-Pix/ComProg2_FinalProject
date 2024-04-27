@@ -32,6 +32,8 @@ import Utilities.HelperUtility;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.SystemColor;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 public class ProductTemplatePanel extends JPanel{
 	
@@ -46,9 +48,10 @@ public class ProductTemplatePanel extends JPanel{
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
 	
 	public ProductTemplatePanel(int merchantId, Product productData) {
+		setBackground(new Color(237, 250, 139));
 		ProductTemplatePanel.productToDisplay = productData;
 		setPreferredSize(new Dimension(275, 405));
-		setBorder(new LineBorder(new Color(0, 0, 0)));
+		setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel(productData.getName());
@@ -67,6 +70,9 @@ public class ProductTemplatePanel extends JPanel{
 		add(lblPrice);
 		
 		JButton btnNewButton = new JButton("Edit");
+		btnNewButton.setForeground(new Color(255, 255, 255));
+		btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 12));
+		btnNewButton.setBackground(new Color(64, 112, 86));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -81,6 +87,9 @@ public class ProductTemplatePanel extends JPanel{
 		add(btnNewButton);
 		
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.setForeground(new Color(255, 255, 255));
+		btnDelete.setFont(new Font("Dialog", Font.PLAIN, 12));
+		btnDelete.setBackground(new Color(64, 112, 86));
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int result = JOptionPane.showConfirmDialog(null, 
@@ -168,9 +177,9 @@ public class ProductTemplatePanel extends JPanel{
 		String category = HelperUtility.capitalizeWords(productData.getCategory());
 		JLabel categoryLabel = new JLabel(category);
 		categoryLabel.setOpaque(true);
-		categoryLabel.setBackground(Color.BLACK);
+		categoryLabel.setBackground(new Color(173, 226, 138));
 		
-		categoryLabel.setForeground(new Color(255, 255, 255));
+		categoryLabel.setForeground(new Color(0, 0, 0));
 		categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		categoryLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 		categoryLabel.setBounds(5, 5, 80, 18);

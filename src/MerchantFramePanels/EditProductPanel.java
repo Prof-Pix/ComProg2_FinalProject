@@ -47,6 +47,7 @@ import java.util.Collections;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.SoftBevelBorder;
 
 public class EditProductPanel extends JDialog {
 
@@ -104,6 +105,7 @@ public class EditProductPanel extends JDialog {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setBounds(100, 100, 1184, 680);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(new Color(37, 102, 112));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -118,44 +120,59 @@ public class EditProductPanel extends JDialog {
 		contentPanel.add(productPicture);
 
 		JLabel lblNewLabel = new JLabel("Product Name:");
+		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblNewLabel.setBounds(197, 31, 95, 14);
 		contentPanel.add(lblNewLabel);
 
 		editPNameField = new JTextField();
+		editPNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		editPNameField.setBackground(new Color(237, 250, 139));
+		editPNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
 		editPNameField.setText(productData.getName());
 		editPNameField.setColumns(10);
 		editPNameField.setBounds(302, 29, 249, 20);
 		contentPanel.add(editPNameField);
 
 		JLabel lblProductBrand = new JLabel("Product Brand:");
+		lblProductBrand.setForeground(new Color(255, 255, 255));
 		lblProductBrand.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblProductBrand.setBounds(197, 62, 95, 14);
 		contentPanel.add(lblProductBrand);
 
 		editPBrandField = new JTextField();
+		editPBrandField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		editPBrandField.setBackground(new Color(237, 250, 139));
+		editPBrandField.setFont(new Font("Dialog", Font.PLAIN, 12));
 		editPBrandField.setText(productData.getBrand());
 		editPBrandField.setColumns(10);
 		editPBrandField.setBounds(302, 60, 249, 20);
 		contentPanel.add(editPBrandField);
 
 		JLabel lblStocks = new JLabel("Stocks Available:");
+		lblStocks.setForeground(new Color(255, 255, 255));
 		lblStocks.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblStocks.setBounds(197, 93, 99, 14);
 		contentPanel.add(lblStocks);
 
 		editPStocksField = new JTextField();
+		editPStocksField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		editPStocksField.setBackground(new Color(237, 250, 139));
+		editPStocksField.setFont(new Font("Dialog", Font.PLAIN, 12));
 		editPStocksField.setText(String.valueOf(productData.getStocksAvailable()));
 		editPStocksField.setColumns(10);
 		editPStocksField.setBounds(302, 91, 86, 20);
 		contentPanel.add(editPStocksField);
 
 		JLabel lblCategory = new JLabel("Category:");
+		lblCategory.setForeground(new Color(255, 255, 255));
 		lblCategory.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblCategory.setBounds(197, 125, 86, 14);
 		contentPanel.add(lblCategory);
 
 		editPCategoryComboBox = new JComboBox();
+		editPCategoryComboBox.setFont(new Font("Dialog", Font.PLAIN, 12));
+		editPCategoryComboBox.setBackground(new Color(237, 250, 139));
 
 		DefaultComboBoxModel<MerchantCategory> categModel = new DefaultComboBoxModel<>();
 		categModel.addElement(null);		
@@ -185,6 +202,9 @@ public class EditProductPanel extends JDialog {
 
 
 		JButton uploadPicButton = new JButton("Upload Picture");
+		uploadPicButton.setForeground(new Color(255, 255, 255));
+		uploadPicButton.setBackground(new Color(64, 112, 86));
+		uploadPicButton.setFont(new Font("Dialog", Font.PLAIN, 11));
 		uploadPicButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				uploadImage();
@@ -194,47 +214,64 @@ public class EditProductPanel extends JDialog {
 		contentPanel.add(uploadPicButton);
 
 		JLabel lblDescription = new JLabel("Description:");
+		lblDescription.setForeground(new Color(255, 255, 255));
 		lblDescription.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblDescription.setBounds(23, 222, 86, 14);
 		contentPanel.add(lblDescription);
 
 		editPDescriptionField = new JTextArea();
+		editPDescriptionField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		editPDescriptionField.setBackground(new Color(237, 250, 139));
+		editPDescriptionField.setFont(new Font("Dialog", Font.PLAIN, 13));
 		editPDescriptionField.setText(productData.getDescription());
 		editPDescriptionField.setBounds(24, 246, 526, 148);
 		contentPanel.add(editPDescriptionField);
 
 		JLabel lblSpecifications = new JLabel("Specifications:");
+		lblSpecifications.setForeground(new Color(255, 255, 255));
 		lblSpecifications.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblSpecifications.setBounds(23, 416, 86, 14);
 		contentPanel.add(lblSpecifications);
 
 		editPSpecificationsField = new JTextArea();
+		editPSpecificationsField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		editPSpecificationsField.setBackground(new Color(237, 250, 139));
+		editPSpecificationsField.setFont(new Font("Dialog", Font.PLAIN, 13));
 		editPSpecificationsField.setText(productData.getSpecifications());
 		editPSpecificationsField.setBounds(24, 442, 526, 148);
 		contentPanel.add(editPSpecificationsField);
 
 		JLabel lblPrice = new JLabel("Price:");
+		lblPrice.setForeground(new Color(255, 255, 255));
 		lblPrice.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblPrice.setBounds(622, 31, 40, 14);
 		contentPanel.add(lblPrice);
 
 		JLabel lblProductBrand_1_1_1 = new JLabel("₱");
+		lblProductBrand_1_1_1.setForeground(new Color(255, 255, 255));
 		lblProductBrand_1_1_1.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblProductBrand_1_1_1.setBounds(665, 31, 19, 14);
 		contentPanel.add(lblProductBrand_1_1_1);
 
 		editPPriceField = new JTextField();
+		editPPriceField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		editPPriceField.setBackground(new Color(237, 250, 139));
+		editPPriceField.setFont(new Font("Dialog", Font.PLAIN, 12));
 		editPPriceField.setText(String.valueOf(productData.getPrice()));
 		editPPriceField.setColumns(10);
 		editPPriceField.setBounds(680, 29, 99, 20);
 		contentPanel.add(editPPriceField);
 
 		JLabel lblNewLabel_1 = new JLabel("Interest Rates @ Months to Pay");
+		lblNewLabel_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 12));
 		lblNewLabel_1.setBounds(622, 80, 196, 23);
 		contentPanel.add(lblNewLabel_1);
 
 		JButton refreshButton = new JButton("Refresh Table");
+		refreshButton.setForeground(new Color(255, 255, 255));
+		refreshButton.setBackground(new Color(64, 112, 86));
+		refreshButton.setFont(new Font("Dialog", Font.PLAIN, 11));
 		refreshButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				refreshLoanTermsTable();
@@ -292,20 +329,28 @@ public class EditProductPanel extends JDialog {
 
 
 		JLabel lblMonthsToPay = new JLabel("Months to Pay:");
+		lblMonthsToPay.setForeground(new Color(0, 0, 0));
 		lblMonthsToPay.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblMonthsToPay.setBounds(24, 243, 94, 14);
 		loanInterestTablePanel.add(lblMonthsToPay);
 
 		interestRateField = new JTextField();
+		interestRateField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		interestRateField.setBackground(new Color(237, 250, 139));
+		interestRateField.setFont(new Font("Dialog", Font.PLAIN, 12));
 		interestRateField.setColumns(10);
 		interestRateField.setBounds(117, 271, 33, 20);
 		loanInterestTablePanel.add(interestRateField);
 
 		JLabel lblProductBrand_1_1 = new JLabel("%");
+		lblProductBrand_1_1.setForeground(new Color(255, 255, 255));
 		lblProductBrand_1_1.setBounds(152, 274, 19, 14);
 		loanInterestTablePanel.add(lblProductBrand_1_1);
 
 		JButton addProdLoanBtn = new JButton("Add New Row");
+		addProdLoanBtn.setBackground(new Color(64, 112, 86));
+		addProdLoanBtn.setFont(new Font("Dialog", Font.PLAIN, 11));
+		addProdLoanBtn.setForeground(new Color(255, 255, 255));
 		addProdLoanBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addLoanRowToTable();
@@ -315,6 +360,9 @@ public class EditProductPanel extends JDialog {
 		loanInterestTablePanel.add(addProdLoanBtn);
 
 		JButton deleteButton = new JButton("Delete Selected Row/s");
+		deleteButton.setBackground(new Color(64, 112, 86));
+		deleteButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		deleteButton.setForeground(new Color(255, 255, 255));
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				deleteRow();
@@ -324,11 +372,15 @@ public class EditProductPanel extends JDialog {
 		loanInterestTablePanel.add(deleteButton);
 
 		JLabel lblInterestRate = new JLabel("Interest Rate:");
+		lblInterestRate.setForeground(new Color(0, 0, 0));
 		lblInterestRate.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblInterestRate.setBounds(24, 275, 94, 14);
 		loanInterestTablePanel.add(lblInterestRate);
 
 		monthsToPayField = new JTextField();
+		monthsToPayField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		monthsToPayField.setBackground(new Color(237, 250, 139));
+		monthsToPayField.setFont(new Font("Dialog", Font.PLAIN, 12));
 		monthsToPayField.setColumns(10);
 		monthsToPayField.setBounds(117, 240, 64, 20);
 		loanInterestTablePanel.add(monthsToPayField);
@@ -339,10 +391,14 @@ public class EditProductPanel extends JDialog {
 		contentPanel.add(separator);
 		{
 			JPanel buttonPane = new JPanel();
+			buttonPane.setBackground(new Color(37, 102, 112));
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				saveChangesButton = new JButton("Save Product Changes");
+				saveChangesButton.setForeground(new Color(0, 0, 0));
+				saveChangesButton.setBackground(new Color(173, 226, 138));
+				saveChangesButton.setFont(new Font("Dialog", Font.BOLD, 13));
 				saveChangesButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						

@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import Database.DatabaseManager;
 import Products.Product;
 import Products.ProductLoanTerm;
 import User.Merchant;
@@ -31,9 +32,12 @@ import Utilities.HelperUtility;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.SystemColor;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 public class MarketPlaceProductTemplatePanel extends JPanel{
-	
+	DatabaseManager dbManager = new DatabaseManager();
 	/**
 	 * 
 	 */
@@ -44,9 +48,10 @@ public class MarketPlaceProductTemplatePanel extends JPanel{
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
 	
 	public MarketPlaceProductTemplatePanel(int loanerId, Product productData) {
+		setBackground(new Color(237, 250, 139));
 		MarketPlaceProductTemplatePanel.productToDisplay = productData;
-		setPreferredSize(new Dimension(250, 320));
-		setBorder(new LineBorder(new Color(0, 0, 0)));
+		setPreferredSize(new Dimension(250, 350));
+		setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel(productData.getName());
@@ -71,7 +76,7 @@ public class MarketPlaceProductTemplatePanel extends JPanel{
 		add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_2_1 = new JLabel(productData.getMerchantName());
-		lblNewLabel_2_1.setFont(new Font("Dialog", Font.ITALIC, 12));
+		lblNewLabel_2_1.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblNewLabel_2_1.setBounds(77, 252, 173, 14);
 		add(lblNewLabel_2_1);
 		
@@ -89,15 +94,17 @@ public class MarketPlaceProductTemplatePanel extends JPanel{
 		String category = HelperUtility.capitalizeWords(productData.getCategory());
 		JLabel categoryLabel = new JLabel(category);
 		categoryLabel.setOpaque(true);
-		categoryLabel.setBackground(Color.BLACK);
+		categoryLabel.setBackground(new Color(173, 226, 138));
 		
-		categoryLabel.setForeground(new Color(255, 255, 255));
+		categoryLabel.setForeground(new Color(0, 0, 0));
 		categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		categoryLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 		categoryLabel.setBounds(5, 5, 80, 18);
 		add(categoryLabel);
 		
 		JButton btnNewButton = new JButton("See details");
+		btnNewButton.setForeground(new Color(255, 255, 255));
+		btnNewButton.setBackground(new Color(64, 112, 86));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SeeDetailsProductPanel.productData = productData;
@@ -106,7 +113,20 @@ public class MarketPlaceProductTemplatePanel extends JPanel{
 				seeDetails.setVisible(true);
 			}
 		});
-		btnNewButton.setBounds(126, 280, 114, 23);
+		btnNewButton.setBounds(126, 316, 114, 23);
 		add(btnNewButton);
+		
+		JLabel itemsLeft = new JLabel(String.valueOf(productData.getStocksAvailable()) + " items left"  );
+		itemsLeft.setHorizontalAlignment(SwingConstants.RIGHT);
+		itemsLeft.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 12));
+		itemsLeft.setBounds(113, 8, 127, 14);
+		add(itemsLeft);
+		
+		dbManager.connect();
+		Merchant merch = dbManager.getMerchantData(productData.getMerchantOwnerId()) ;
+		JLabel lblNewLabel_2_1_1 = new JLabel(merch.getMerchantAddress());
+		lblNewLabel_2_1_1.setFont(new Font("Dialog", Font.ITALIC, 12));
+		lblNewLabel_2_1_1.setBounds(10, 271, 230, 14);
+		add(lblNewLabel_2_1_1);
 	}
 }

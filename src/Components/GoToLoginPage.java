@@ -39,6 +39,7 @@ public class GoToLoginPage extends JDialog {
 	 * Create the dialog.
 	 */
 	public GoToLoginPage() {
+		setResizable(false);
 		setModal(true);
 		setBounds(100, 100, 358, 233);
 		getContentPane().setLayout(new BorderLayout());

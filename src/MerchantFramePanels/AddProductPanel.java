@@ -41,6 +41,7 @@ import UserEnums.MerchantCategory;
 import UserRoleFrames.MerchantFrame;
 import Utilities.HelperUtility;
 import java.awt.Dimension;
+import javax.swing.border.SoftBevelBorder;
 
 public class AddProductPanel extends JPanel{
 
@@ -58,7 +59,7 @@ public class AddProductPanel extends JPanel{
 	JButton addProdLoanBtn;
 
 	JLabel productPicture;
-	private final String DEFAULT_PRODUCT_IMAGE_PATH = "D:\\APPLICATIONS\\Home_Credit\\src\\Images\\default_product_picture.jpg";
+	private final String DEFAULT_PRODUCT_IMAGE_PATH = "D:\\APPLICATIONS\\Home_Credit\\src\\Images\\default_product.png";
 
 	JComboBox mfCategoryComboBox;
 
@@ -69,30 +70,37 @@ public class AddProductPanel extends JPanel{
 	private static int MERCHANT_ID;
 
 	public AddProductPanel(int merchantId) {
-		setPreferredSize(new Dimension(1184, 645));
+		setBackground(new Color(37, 102, 112));
+		setPreferredSize(new Dimension(1184, 638));
 
 		AddProductPanel.MERCHANT_ID = merchantId;
 		setLayout(null);
 
 		JLabel lblPrice = new JLabel("Price:");
+		lblPrice.setForeground(new Color(255, 255, 255));
 		lblPrice.setBounds(627, 51, 40, 14);
 		add(lblPrice);
 		lblPrice.setFont(new Font("Dialog", Font.BOLD, 12));
 
 		JLabel lblProductBrand_1_1_1 = new JLabel("₱");
+		lblProductBrand_1_1_1.setForeground(new Color(255, 255, 255));
 		lblProductBrand_1_1_1.setBounds(670, 51, 19, 14);
 		add(lblProductBrand_1_1_1);
 		lblProductBrand_1_1_1.setFont(new Font("Dialog", Font.PLAIN, 12));
 
 		mfProductPriceField = new JTextField();
+		mfProductPriceField.setBackground(new Color(237, 250, 139));
+		mfProductPriceField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		mfProductPriceField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		mfProductPriceField.setBounds(685, 49, 99, 20);
 		add(mfProductPriceField);
 		mfProductPriceField.setColumns(10);
 
 		JPanel loanInterestTablePanel = new JPanel();
+		loanInterestTablePanel.setBackground(new Color(37, 102, 112));
 		loanInterestTablePanel.setBounds(627, 134, 445, 305);
 		add(loanInterestTablePanel);
-		loanInterestTablePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		loanInterestTablePanel.setBorder(new LineBorder(new Color(237, 250, 139)));
 		loanInterestTablePanel.setLayout(null);
 
 		// Table Setup
@@ -122,20 +130,29 @@ public class AddProductPanel extends JPanel{
 		loanInterestTableScrollPane.setViewportView(loanInterestTable);
 
 		JLabel lblMonthsToPay = new JLabel("Months to Pay:");
+		lblMonthsToPay.setForeground(new Color(255, 255, 255));
 		lblMonthsToPay.setBounds(24, 243, 94, 14);
 		lblMonthsToPay.setFont(new Font("Dialog", Font.BOLD, 12));
 		loanInterestTablePanel.add(lblMonthsToPay);
 
 		mInterestRateField = new JTextField();
+		mInterestRateField.setBackground(new Color(237, 250, 139));
+		mInterestRateField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		mInterestRateField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		mInterestRateField.setBounds(117, 271, 33, 20);
 		loanInterestTablePanel.add(mInterestRateField);
 		mInterestRateField.setColumns(10);
 
 		JLabel lblProductBrand_1_1 = new JLabel("%");
-		lblProductBrand_1_1.setBounds(152, 274, 19, 14);
+		lblProductBrand_1_1.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblProductBrand_1_1.setForeground(new Color(255, 255, 255));
+		lblProductBrand_1_1.setBounds(155, 274, 19, 14);
 		loanInterestTablePanel.add(lblProductBrand_1_1);
 
 		addProdLoanBtn = new JButton("Add New Row");
+		addProdLoanBtn.setForeground(new Color(255, 255, 255));
+		addProdLoanBtn.setFont(new Font("Dialog", Font.BOLD, 12));
+		addProdLoanBtn.setBackground(new Color(64, 112, 86));
 		addProdLoanBtn.setBounds(237, 240, 160, 23);
 		addProdLoanBtn.addActionListener(new ActionListener() {
 
@@ -148,6 +165,9 @@ public class AddProductPanel extends JPanel{
 		loanInterestTablePanel.add(addProdLoanBtn);
 
 		JButton deleteButton = new JButton("Delete Selected Row/s");
+		deleteButton.setForeground(new Color(255, 255, 255));
+		deleteButton.setFont(new Font("Dialog", Font.BOLD, 12));
+		deleteButton.setBackground(new Color(64, 112, 86));
 		deleteButton.setBounds(238, 271, 161, 23);
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -157,20 +177,27 @@ public class AddProductPanel extends JPanel{
 		loanInterestTablePanel.add(deleteButton);
 
 		JLabel lblInterestRate = new JLabel("Interest Rate:");
+		lblInterestRate.setForeground(new Color(255, 255, 255));
 		lblInterestRate.setBounds(24, 275, 94, 14);
 		lblInterestRate.setFont(new Font("Dialog", Font.BOLD, 12));
 		loanInterestTablePanel.add(lblInterestRate);
 
 		monthsToPayField = new JTextField();
+		monthsToPayField.setBackground(new Color(237, 250, 139));
+		monthsToPayField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		monthsToPayField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		monthsToPayField.setBounds(117, 240, 64, 20);
 		loanInterestTablePanel.add(monthsToPayField);
 		monthsToPayField.setColumns(10);
 
 		JButton addProductButton = new JButton("Add Product");
+		addProductButton.setBackground(new Color(173, 226, 138));
+		addProductButton.setFont(new Font("Dialog", Font.PLAIN, 14));
 		addProductButton.setBounds(967, 564, 196, 57);
 		add(addProductButton);
 
 		JLabel lblNewLabel_1 = new JLabel("Interest Rates @ Months to Pay");
+		lblNewLabel_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1.setBounds(627, 100, 196, 23);
 		add(lblNewLabel_1);
 		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 12));
@@ -184,59 +211,78 @@ public class AddProductPanel extends JPanel{
 		ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
 		productPicture.setIcon(scaledImageIcon);
 		add(productPicture);
-		productPicture.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		productPicture.setBorder(new LineBorder(new Color(173, 226, 138)));
 
 		JButton uploadPicButton = new JButton("Upload Picture");
+		uploadPicButton.setForeground(new Color(255, 255, 255));
+		uploadPicButton.setBackground(new Color(64, 112, 86));
+		uploadPicButton.setFont(new Font("Dialog", Font.PLAIN, 11));
 		uploadPicButton.setBounds(28, 196, 150, 23);
 		uploadPicButton.addActionListener(e -> uploadImage());
 		add(uploadPicButton);
 
 		JLabel lblDescription = new JLabel("Description:");
+		lblDescription.setForeground(new Color(255, 255, 255));
 		lblDescription.setBounds(28, 242, 86, 14);
 		add(lblDescription);
 		lblDescription.setFont(new Font("Dialog", Font.BOLD, 12));
 
 		JLabel lblSpecifications = new JLabel("Specifications:");
+		lblSpecifications.setForeground(new Color(255, 255, 255));
 		lblSpecifications.setBounds(28, 436, 86, 14);
 		add(lblSpecifications);
 		lblSpecifications.setFont(new Font("Dialog", Font.BOLD, 12));
 
 		mfProductNameField = new JTextField();
+		mfProductNameField.setBackground(new Color(237, 250, 139));
+		mfProductNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		mfProductNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		mfProductNameField.setBounds(307, 49, 249, 20);
 		add(mfProductNameField);
 		mfProductNameField.setColumns(10);
 
 		JLabel lblNewLabel = new JLabel("Product Name:");
+		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setBounds(202, 51, 95, 14);
 		add(lblNewLabel);
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 
 		JLabel lblProductBrand = new JLabel("Product Brand:");
+		lblProductBrand.setForeground(new Color(255, 255, 255));
 		lblProductBrand.setBounds(202, 82, 95, 14);
 		add(lblProductBrand);
 		lblProductBrand.setFont(new Font("Dialog", Font.BOLD, 12));
 
 		mfProductBrandField = new JTextField();
+		mfProductBrandField.setBackground(new Color(237, 250, 139));
+		mfProductBrandField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		mfProductBrandField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		mfProductBrandField.setBounds(307, 80, 249, 20);
 		add(mfProductBrandField);
 		mfProductBrandField.setColumns(10);
 
 		JLabel lblStocks = new JLabel("Stocks Available:");
+		lblStocks.setForeground(new Color(255, 255, 255));
 		lblStocks.setBounds(202, 113, 99, 14);
 		add(lblStocks);
 		lblStocks.setFont(new Font("Dialog", Font.BOLD, 12));
 
 		mfProductStocksField = new JTextField();
+		mfProductStocksField.setBackground(new Color(237, 250, 139));
+		mfProductStocksField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		mfProductStocksField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		mfProductStocksField.setBounds(307, 111, 86, 20);
 		add(mfProductStocksField);
 		mfProductStocksField.setColumns(10);
 
 		JLabel lblCategory = new JLabel("Category:");
+		lblCategory.setForeground(new Color(255, 255, 255));
 		lblCategory.setBounds(202, 145, 86, 14);
 		add(lblCategory);
 		lblCategory.setFont(new Font("Dialog", Font.BOLD, 12));
 
 		mfCategoryComboBox = new JComboBox();
+		mfCategoryComboBox.setBackground(new Color(237, 250, 139));
 		mfCategoryComboBox.setBounds(307, 142, 150, 22);
 		add(mfCategoryComboBox);
 
@@ -255,6 +301,8 @@ public class AddProductPanel extends JPanel{
 		add(separator);
 
 		JButton refreshButton = new JButton("Refresh Table");
+		refreshButton.setBackground(new Color(64, 112, 86));
+		refreshButton.setFont(new Font("Dialog", Font.BOLD, 12));
 		refreshButton.setBounds(951, 100, 121, 23);
 		refreshButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -273,6 +321,9 @@ public class AddProductPanel extends JPanel{
 		add(loanInterestTableScrollPane_1);
 
 		mfDescriptionField = new JTextArea();
+		mfDescriptionField.setLineWrap(true);
+		mfDescriptionField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		mfDescriptionField.setBackground(new Color(237, 250, 139));
 		loanInterestTableScrollPane_1.setViewportView(mfDescriptionField);
 
 		JScrollPane loanInterestTableScrollPane_1_1 = new JScrollPane();
@@ -281,6 +332,8 @@ public class AddProductPanel extends JPanel{
 		add(loanInterestTableScrollPane_1_1);
 
 		mfSpecificationsField = new JTextArea();
+		mfSpecificationsField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		mfSpecificationsField.setBackground(new Color(237, 250, 139));
 		loanInterestTableScrollPane_1_1.setViewportView(mfSpecificationsField);
 
 		addProductButton.addActionListener(new ActionListener() {

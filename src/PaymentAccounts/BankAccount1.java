@@ -1,6 +1,6 @@
 package PaymentAccounts;
 
-public class BankAccount {
+public class BankAccount1 {
 	
 	public static String cardNumber = "12345678912";
 	public static String expirationDate = "12/24";

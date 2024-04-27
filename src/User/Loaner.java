@@ -48,6 +48,7 @@ public class Loaner extends User {
 			String occupation, 
 			String monthlyIncome) {
 		super(username, password, firstName, middleName, lastName, gender, birthdate, age, email, phoneNumber);
+		this.loanerId = loanerId;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;

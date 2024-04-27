@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,7 +21,7 @@ import javax.swing.border.LineBorder;
 
 import Database.DatabaseManager;
 import Loan.LoanRequest;
-import PaymentAccounts.BankAccount;
+import PaymentAccounts.BankAccount1;
 import PaymentAccounts.EWalletAccount;
 import Utilities.HelperUtility;
 
@@ -39,6 +40,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import java.awt.Dimension;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 public class DownPaymentLoanerPanel extends JDialog {
 	
@@ -69,7 +72,10 @@ public class DownPaymentLoanerPanel extends JDialog {
 	
 	//For advance pay
 	ArrayList<JCheckBox> monthCheckBoxes = new ArrayList<>();
+	
+	boolean hasSelectedEWallet = false;
 
+	final ButtonGroup eWalletButtonSelectRadButtons;
 	/**
 	 * Launch the application.
 	 */
@@ -87,6 +93,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 	 * Create the dialog.
 	 */
 	public DownPaymentLoanerPanel(LoanRequest loanDetails) {
+		setTitle("Pay Downpayment");
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		
 		//Get more information about the loan 
@@ -96,11 +103,13 @@ public class DownPaymentLoanerPanel extends JDialog {
 		
 		setBounds(100, 100, 1184, 640);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(new Color(37, 102, 112));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(173, 226, 138));
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel.setBounds(630, 75, 485, 95);
 		contentPanel.add(panel);
@@ -114,6 +123,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 		final ButtonGroup eWalletButtonGroup = new ButtonGroup();
 		
 		JRadioButton eWalletRadButton = new JRadioButton("E-Wallet");
+		eWalletRadButton.setBackground(new Color(173, 226, 138));
 		eWalletRadButton.addActionListener(e -> showEWalletSelection());
 		
 		eWalletRadButton.setFont(new Font("Dialog", Font.PLAIN, 12));
@@ -121,6 +131,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 		panel.add(eWalletRadButton);
 		
 		JRadioButton bankPaymentRadButton = new JRadioButton("Bank Payment");
+		bankPaymentRadButton.setBackground(new Color(173, 226, 138));
 		bankPaymentRadButton.addActionListener(e -> showCardInformation());
 		bankPaymentRadButton.setFont(new Font("Dialog", Font.PLAIN, 12));
 		bankPaymentRadButton.setBounds(258, 49, 127, 23);
@@ -130,6 +141,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 		eWalletButtonGroup.add(bankPaymentRadButton);
 		
 		eWalletInformationPanel = new JPanel();
+		eWalletInformationPanel.setBackground(new Color(237, 250, 139));
 		eWalletInformationPanel.setLayout(null);
 		eWalletInformationPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		eWalletInformationPanel.setBounds(630, 391, 259, 155);
@@ -142,6 +154,8 @@ public class DownPaymentLoanerPanel extends JDialog {
 		eWalletInformationPanel.add(lblMobileNumber);
 		
 		mobileNumberField = new JTextField();
+		mobileNumberField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		mobileNumberField.setFont(new Font("Dialog", Font.PLAIN, 11));
 		mobileNumberField.setColumns(10);
 		mobileNumberField.setBounds(20, 48, 213, 20);
 		eWalletInformationPanel.add(mobileNumberField);
@@ -153,11 +167,14 @@ public class DownPaymentLoanerPanel extends JDialog {
 		eWalletInformationPanel.add(lblPinCode);
 		
 		pinCodeField = new JTextField();
+		pinCodeField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		pinCodeField.setFont(new Font("Dialog", Font.PLAIN, 11));
 		pinCodeField.setColumns(10);
 		pinCodeField.setBounds(20, 107, 213, 20);
 		eWalletInformationPanel.add(pinCodeField);
 		
 		selectEWalletPanel = new JPanel();
+		selectEWalletPanel.setBackground(new Color(237, 250, 139));
 		selectEWalletPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		selectEWalletPanel.setBounds(630, 181, 485, 187);
 		contentPanel.add(selectEWalletPanel);
@@ -191,6 +208,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 		selectEWalletPanel.add(gcashPicture);
 		
 		JRadioButton mayaRadButton = new JRadioButton("Maya");
+		mayaRadButton.setBackground(new Color(237, 250, 139));
 		mayaRadButton.addActionListener(e -> showEWalletInformation());
 		mayaRadButton.setHorizontalAlignment(SwingConstants.CENTER);
 		mayaRadButton.setFont(new Font("Dialog", Font.PLAIN, 12));
@@ -198,13 +216,14 @@ public class DownPaymentLoanerPanel extends JDialog {
 		selectEWalletPanel.add(mayaRadButton);
 		
 		JRadioButton gcashRadButton = new JRadioButton("Gcash");
+		gcashRadButton.setBackground(new Color(237, 250, 139));
 		gcashRadButton.addActionListener(e -> showEWalletInformation());
 		gcashRadButton.setHorizontalAlignment(SwingConstants.CENTER);
 		gcashRadButton.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gcashRadButton.setBounds(269, 143, 100, 23);
 		selectEWalletPanel.add(gcashRadButton);
 		
-		final ButtonGroup eWalletButtonSelectRadButtons = new ButtonGroup();
+		eWalletButtonSelectRadButtons = new ButtonGroup();
 		eWalletButtonSelectRadButtons.add(gcashRadButton);
 		eWalletButtonSelectRadButtons.add(mayaRadButton);
 		
@@ -224,51 +243,61 @@ public class DownPaymentLoanerPanel extends JDialog {
 		contentPanel.add(productImageLabel);
 		
 		JLabel lblProductName = new JLabel(LOAN_DETAILS.getProductToLoanData().getName());
+		lblProductName.setForeground(new Color(255, 255, 255));
 		lblProductName.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblProductName.setBounds(291, 24, 235, 14);
 		contentPanel.add(lblProductName);
 		
 		JLabel lblNewLabel_1 = new JLabel(LOAN_DETAILS.getProductToLoanData().getBrand());
+		lblNewLabel_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 14));
 		lblNewLabel_1.setBounds(291, 41, 235, 19);
 		contentPanel.add(lblNewLabel_1);
 		
 		JLabel lblPrice = new JLabel("₱ " + String.valueOf(LOAN_DETAILS.getProductToLoanData().getPrice()));
+		lblPrice.setForeground(new Color(255, 255, 255));
 		lblPrice.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblPrice.setBounds(291, 79, 235, 14);
 		contentPanel.add(lblPrice);
 		
 		JLabel lblNewLabel_2 = new JLabel("Merchant:");
+		lblNewLabel_2.setForeground(new Color(255, 255, 255));
 		lblNewLabel_2.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblNewLabel_2.setBounds(291, 104, 89, 14);
 		contentPanel.add(lblNewLabel_2);
 		
 		JLabel merchantName = new JLabel(LOAN_DETAILS.getMerchantLoanData().getMerchantName());
+		merchantName.setForeground(new Color(255, 255, 255));
 		merchantName.setFont(new Font("Dialog", Font.ITALIC, 14));
 		merchantName.setBounds(370, 104, 173, 14);
 		contentPanel.add(merchantName);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Downpayment Price:");
+		lblNewLabel_2_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_2_1.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblNewLabel_2_1.setBounds(31, 255, 153, 16);
 		contentPanel.add(lblNewLabel_2_1);
 		
 		JLabel downPaymentPrice = new JLabel("₱ " + LOAN_DETAILS.getDownPaymentAmount());
+		downPaymentPrice.setForeground(new Color(255, 255, 255));
 		downPaymentPrice.setFont(new Font("Dialog", Font.BOLD, 14));
 		downPaymentPrice.setBounds(196, 255, 235, 14);
 		contentPanel.add(downPaymentPrice);
 		
 		JLabel lblNewLabel_2_1_1 = new JLabel("Monthly Payments:");
+		lblNewLabel_2_1_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_2_1_1.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblNewLabel_2_1_1.setBounds(31, 282, 153, 16);
 		contentPanel.add(lblNewLabel_2_1_1);
 		
 		JLabel lblPrice_1_1 = new JLabel("₱ " + LOAN_DETAILS.getMonthlyPayment() + " x " + LOAN_DETAILS.getLoanedProductMonthsToPay() + " months");
+		lblPrice_1_1.setForeground(new Color(255, 255, 255));
 		lblPrice_1_1.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblPrice_1_1.setBounds(196, 282, 235, 14);
 		contentPanel.add(lblPrice_1_1);
 		
 		cardSecurityCodeFIeld = new JPanel();
+		cardSecurityCodeFIeld.setBackground(new Color(237, 250, 139));
 		cardSecurityCodeFIeld.setBounds(630, 181, 259, 232);
 		contentPanel.add(cardSecurityCodeFIeld);
 		cardSecurityCodeFIeld.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -281,6 +310,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 		cardSecurityCodeFIeld.add(lblCardNumber);
 		
 		cardNumberField = new JTextField();
+		cardNumberField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		cardNumberField.setBounds(20, 48, 213, 20);
 		cardSecurityCodeFIeld.add(cardNumberField);
 		cardNumberField.setColumns(10);
@@ -292,6 +322,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 		cardSecurityCodeFIeld.add(lblExpirationDatemmyy);
 		
 		cardExpDateField = new JTextField();
+		cardExpDateField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		cardExpDateField.setColumns(10);
 		cardExpDateField.setBounds(20, 107, 213, 20);
 		cardSecurityCodeFIeld.add(cardExpDateField);
@@ -303,22 +334,27 @@ public class DownPaymentLoanerPanel extends JDialog {
 		cardSecurityCodeFIeld.add(lblSecurityCode);
 		
 		JTextField cardSecurityCodeField = new JTextField();
+		cardSecurityCodeField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		cardSecurityCodeField.setColumns(10);
 		cardSecurityCodeField.setBounds(20, 169, 213, 20);
 		cardSecurityCodeFIeld.add(cardSecurityCodeField);
 		
 		JLabel lblNewLabel_2_1_2 = new JLabel("Amount to pay:");
+		lblNewLabel_2_1_2.setForeground(new Color(255, 255, 255));
 		lblNewLabel_2_1_2.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblNewLabel_2_1_2.setBounds(630, 41, 122, 16);
 		contentPanel.add(lblNewLabel_2_1_2);
 		
 		totalPaymentText = new JLabel("₱ " + String.valueOf(LOAN_DETAILS.getDownPayment()));
+		totalPaymentText.setForeground(new Color(255, 255, 255));
 		totalPaymentText.setFont(new Font("Dialog", Font.BOLD, 14));
 		totalPaymentText.setBounds(762, 43, 235, 14);
 		contentPanel.add(totalPaymentText);
 		
 		
 		payInAdvanceToggle = new JToggleButton("Pay-in-advance");
+		payInAdvanceToggle.setForeground(new Color(255, 255, 255));
+		payInAdvanceToggle.setBackground(new Color(64, 112, 86));
 		
 		payInAdvanceToggle.addActionListener(new ActionListener() {
 
@@ -423,12 +459,14 @@ public class DownPaymentLoanerPanel extends JDialog {
 		
 		
 		lblMonth = new JLabel("Month");
+		lblMonth.setForeground(new Color(255, 255, 255));
 		
 		lblMonth.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblMonth.setBounds(98, 353, 37, 14);
 		contentPanel.add(lblMonth);
 		
 		lblAmountDue = new JLabel("Amount Due");
+		lblAmountDue.setForeground(new Color(255, 255, 255));
 		
 		lblAmountDue.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblAmountDue.setBounds(177, 354, 74, 14);
@@ -444,14 +482,21 @@ public class DownPaymentLoanerPanel extends JDialog {
 		eWalletInformationPanel.setVisible(false);
 		{
 			JPanel buttonPane = new JPanel();
+			buttonPane.setBackground(new Color(37, 102, 112));
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("Continue Payment");
+				okButton.setForeground(new Color(255, 255, 255));
+				okButton.setBackground(new Color(64, 112, 86));
+				okButton.setFont(new Font("Dialog", Font.PLAIN, 12));
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						System.out.println(loanDetails.getLoanerId());
-						if(paymentMethod.equals("bank")) {
+						if(paymentMethod == null) {
+							JOptionPane.showMessageDialog(null, "Please select payment option to continue", "Invalid Action", JOptionPane.WARNING_MESSAGE);
+							return;
+						}
+					else if(paymentMethod.equals("bank")) {
 							
 							String cardNumberText = cardNumberField.getText();
 							String cardExpDateText = cardExpDateField.getText();
@@ -490,7 +535,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 							
 							//Verify Credentials
 							
-							boolean isCredentialsValid = cardNumberText.equals(BankAccount.cardNumber) && cardExpDateText.equals(BankAccount.expirationDate) && cardSecurityCodeText.equals(BankAccount.cvvc);
+							boolean isCredentialsValid = cardNumberText.equals(BankAccount1.cardNumber) && cardExpDateText.equals(BankAccount1.expirationDate) && cardSecurityCodeText.equals(BankAccount1.cvvc);
 							
 							if(!isCredentialsValid) {
 								JOptionPane.showMessageDialog(null, "Please make sure that the credentials you entered are correct.", "Invalid Credentials", JOptionPane.ERROR_MESSAGE);
@@ -502,6 +547,12 @@ public class DownPaymentLoanerPanel extends JDialog {
 							HelperUtility.closeDialog(DownPaymentLoanerPanel.this);
 						
 						} else if(paymentMethod.equals("ewallet")) {
+							
+							if(!hasSelectedEWallet) {
+								JOptionPane.showMessageDialog(null, "Please select an e-wallet to continue", "Invalid Action", JOptionPane.WARNING_MESSAGE);
+								return;
+							}
+							
 							String mobileNumberText = mobileNumberField.getText();
 							String pinCodeText = pinCodeField.getText();
 	
@@ -573,6 +624,13 @@ public class DownPaymentLoanerPanel extends JDialog {
 		eWalletInformationPanel.setVisible(false);
 		cardSecurityCodeFIeld.setVisible(true);
 		paymentMethod = "bank";
+		
+		ButtonModel selectedModel = eWalletButtonSelectRadButtons.getSelection();
+
+        if (selectedModel != null) { 
+        	eWalletButtonSelectRadButtons.clearSelection(); 
+        }
+        hasSelectedEWallet = false;
 	}
 	
 	private void showEWalletInformation() {
@@ -580,6 +638,7 @@ public class DownPaymentLoanerPanel extends JDialog {
 		cardSecurityCodeFIeld.setVisible(false);
 		selectEWalletPanel.setVisible(true);
 		paymentMethod = "ewallet";
+		hasSelectedEWallet = true;
 	}
 	
 	private void showEWalletSelection() {

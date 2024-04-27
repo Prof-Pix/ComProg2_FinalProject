@@ -33,6 +33,8 @@ import Utilities.HelperUtility;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.SystemColor;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 public class MerchantTemplatePanel extends JPanel{
 	
@@ -47,9 +49,10 @@ public class MerchantTemplatePanel extends JPanel{
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
 	
 	public MerchantTemplatePanel(Merchant merch) {
+		setBackground(new Color(237, 250, 139));
 		
 		setPreferredSize(new Dimension(250, 320));
-		setBorder(new LineBorder(new Color(0, 0, 0)));
+		setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setLayout(null);
 		
 		JLabel merchantName = new JLabel(merch.getMerchantName());
@@ -71,27 +74,24 @@ public class MerchantTemplatePanel extends JPanel{
 		
 		JLabel productImageLabel = new JLabel("");
 		productImageLabel.setBorder(new LineBorder(new Color(0, 0, 0)));
-//		productImageLabel.setIcon(productData.getProductImage());
 		productImageLabel.setBounds(15, 32, 140, 140);
-//		//Scaling the image
-//				Image originalImage = productData.getProductImage().getImage();
-//				Image scaledImage = originalImage.getScaledInstance(productImageLabel.getWidth(), productImageLabel.getHeight(), Image.SCALE_SMOOTH);
-//				ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
-//				productImageLabel.setIcon(scaledImageIcon);
+		productImageLabel.setIcon(HelperUtility.resizeImage(HelperUtility.defaultMerchantImageFilePath, productImageLabel.getWidth(), productImageLabel.getHeight()));
 		add(productImageLabel);
 		
 		String category = HelperUtility.capitalizeWords(merch.getMerchantCategory());
-		JLabel categoryLabel = new JLabel("Sports");
+		JLabel categoryLabel = new JLabel(category);
 		categoryLabel.setOpaque(true);
-		categoryLabel.setBackground(Color.BLACK);
+		categoryLabel.setBackground(new Color(173, 226, 138));
 		
-		categoryLabel.setForeground(new Color(255, 255, 255));
+		categoryLabel.setForeground(new Color(0, 0, 0));
 		categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		categoryLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 		categoryLabel.setBounds(5, 5, 80, 18);
 		add(categoryLabel);
 		
 		JButton btnNewButton = new JButton("See details");
+		btnNewButton.setForeground(new Color(255, 255, 255));
+		btnNewButton.setBackground(new Color(64, 112, 86));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SeeMerchantProductDetails merchantProductPanel = new SeeMerchantProductDetails(merch.getMerchantId());

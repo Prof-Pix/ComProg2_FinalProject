@@ -6,9 +6,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import AdminFramePanels.ManageLoanerPanel;
 import AdminFramePanels.ManageMerchantPanel;
-import AdminFramePanels.ViewProfilePanel;
+import AdminFramePanels.ViewAdminProfileDialog;
+import ChatBot.HelpCenterChatBotDialog;
+import Database.DatabaseManager;
 import LoanerFramePanels.RejectedLoansPanel;
+import LoanerFramePanels.ViewLoanerProfileDialog;
+import User.Admin;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -18,9 +23,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import java.awt.Dimension;
 
 public class AdminFrame extends JFrame {
 
+	DatabaseManager dbManager = new DatabaseManager();
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
@@ -28,6 +35,7 @@ public class AdminFrame extends JFrame {
 	static JPanel currentPanel = null;
 	
 	private static int ADMIN_ID;
+	private static Admin ADMIN_DATA;
 
 	/**
 	 * Launch the application.
@@ -49,11 +57,22 @@ public class AdminFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public AdminFrame(int adminId) {
-		
 		AdminFrame.ADMIN_ID = adminId;
 		
+		try {
+			dbManager.connect();
+			AdminFrame.ADMIN_DATA = dbManager.getAdminData(ADMIN_ID);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		setTitle(ADMIN_DATA.getFullName());
+		
+		
+
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1180, 643);
+		setBounds(100, 100, 1180, 650);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -62,48 +81,55 @@ public class AdminFrame extends JFrame {
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem viewProfileMenuItem = new JMenuItem("View Profile");
-		viewProfileMenuItem.addActionListener(e -> showViewProfilePanel());
+		viewProfileMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ViewAdminProfileDialog adminProfileDialog = new ViewAdminProfileDialog(ADMIN_ID);
+				adminProfileDialog.setVisible(true);
+				
+			}
+			
+		} );
 		mnNewMenu.add(viewProfileMenuItem);
-		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Edit Profile");
-		mnNewMenu.add(mntmNewMenuItem_3);
 		
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Logout");
 		mnNewMenu.add(mntmNewMenuItem_4);
 		
-		JMenu mnNewMenu_1 = new JMenu("Manage Users");
-		menuBar.add(mnNewMenu_1);
+		JMenuItem manageMerchantsMenuItem = new JMenuItem("Manage Merchants");
+		manageMerchantsMenuItem.addActionListener(e -> showManageMerchant());
+		manageMerchantsMenuItem.setMaximumSize(new Dimension(160, 32767));
+		menuBar.add(manageMerchantsMenuItem);
 		
-		JMenuItem manageMerchantMenuItem = new JMenuItem("Manage Merchants");
-		manageMerchantMenuItem.addActionListener(e -> showManageMerchant());
-		mnNewMenu_1.add(manageMerchantMenuItem);
+		JMenuItem manageLoanersMenuItem = new JMenuItem("Manage Loaner");
+		manageLoanersMenuItem.addActionListener(e -> showManageLoaner());
+		manageLoanersMenuItem.setMaximumSize(new Dimension(160, 32767));
+		manageLoanersMenuItem.setPreferredSize(new Dimension(20, 26));
+		manageLoanersMenuItem.setSize(new Dimension(20, 0));
+		menuBar.add(manageLoanersMenuItem);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Manage Loaners");
-		mnNewMenu_1.add(mntmNewMenuItem_1);
-		
-		JMenu mnNewMenu_2 = new JMenu("Manage FAQS");
+		JMenu mnNewMenu_2 = new JMenu("Settings");
 		menuBar.add(mnNewMenu_2);
 		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Edit FAQS");
-		mnNewMenu_2.add(mntmNewMenuItem_2);
+		JMenuItem faqsMenuItem = new JMenuItem("FAQS");
+		faqsMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				HelpCenterChatBotDialog chatBot = new HelpCenterChatBotDialog("admin");
+				chatBot.setVisible(true);
+			}
+			
+		});
+		mnNewMenu_2.add(faqsMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-	}
-	
-	
-	private void showViewProfilePanel() {
-		if (currentPanel != null) {
-			contentPane.remove(currentPanel);		
-		}
-		ViewProfilePanel viewProfilePanel = new ViewProfilePanel(ADMIN_ID);
-		currentPanel = viewProfilePanel;
-		viewProfilePanel.setBounds(0,0,1200,700);
-		contentPane.add(viewProfilePanel);
-		contentPane.revalidate();
-		contentPane.repaint();
+		
+		showManageMerchant();
 	}
 	
 	private void showManageMerchant() {
@@ -114,6 +140,18 @@ public class AdminFrame extends JFrame {
 		currentPanel = manageMerchantPanel;
 		manageMerchantPanel.setBounds(0,0,1200,700);
 		contentPane.add(manageMerchantPanel);
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+	
+	private void showManageLoaner() {
+		if (currentPanel != null) {
+			contentPane.remove(currentPanel);		
+		}
+		ManageLoanerPanel manageLoanerPanel = new ManageLoanerPanel();
+		currentPanel = manageLoanerPanel;
+		manageLoanerPanel.setBounds(0,0,1200,700);
+		contentPane.add(manageLoanerPanel);
 		contentPane.revalidate();
 		contentPane.repaint();
 	}

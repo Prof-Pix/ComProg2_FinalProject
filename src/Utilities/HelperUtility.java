@@ -1,5 +1,6 @@
 package Utilities;
 
+import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
@@ -9,10 +10,18 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class HelperUtility {
+	
+	//Default Image File Paths
+	public static String defaultLoanerImageFilePath = "D:\\APPLICATIONS\\Home_Credit\\src\\Images\\default_loaner.png";
+	public static String defaultMerchantImageFilePath = "D:\\APPLICATIONS\\Home_Credit\\src\\Images\\default_merchant.png";
+	public static String defaultProductPicturePath = "D:\\APPLICATIONS\\Home_Credit\\src\\Images\\default_product.png";
+	public static String defaultAdminPicturePath = "D:\\APPLICATIONS\\Home_Credit\\src\\Images\\default_admin.png";
 
 	//FOR CAPITALIZING THE FIRST WORD
 	public static String capitalizeWords(String str) {
@@ -83,6 +92,21 @@ public class HelperUtility {
 		UUID uuid = UUID.randomUUID();
 		long id = Math.abs(uuid.getMostSignificantBits()); // Get the first 64 bits
 		return id; 
+	}
+	
+	public static ImageIcon resizeImage(String filePath, int labelWidth, int labelHeight) {
+		ImageIcon imageIcon = new ImageIcon(filePath);
+				Image originalImage = imageIcon.getImage();
+				Image scaledImage = originalImage.getScaledInstance(labelWidth,labelHeight, Image.SCALE_SMOOTH);
+				 ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
+				 return scaledImageIcon;
+	}
+	
+	public static ImageIcon resizeImage(ImageIcon imageIcon, int labelWidth, int labelHeight) {
+				Image originalImage = imageIcon.getImage();
+				Image scaledImage = originalImage.getScaledInstance(labelWidth,labelHeight, Image.SCALE_SMOOTH);
+				 ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
+				 return scaledImageIcon;
 	}
 
 

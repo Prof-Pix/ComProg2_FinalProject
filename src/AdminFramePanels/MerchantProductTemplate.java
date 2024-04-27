@@ -32,6 +32,8 @@ import Utilities.HelperUtility;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.SystemColor;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 @SuppressWarnings("serial")
 public class MerchantProductTemplate extends JPanel{
@@ -47,9 +49,10 @@ public class MerchantProductTemplate extends JPanel{
 	ArrayList<ProductLoanTerm> prodLoanTerms = new ArrayList<>();
 	
 	public MerchantProductTemplate(int merchantId, Product productData) {
+		setBackground(new Color(237, 250, 139));
 		MerchantProductTemplate.productToDisplay = productData;
 		setPreferredSize(new Dimension(275, 405));
-		setBorder(new LineBorder(new Color(0, 0, 0)));
+		setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel(productData.getName());
@@ -68,12 +71,15 @@ public class MerchantProductTemplate extends JPanel{
 		add(lblPrice);
 		
 		JButton btnNewButton = new JButton("View Loans");
+		btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		btnNewButton.setForeground(new Color(255, 255, 255));
+		btnNewButton.setBackground(new Color(64, 112, 86));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
-		btnNewButton.setBounds(175, 32, 90, 23);
+		btnNewButton.setBounds(165, 32, 100, 23);
 		add(btnNewButton);
 		
 		JScrollPane loanInterestTableScrollPane = new JScrollPane();
@@ -141,9 +147,9 @@ public class MerchantProductTemplate extends JPanel{
 		String category = HelperUtility.capitalizeWords(productData.getCategory());
 		JLabel categoryLabel = new JLabel(category);
 		categoryLabel.setOpaque(true);
-		categoryLabel.setBackground(Color.BLACK);
+		categoryLabel.setBackground(new Color(173, 226, 138));
 		
-		categoryLabel.setForeground(new Color(255, 255, 255));
+		categoryLabel.setForeground(new Color(0, 0, 0));
 		categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		categoryLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 		categoryLabel.setBounds(5, 5, 80, 18);

@@ -1265,7 +1265,7 @@ public class DatabaseManager {
 				if(loanerDataSet.next()) {
 					// For the birthdate
 					LocalDate birthdate = loanerDataSet.getDate("birthday").toLocalDate();
-
+					
 					Loaner loaner = new Loaner(loanerDataSet.getInt("loaner_id"),
 							loanerDataSet.getString("username"),
 							loanerDataSet.getString("password"),
@@ -1780,6 +1780,93 @@ public class DatabaseManager {
 			return null;
 		}
 	}
+	
+	public ArrayList<Loan> getOngoingLoansMerchant(int merchantId) {
+
+		ArrayList<Loan> loans = new ArrayList<>();
+
+		String getOngoingLoans = "SELECT * FROM loan_table WHERE merchant_id = ?";
+
+		try(PreparedStatement prepSt = connection.prepareStatement(getOngoingLoans)) {
+			prepSt.setInt(1, merchantId);
+
+			ResultSet ongoingLoanSet = prepSt.executeQuery();
+
+			while(ongoingLoanSet.next()) {
+
+				ArrayList<LoanSchedule> loanSchedules = new ArrayList<>();
+
+				String loanId = ongoingLoanSet.getString("loan_id");
+
+				//Get each loan schedule
+				String getLoanScheduleQuery = "SELECT * FROM loan_schedule_table WHERE loan_id = ?";
+
+				try(PreparedStatement prepStt = connection.prepareStatement(getLoanScheduleQuery)) {
+					prepStt.setString(1, loanId);
+
+					ResultSet loanScheduleSet = prepStt.executeQuery();
+
+
+					while(loanScheduleSet.next()) {
+
+						if(loanScheduleSet.getDate("loan_paid_date") == null) {
+							LoanSchedule loanSched = new LoanSchedule(loanScheduleSet.getInt("loan_schedule_id"),
+									loanScheduleSet.getString("loan_id"),
+									loanScheduleSet.getInt("loan_month"),
+									loanScheduleSet.getDate("loan_schedule_date").toLocalDate(),
+									loanScheduleSet.getFloat("loan_schedule_amount"),
+									null,
+									0,
+									loanScheduleSet.getString("status"),
+									loanScheduleSet.getBoolean("is_due")
+									);
+							loanSchedules.add(loanSched);
+						} else {
+							LoanSchedule loanSched = new LoanSchedule(loanScheduleSet.getInt("loan_schedule_id"),
+									loanScheduleSet.getString("loan_id"),
+									loanScheduleSet.getInt("loan_month"),
+									loanScheduleSet.getDate("loan_schedule_date").toLocalDate(),
+									loanScheduleSet.getFloat("loan_schedule_amount"),
+									loanScheduleSet.getDate("loan_paid_date").toLocalDate(),
+									loanScheduleSet.getFloat("loan_penalty"),
+									loanScheduleSet.getString("status"),
+									loanScheduleSet.getBoolean("is_due")
+									);
+							loanSchedules.add(loanSched);
+						}
+
+
+					}
+				}
+
+
+				Loan ln = new Loan(ongoingLoanSet.getString("loan_id"),
+						ongoingLoanSet.getInt("loan_request_id"),
+						ongoingLoanSet.getInt("merchant_id"),
+						ongoingLoanSet.getInt("product_id"),
+						ongoingLoanSet.getInt("loaner_id"),
+						ongoingLoanSet.getDate("loan_start_date").toLocalDate(),
+						ongoingLoanSet.getFloat("monthly_payment"),
+						ongoingLoanSet.getInt("remaining_months_to_pay"),
+						ongoingLoanSet.getFloat("remaining_balance"),
+						ongoingLoanSet.getInt("paid_months"),
+						ongoingLoanSet.getFloat("paid_balance"),
+						ongoingLoanSet.getString("loan_status"),
+						loanSchedules
+						);
+
+				loans.add(ln);
+			}
+
+			return loans;
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 
 	public ArrayList<Merchant> getAllMerchants() {
@@ -1806,6 +1893,30 @@ public class DatabaseManager {
 		}
 		return allMerchants;
 		
+	}
+	
+	public ArrayList<Loaner> getAllLoaner() {
+		ArrayList<Loaner> allLoaner = new ArrayList<>();
+		
+		String getAllLoanerQuery = "SELECT * FROM loaner_table";
+		
+		try(PreparedStatement prepSt = connection.prepareStatement(getAllLoanerQuery)) {
+			
+			ResultSet allLoanerSet = prepSt.executeQuery();
+			
+			while(allLoanerSet.next()) {
+				int loanerId = allLoanerSet.getInt("loaner_id");
+				Loaner loaner = getLoanerData(loanerId);
+				
+				allLoaner.add(loaner);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return allLoaner;
 	}
 	
 	public ArrayList<Faqs> getAllFaqs() {
@@ -1835,6 +1946,7 @@ public class DatabaseManager {
 		}
 		
 	}
+	
 }
 
 

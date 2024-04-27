@@ -37,6 +37,7 @@ public class ViewProductsPanel extends JPanel{
 	static int MERCHANT_ID;
 	
 	public ViewProductsPanel(int merchantId) {
+		setBackground(new Color(30, 66, 94));
 		ViewProductsPanel.MERCHANT_ID = merchantId;
 		//Establish a connection
 		try {
@@ -51,20 +52,25 @@ public class ViewProductsPanel extends JPanel{
 		setLayout(null);
 
 		productsPanel = new JPanel();
+		productsPanel.setBackground(new Color(30, 66, 94));
 		productsPanel.setBorder(null);
 		productsPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 15, 15)); // Adjust gaps as needed
 
 		// Create the scrollpane and add productsPanel INTO it
 		JScrollPane scrollPane = new JScrollPane(productsPanel); 
+		scrollPane.setBorder(null);
 		scrollPane.setBounds(10, 60, 1163, 570);
 		add(scrollPane); 
 
 		JLabel lblNewLabel = new JLabel("Sort by price:");
+		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblNewLabel.setBounds(710, 30, 83, 14);
 		add(lblNewLabel);
 
 		sortByComboBox = new JComboBox();
+		sortByComboBox.setBackground(new Color(237, 250, 139));
+		sortByComboBox.setFont(new Font("Dialog", Font.PLAIN, 12));
 		sortByComboBox.setModel(new DefaultComboBoxModel(new String[] {"Low to High", "High to Low"}));
 		sortByComboBox.addActionListener(new ActionListener() {
 
@@ -78,11 +84,14 @@ public class ViewProductsPanel extends JPanel{
 		add(sortByComboBox);
 
 		JLabel lblFilterByCategory = new JLabel("Filter by category:");
+		lblFilterByCategory.setForeground(new Color(255, 255, 255));
 		lblFilterByCategory.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblFilterByCategory.setBounds(905, 29, 109, 14);
 		add(lblFilterByCategory);
 
 		filterCategComboBox = new JComboBox();
+		filterCategComboBox.setBackground(new Color(237, 250, 139));
+		filterCategComboBox.setFont(new Font("Dialog", Font.PLAIN, 12));
 		filterCategComboBox.addActionListener(new ActionListener() {
 
 			@Override
@@ -95,14 +104,6 @@ public class ViewProductsPanel extends JPanel{
 		filterCategComboBox.setModel(new DefaultComboBoxModel(new String[] {"--- Select a category ---", "Gadgets", "Electronics", "Appliances", "Sports", "Fashion", "Furniture", "Vehicles"}));
 		filterCategComboBox.setBounds(1010, 27, 163, 22);
 		add(filterCategComboBox);
-
-		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 341, 10, 2);
-		add(separator);
-
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(1174, 341, 10, 2);
-		add(separator_1);
 		
 		
 		//Adding the products
@@ -137,7 +138,6 @@ public class ViewProductsPanel extends JPanel{
 		productsPanel.revalidate();
         productsPanel.repaint();
 		
-			
 	}
 	
 	public void filterByCategory() {

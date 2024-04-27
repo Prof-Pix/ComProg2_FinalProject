@@ -24,8 +24,8 @@ import MerchantFramePanels.EditProductPanel;
 import MerchantFramePanels.OngoingLoansPanel;
 import MerchantFramePanels.PendingLoanRequestsPanel;
 import MerchantFramePanels.PendingLoansPanel;
+import MerchantFramePanels.ViewMerchantProfileDialog;
 import MerchantFramePanels.ViewProductsPanel;
-import MerchantFramePanels.ViewProfilePanel;
 import Products.Product;
 import Products.ProductLoanTerm;
 import Products.ProductRegistrationData;
@@ -86,10 +86,11 @@ public class MerchantFrame extends JFrame {
 	private static JPanel contentPane;
 
 	private static int MERCHANT_ID;
+	private static Merchant MERCHANT_DATA;
 
 	//Manage Products Panel
 	JPanel addProductPanel;
-	
+
 	//For tracking the current panel;
 	static JPanel currentPanel = null;
 
@@ -114,6 +115,18 @@ public class MerchantFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MerchantFrame(int merchantId) {
+
+		MerchantFrame.MERCHANT_ID = merchantId;
+
+		try {
+			dbManager.connect();
+			MerchantFrame.MERCHANT_DATA = dbManager.getMerchantData(MERCHANT_ID);
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		setTitle(MERCHANT_DATA.getFullName());
+
 		setResizable(false);
 
 		MerchantFrame.MERCHANT_ID = merchantId;
@@ -122,34 +135,42 @@ public class MerchantFrame extends JFrame {
 
 		setTitle("Merchant Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1200, 740);
+		setBounds(100, 100, 1200, 700);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
 		JMenu mnNewMenu_1 = new JMenu("Profile");
 		menuBar.add(mnNewMenu_1);
-		
+
 		JMenuItem viewProfileMenuItem = new JMenuItem("View Profile");
-		viewProfileMenuItem.addActionListener(e -> showViewProfilePanel());
+		viewProfileMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				ViewMerchantProfileDialog merchProfileDialog = new ViewMerchantProfileDialog(MERCHANT_ID);
+				merchProfileDialog.setVisible(true);
+
+			}
+
+		});
 		mnNewMenu_1.add(viewProfileMenuItem);
 
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Edit Profile");
-		mnNewMenu_1.add(mntmNewMenuItem_3);
-		
 		JMenuItem logoutMenuItem = new JMenuItem("Logout");
 		logoutMenuItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION);
-				
+
 				if(choice == JOptionPane.YES_OPTION) {
 					logout();
 				}
-				
+
 			}
-			
+
 		});
 		mnNewMenu_1.add(logoutMenuItem);
 
@@ -166,14 +187,14 @@ public class MerchantFrame extends JFrame {
 
 		JMenu mnNewMenu_3 = new JMenu("Manage Loans");
 		menuBar.add(mnNewMenu_3);
-		
+
 		JMenuItem loanRequestMenuItem = new JMenuItem("Loan Requests");
 		loanRequestMenuItem.addActionListener(e -> showPendingLoanRequestPanel());
 		mnNewMenu_3.add(loanRequestMenuItem);
-		
+
 		JMenuItem ongoingLoansMenuItem = new JMenuItem("Ongoing Loans");
 		ongoingLoansMenuItem.addActionListener(e -> showOngoingLoansPanel());
-		
+
 		JMenuItem pendingLoansMenuItem = new JMenuItem("Pending Loans");
 		pendingLoansMenuItem.addActionListener(e -> showPendingLoanPanel());
 		mnNewMenu_3.add(pendingLoansMenuItem);
@@ -192,24 +213,22 @@ public class MerchantFrame extends JFrame {
 				HelpCenterChatBotDialog chatBot = new HelpCenterChatBotDialog("merchant");
 				chatBot.setVisible(true);
 			}
-			
+
 		});
 		mnNewMenu_4.add(faqsMenuItem);
 
-		JMenuItem mntmNewMenuItem_5 = new JMenuItem("About HomeCredit");
-		mnNewMenu_4.add(mntmNewMenuItem_5);
-		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
+
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		showViewProductsPanel();
 
 	}
 	//For changing from one menu to another
 	public void showAddProductPanel() {
-		
+
 		if (currentPanel != null) {
 			contentPane.remove(currentPanel);		
 		}
@@ -220,13 +239,13 @@ public class MerchantFrame extends JFrame {
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
-	
+
 	public static void showViewProductsPanel() {
-		
+
 		if (currentPanel != null) {
 			contentPane.remove(currentPanel);		
 		}
-		
+
 		ViewProductsPanel viewProductsPanel = new ViewProductsPanel(MERCHANT_ID);
 		currentPanel = viewProductsPanel;
 		viewProductsPanel.setBounds(0,0,1200,700);
@@ -234,12 +253,12 @@ public class MerchantFrame extends JFrame {
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
-	
+
 	public void showOngoingLoansPanel() {
 		if(currentPanel != null) {
 			contentPane.remove(currentPanel);
 		}
-		
+
 		OngoingLoansPanel ongoingLoansPanel = new OngoingLoansPanel(MERCHANT_ID);
 		currentPanel = ongoingLoansPanel;
 		ongoingLoansPanel.setBounds(0,0,1200,700);
@@ -247,12 +266,12 @@ public class MerchantFrame extends JFrame {
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
-	
+
 	public void showPendingLoanPanel() {
 		if(currentPanel != null) {
 			contentPane.remove(currentPanel);
 		}
-		
+
 		PendingLoansPanel pendingLoansPanel = new PendingLoansPanel(MERCHANT_ID);
 		currentPanel = pendingLoansPanel;
 		pendingLoansPanel.setBounds(0,0,1200,700);
@@ -260,12 +279,12 @@ public class MerchantFrame extends JFrame {
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
-	
+
 	public void showPendingLoanRequestPanel() {
 		if(currentPanel != null) {
 			contentPane.remove(currentPanel);
 		}
-		
+
 		PendingLoanRequestsPanel pendingLoanRequestPanel = new PendingLoanRequestsPanel(MERCHANT_ID);
 		currentPanel = pendingLoanRequestPanel;
 		pendingLoanRequestPanel.setBounds(0,0,1200,700);
@@ -273,24 +292,11 @@ public class MerchantFrame extends JFrame {
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
-	
-	public  void showViewProfilePanel() {
-		if(currentPanel != null) {
-			contentPane.remove(currentPanel);
-		}
-		
-		ViewProfilePanel viewProfilePanel = new ViewProfilePanel(MERCHANT_ID);
-		currentPanel = viewProfilePanel;
-		viewProfilePanel.setBounds(0,0,1200,700);
-		contentPane.add(viewProfilePanel);
-		contentPane.revalidate();
-		contentPane.repaint();
-	}
-	
+
 	//Logout
-			private void logout() {
-				HelperUtility.closePage(MerchantFrame.this);
-				LoginPage login = new LoginPage();
-				login.setVisible(true);
-			}
+	private void logout() {
+		HelperUtility.closePage(MerchantFrame.this);
+		LoginPage login = new LoginPage();
+		login.setVisible(true);
+	}
 }

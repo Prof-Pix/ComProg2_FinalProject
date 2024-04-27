@@ -19,6 +19,7 @@ import Loan.LoanRequest;
 import Loan.LoanSchedule;
 import Products.Product;
 import User.Loaner;
+import Utilities.HelperUtility;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -42,7 +43,8 @@ public class OngoingLoansPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public OngoingLoansPanel(int loanerId) {
-		
+		setBackground(new Color(37, 102, 112));
+
 		setLayout(null);
 		LOANER_ID = loanerId;
 
@@ -50,6 +52,7 @@ public class OngoingLoansPanel extends JPanel {
 
 
 		JLabel lblNewLabel_5 = new JLabel("Product Name");
+		lblNewLabel_5.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -57,45 +60,51 @@ public class OngoingLoansPanel extends JPanel {
 		add(lblNewLabel_5);
 
 		JLabel lblNewLabel_5_1 = new JLabel("Months Paid");
+		lblNewLabel_5_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1.setBounds(205, 20, 93, 14);
+		lblNewLabel_5_1.setBounds(235, 20, 93, 14);
 		add(lblNewLabel_5_1);
 
 		JLabel lblNewLabel_5_1_1 = new JLabel("Months Left");
+		lblNewLabel_5_1_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1_1.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1_1.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1_1.setBounds(323, 20, 93, 14);
+		lblNewLabel_5_1_1.setBounds(349, 20, 93, 14);
 		add(lblNewLabel_5_1_1);
 
 		JLabel lblNewLabel_5_1_1_1 = new JLabel("Paid Balance");
+		lblNewLabel_5_1_1_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1_1_1.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1_1_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1_1_1.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1_1_1.setBounds(470, 20, 93, 14);
+		lblNewLabel_5_1_1_1.setBounds(493, 20, 93, 14);
 		add(lblNewLabel_5_1_1_1);
 
 		JLabel lblNewLabel_5_1_1_2 = new JLabel("Remaining Balance");
+		lblNewLabel_5_1_1_2.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1_1_2.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1_1_2.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1_1_2.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1_1_2.setBounds(622, 20, 111, 14);
+		lblNewLabel_5_1_1_2.setBounds(665, 20, 111, 14);
 		add(lblNewLabel_5_1_1_2);
 
 		JLabel lblNewLabel_5_1_1_2_2 = new JLabel("Next Due Date");
+		lblNewLabel_5_1_1_2_2.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1_1_2_2.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1_1_2_2.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1_1_2_2.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1_1_2_2.setBounds(776, 20, 93, 14);
+		lblNewLabel_5_1_1_2_2.setBounds(814, 20, 93, 14);
 		add(lblNewLabel_5_1_1_2_2);
 
 		JLabel lblNewLabel_5_1_1_2_1 = new JLabel("Action");
+		lblNewLabel_5_1_1_2_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1_1_2_1.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1_1_2_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_5_1_1_2_1.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1_1_2_1.setBounds(953, 20, 93, 14);
+		lblNewLabel_5_1_1_2_1.setBounds(986, 20, 93, 14);
 		add(lblNewLabel_5_1_1_2_1);
 
 
@@ -105,78 +114,151 @@ public class OngoingLoansPanel extends JPanel {
 		add(scrollPane);
 
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(37, 102, 112));
 		scrollPane.setViewportView(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 
 		//		JPanel loanRequestPanel = new JPanel();
 		//		panel.add(loanRequestPanel);
-		//		loanRequestPanel.setMaximumSize(new Dimension(2210, 70));
+		//		loanRequestPanel.setMaximumSize(new Dimension(2210, 150));
+		//		loanRequestPanel.setPreferredSize(new Dimension(1085, 150));
 		//		loanRequestPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		//		loanRequestPanel.setLayout(new BoxLayout(loanRequestPanel, BoxLayout.X_AXIS));
 		//
 		//		loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-		//		JLabel lblNewLabel = new JLabel("Samsung A54");
-		//		lblNewLabel.setMaximumSize(new Dimension(130, 14));
-		//		lblNewLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		//		loanRequestPanel.add(lblNewLabel);
 		//
+		//		JPanel panel_1 = new JPanel();
+		//		panel_1.setBorder(null);
+		//
+		//		if(i % 2 == 1) {
+		//			loanRequestPanel.setBackground(new Color(237, 250, 139));
+		//			panel_1.setBackground(new Color(237, 250, 139));
+		//		} else {
+		//			loanRequestPanel.setBackground(new Color(205, 248,141));
+		//			panel_1.setBackground(new Color(205, 248,141));
+		//		}
+		//
+		//		panel_1.setMaximumSize(new Dimension(175, 32767));
+		//		loanRequestPanel.add(panel_1);
+		//		panel_1.setLayout(null);
+		//
+		//		
+		//		Product product = dbManager.getProductData(ongoingLoan.getProductId());
+		//		
+		//		JLabel productImage = new JLabel();
+		//		productImage.setBorder(new LineBorder(new Color(0, 0, 0)));
+		//		productImage.setBounds(10, 8, 109, 109);
+		//		productImage.setIcon(HelperUtility.resizeImage(product.getProductImage(), productImage.getWidth(), productImage.getHeight()));
+		//		panel_1.add(productImage);
+		//
+		//		JLabel lblNewLabel_1_1 = new JLabel(product.getName());
+		//		lblNewLabel_1_1.setMaximumSize(new Dimension(125, 14));
+		//		lblNewLabel_1_1.setFont(new Font("Dialog", Font.PLAIN, 12));
+		//		lblNewLabel_1_1.setBounds(10, 123, 125, 14);
+		//		panel_1.add(lblNewLabel_1_1);
+		//		JLabel monthsPaid = new JLabel(String.valueOf(ongoingLoan.getPaid_months()));
+		//		monthsPaid.setMaximumSize(new Dimension(100, 14));
+		//		monthsPaid.setFont(new Font("Dialog", Font.PLAIN, 12));
+		//		loanRequestPanel.add(monthsPaid);
 		//		loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-		//		JLabel lblNewLabel_1 = new JLabel("₱ 9000");
-		//		lblNewLabel_1.setMaximumSize(new Dimension(100, 14));
-		//		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 12));
-		//		loanRequestPanel.add(lblNewLabel_1);
+		//		JLabel monthsLeft = new JLabel(String.valueOf(ongoingLoan.getRemainingMonthsToPay()));
+		//		monthsLeft.setMaximumSize(new Dimension(125, 14));
+		//		monthsLeft.setFont(new Font("Dialog", Font.PLAIN, 12));
+		//		loanRequestPanel.add(monthsLeft);
 		//		loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-		//		JLabel lblNewLabel_3 = new JLabel("6 months @ 3%");
-		//		lblNewLabel_3.setMaximumSize(new Dimension(125, 14));
-		//		lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 12));
-		//		loanRequestPanel.add(lblNewLabel_3);
+		//		JLabel paidBalance = new JLabel(String.valueOf(ongoingLoan.getPaidBalance()));
+		//		paidBalance.setMaximumSize(new Dimension(150, 14));
+		//		paidBalance.setFont(new Font("Dialog", Font.PLAIN, 12));
+		//		loanRequestPanel.add(paidBalance);
 		//		loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-		//		JLabel lblNewLabel_2 = new JLabel("Rhem Gorgs Salvador");
-		//		lblNewLabel_2.setMaximumSize(new Dimension(150, 14));
-		//		lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 12));
-		//		loanRequestPanel.add(lblNewLabel_2);
-		//		loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-		//		JLabel lblNewLabel_4 = new JLabel("02-02-2024");
-		//		lblNewLabel_4.setMaximumSize(new Dimension(100, 14));
-		//		lblNewLabel_4.setFont(new Font("Dialog", Font.PLAIN, 12));
-		//		loanRequestPanel.add(lblNewLabel_4);
+		//		JLabel remainingBalance = new JLabel(String.valueOf(ongoingLoan.getRemainingBalance()));
+		//		remainingBalance.setMaximumSize(new Dimension(120, 14));
+		//		remainingBalance.setFont(new Font("Dialog", Font.PLAIN, 12));
+		//		loanRequestPanel.add(remainingBalance);
 		//
 		//		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 0));
 		//		loanRequestPanel.add(rigidArea_1);
 		//
-		//		JLabel lblNewLabel_4_1 = new JLabel("02-02-2024");
-		//		lblNewLabel_4_1.setMaximumSize(new Dimension(125, 14));
-		//		lblNewLabel_4_1.setFont(new Font("Dialog", Font.PLAIN, 12));
-		//		loanRequestPanel.add(lblNewLabel_4_1);
-		//		Component rigidArea = Box.createRigidArea(new Dimension(20,0));
-		//		rigidArea.setMaximumSize(new Dimension(50, 0));
-		//		loanRequestPanel.add(rigidArea);
+		//		LocalDate dueDate = null;
+		//		for(LoanSchedule loanSched : ongoingLoan.getLoanSchedule()) {
+		//			if(loanSched.getStatus().equals("notpaid") ) {
+		//				dueDate = loanSched.getLoanScheduleDate();
+		//				break;
+		//			}
+		//		}
 		//
-		//		JButton btnNewButton = new JButton("Pay Remaining Balance");
-		//		loanRequestPanel.add(btnNewButton);
+		//		JLabel nextDueDate = new JLabel(dueDate.toString());
+		//		nextDueDate.setMaximumSize(new Dimension(120, 14));
+		//		nextDueDate.setFont(new Font("Dialog", Font.PLAIN, 12));
+		//		loanRequestPanel.add(nextDueDate);
+		//		loanRequestPanel.add(Box.createRigidArea(new Dimension(30,0)));
+		//
+		//		JButton payRemainingButton = new JButton("Pay Remaining Balance");
+		//		payRemainingButton.setForeground(new Color(255, 255, 255));
+		//		payRemainingButton.setBackground(new Color(64, 112, 86));
+		//		payRemainingButton.addActionListener(new ActionListener() {
+		//
+		//			@Override
+		//			public void actionPerformed(ActionEvent e) {
+		//
+		//				dbManager.connect();
+		//				LoanRequest loanReq = dbManager.getLoanRequestData(loanerId, ongoingLoan.getLoanRequestId());
+		//
+		//				LoanPaymentPanel loanPayment = new LoanPaymentPanel(loanReq, ongoingLoan);
+		//				loanPayment.setVisible(true);
+		//
+		//			}
+		//
+		//		});
+		//
+		//		loanRequestPanel.add(payRemainingButton);
 		//
 		//		loanRequestPanel.add(Box.createRigidArea(new Dimension(10,0)));
 
 
-
+		int i = 0;
 		for(Loan ongoingLoan :  loanerOngoingLoans) {
 
 
 			JPanel loanRequestPanel = new JPanel();
 			panel.add(loanRequestPanel);
-			loanRequestPanel.setMaximumSize(new Dimension(2210, 70));
+			loanRequestPanel.setMaximumSize(new Dimension(2210, 150));
+			loanRequestPanel.setPreferredSize(new Dimension(1085, 150));
 			loanRequestPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 			loanRequestPanel.setLayout(new BoxLayout(loanRequestPanel, BoxLayout.X_AXIS));
 
 			loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-			dbManager.connect();
-			JLabel productName = new JLabel(dbManager.getProductName(ongoingLoan.getProductId()));
-			productName.setMaximumSize(new Dimension(130, 14));
-			productName.setFont(new Font("Dialog", Font.PLAIN, 12));
-			loanRequestPanel.add(productName);
 
-			loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
+			JPanel panel_1 = new JPanel();
+			panel_1.setBorder(null);
+
+			if(i % 2 == 1) {
+				loanRequestPanel.setBackground(new Color(237, 250, 139));
+				panel_1.setBackground(new Color(237, 250, 139));
+			} else {
+				loanRequestPanel.setBackground(new Color(205, 248,141));
+				panel_1.setBackground(new Color(205, 248,141));
+			}
+
+			panel_1.setMaximumSize(new Dimension(175, 32767));
+			loanRequestPanel.add(panel_1);
+			panel_1.setLayout(null);
+
+
+			Product product = dbManager.getProductData(ongoingLoan.getProductId());
+
+			JLabel productImage = new JLabel();
+			productImage.setBorder(new LineBorder(new Color(0, 0, 0)));
+			productImage.setBounds(10, 8, 109, 109);
+			productImage.setIcon(HelperUtility.resizeImage(product.getProductImage(), productImage.getWidth(), productImage.getHeight()));
+			panel_1.add(productImage);
+
+			JLabel lblNewLabel_1_1 = new JLabel(product.getName());
+			lblNewLabel_1_1.setMaximumSize(new Dimension(125, 14));
+			lblNewLabel_1_1.setFont(new Font("Dialog", Font.PLAIN, 12));
+			lblNewLabel_1_1.setBounds(10, 123, 125, 14);
+			panel_1.add(lblNewLabel_1_1);
 			JLabel monthsPaid = new JLabel(String.valueOf(ongoingLoan.getPaid_months()));
 			monthsPaid.setMaximumSize(new Dimension(100, 14));
 			monthsPaid.setFont(new Font("Dialog", Font.PLAIN, 12));
@@ -187,12 +269,12 @@ public class OngoingLoansPanel extends JPanel {
 			monthsLeft.setFont(new Font("Dialog", Font.PLAIN, 12));
 			loanRequestPanel.add(monthsLeft);
 			loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-			JLabel paidBalance = new JLabel(String.valueOf(ongoingLoan.getPaidBalance()));
+			JLabel paidBalance = new JLabel("₱ " + String.valueOf(ongoingLoan.getPaidBalance()));
 			paidBalance.setMaximumSize(new Dimension(150, 14));
 			paidBalance.setFont(new Font("Dialog", Font.PLAIN, 12));
 			loanRequestPanel.add(paidBalance);
 			loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-			JLabel remainingBalance = new JLabel(String.valueOf(ongoingLoan.getRemainingBalance()));
+			JLabel remainingBalance = new JLabel("₱ " +String.valueOf(ongoingLoan.getRemainingBalance()));
 			remainingBalance.setMaximumSize(new Dimension(120, 14));
 			remainingBalance.setFont(new Font("Dialog", Font.PLAIN, 12));
 			loanRequestPanel.add(remainingBalance);
@@ -209,12 +291,14 @@ public class OngoingLoansPanel extends JPanel {
 			}
 
 			JLabel nextDueDate = new JLabel(dueDate.toString());
-			nextDueDate.setMaximumSize(new Dimension(90, 14));
+			nextDueDate.setMaximumSize(new Dimension(120, 14));
 			nextDueDate.setFont(new Font("Dialog", Font.PLAIN, 12));
 			loanRequestPanel.add(nextDueDate);
-			loanRequestPanel.add(Box.createRigidArea(new Dimension(50,0)));
+			loanRequestPanel.add(Box.createRigidArea(new Dimension(30,0)));
 
 			JButton payRemainingButton = new JButton("Pay Remaining Balance");
+			payRemainingButton.setForeground(new Color(255, 255, 255));
+			payRemainingButton.setBackground(new Color(64, 112, 86));
 			payRemainingButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -234,7 +318,7 @@ public class OngoingLoansPanel extends JPanel {
 
 			loanRequestPanel.add(Box.createRigidArea(new Dimension(10,0)));
 
-
+			i++;
 		}
 
 	}

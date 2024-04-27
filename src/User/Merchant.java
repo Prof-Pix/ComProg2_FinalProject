@@ -7,6 +7,7 @@ import Database.DatabaseManager;
 import Products.ProductRegistrationData;
 import UserEnums.MerchantCategory;
 import UserEnums.UserRoles;
+import Utilities.HelperUtility;
 
 public class Merchant extends User {
 	
@@ -61,7 +62,7 @@ public class Merchant extends User {
 		this.merchantCityLocation = merchantCityLocation;
 		this.merchantBarangayLocation = merchantBarangayLocation;
 		this.merchantStreetLocation = merchantStreetLocation;
-		this.merchantAddress = merchantStreetLocation + "," + merchantBarangayLocation + "," + merchantCityLocation + "," + merchantProvinceLocation + "," + merchantRegionLocation;
+		this.merchantAddress = merchantStreetLocation + ", " + HelperUtility.capitalizeWords(merchantBarangayLocation)  + ", " + HelperUtility.capitalizeWords(merchantCityLocation) + ", " + HelperUtility.capitalizeWords(merchantProvinceLocation)  + ", " + HelperUtility.capitalizeWords(merchantRegionLocation);
 	}
 
 	public Merchant(String username, String password, String firstName, String middleName, String lastName, String gender,

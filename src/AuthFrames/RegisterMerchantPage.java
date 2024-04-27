@@ -31,6 +31,8 @@ import PH_Locations.PHLocationsClass;
 import User.Merchant;
 import User.MerchantRegistrationData;
 import javax.swing.JRadioButton;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 
 	private static final long serialVersionUID = 1L;
@@ -108,162 +110,233 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 	 * Create the frame.
 	 */
 	public RegisterMerchantPage() {
+		setResizable(false);
 
 		setTitle("Merchant Registration Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 897, 514);
+		setBounds(100, 100, 897, 560);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(37, 102, 112));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JLabel raUserLabel = new JLabel("Username:");
-		raUserLabel.setBounds(40, 53, 107, 14);
+		raUserLabel.setForeground(new Color(255, 255, 255));
+		raUserLabel.setBackground(new Color(255, 255, 255));
+		raUserLabel.setBounds(69, 51, 107, 14);
 		raUserLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raUserLabel);
 
 		rmUserField = new JTextField();
-		rmUserField.setBounds(171, 50, 192, 20);
+		rmUserField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmUserField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmUserField.setBackground(new Color(237, 250, 139));
+		rmUserField.setBounds(200, 48, 192, 20);
 		contentPane.add(rmUserField);
 		rmUserField.setColumns(10);
 
 		JLabel raFNameLabel = new JLabel("First Name:");
-		raFNameLabel.setBounds(40, 154, 97, 14);
+		raFNameLabel.setForeground(new Color(255, 255, 255));
+		raFNameLabel.setBackground(new Color(255, 255, 255));
+		raFNameLabel.setBounds(69, 152, 97, 14);
 		raFNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raFNameLabel);
 
 		rmFNameField = new JTextField();
-		rmFNameField.setBounds(171, 151, 192, 20);
+		rmFNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmFNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmFNameField.setBackground(new Color(237, 250, 139));
+		rmFNameField.setBounds(200, 149, 192, 20);
 		rmFNameField.setColumns(10);
 		contentPane.add(rmFNameField);
 
 		JLabel lblMiddlename = new JLabel("Middle Name:");
-		lblMiddlename.setBounds(40, 185, 97, 14);
+		lblMiddlename.setForeground(new Color(255, 255, 255));
+		lblMiddlename.setBackground(new Color(255, 255, 255));
+		lblMiddlename.setBounds(69, 183, 97, 14);
 		lblMiddlename.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblMiddlename);
 
 		rmMiddleNameField = new JTextField();
-		rmMiddleNameField.setBounds(171, 182, 192, 20);
+		rmMiddleNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmMiddleNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmMiddleNameField.setBackground(new Color(237, 250, 139));
+		rmMiddleNameField.setBounds(200, 180, 192, 20);
 		rmMiddleNameField.setColumns(10);
 		contentPane.add(rmMiddleNameField);
 
 		raLastNameLabel = new JLabel("Last Name:");
-		raLastNameLabel.setBounds(40, 216, 97, 14);
+		raLastNameLabel.setForeground(new Color(255, 255, 255));
+		raLastNameLabel.setBackground(new Color(255, 255, 255));
+		raLastNameLabel.setBounds(69, 214, 97, 14);
 		raLastNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raLastNameLabel);
 
 		rmLastNameField = new JTextField();
-		rmLastNameField.setBounds(171, 213, 192, 20);
+		rmLastNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmLastNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmLastNameField.setBackground(new Color(237, 250, 139));
+		rmLastNameField.setBounds(200, 211, 192, 20);
 		rmLastNameField.setColumns(10);
 		contentPane.add(rmLastNameField);
 
 		raAgeLabel = new JLabel("Age:");
-		raAgeLabel.setBounds(40, 276, 97, 18);
+		raAgeLabel.setForeground(new Color(255, 255, 255));
+		raAgeLabel.setBackground(new Color(255, 255, 255));
+		raAgeLabel.setBounds(69, 274, 97, 18);
 		raAgeLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raAgeLabel);
 
 		rmPhoneNumberField = new JTextField();
-		rmPhoneNumberField.setBounds(171, 338, 192, 20);
+		rmPhoneNumberField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmPhoneNumberField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmPhoneNumberField.setBackground(new Color(237, 250, 139));
+		rmPhoneNumberField.setBounds(200, 336, 192, 20);
 		rmPhoneNumberField.setColumns(10);
 		contentPane.add(rmPhoneNumberField);
 
 		raEmailLabel = new JLabel("Email:");
-		raEmailLabel.setBounds(40, 311, 97, 14);
+		raEmailLabel.setForeground(new Color(255, 255, 255));
+		raEmailLabel.setBackground(new Color(255, 255, 255));
+		raEmailLabel.setBounds(69, 309, 97, 14);
 		raEmailLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raEmailLabel);
 
 		rmAgeField = new JTextField();
-		rmAgeField.setBounds(171, 275, 46, 20);
+		rmAgeField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmAgeField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmAgeField.setBackground(new Color(237, 250, 139));
+		rmAgeField.setBounds(200, 273, 46, 20);
 		rmAgeField.setColumns(10);
 		contentPane.add(rmAgeField);
 
 		raPhoneNumberLabel = new JLabel("Phone Number:");
-		raPhoneNumberLabel.setBounds(40, 341, 97, 14);
+		raPhoneNumberLabel.setForeground(new Color(255, 255, 255));
+		raPhoneNumberLabel.setBackground(new Color(255, 255, 255));
+		raPhoneNumberLabel.setBounds(69, 339, 97, 14);
 		raPhoneNumberLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raPhoneNumberLabel);
 
 		rmEmailField = new JTextField();
-		rmEmailField.setBounds(171, 306, 192, 20);
+		rmEmailField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmEmailField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmEmailField.setBackground(new Color(237, 250, 139));
+		rmEmailField.setBounds(200, 304, 192, 20);
 		rmEmailField.setColumns(10);
 		contentPane.add(rmEmailField);
 
 		raPasswordLabel = new JLabel("Password:");
-		raPasswordLabel.setBounds(40, 84, 107, 14);
+		raPasswordLabel.setForeground(new Color(255, 255, 255));
+		raPasswordLabel.setBackground(new Color(255, 255, 255));
+		raPasswordLabel.setBounds(69, 82, 107, 14);
 		raPasswordLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(raPasswordLabel);
 
 		rmPasswordField = new JTextField();
-		rmPasswordField.setBounds(171, 81, 192, 20);
+		rmPasswordField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmPasswordField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmPasswordField.setBackground(new Color(237, 250, 139));
+		rmPasswordField.setBounds(200, 79, 192, 20);
 		rmPasswordField.setColumns(10);
 		contentPane.add(rmPasswordField);
 
 		JLabel lblBirthday = new JLabel("Birthday (MM/DD/YYYY):");
-		lblBirthday.setBounds(40, 248, 133, 14);
+		lblBirthday.setForeground(new Color(255, 255, 255));
+		lblBirthday.setBackground(new Color(255, 255, 255));
+		lblBirthday.setBounds(69, 246, 133, 14);
 		lblBirthday.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblBirthday);
 
 		raYearLabel = new JLabel("/");
-		raYearLabel.setBounds(261, 248, 16, 14);
+		raYearLabel.setBounds(290, 246, 16, 14);
 		raYearLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 		contentPane.add(raYearLabel);
 
 		JTextField rmMonthField = new JTextField();
-		rmMonthField.setBounds(171, 245, 38, 20);
+		rmMonthField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmMonthField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmMonthField.setBackground(new Color(237, 250, 139));
+		rmMonthField.setBounds(200, 243, 38, 20);
 		contentPane.add(rmMonthField);
 		rmMonthField.setColumns(10);
 
 		rmDayField = new JTextField();
-		rmDayField.setBounds(219, 245, 38, 20);
+		rmDayField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmDayField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmDayField.setBackground(new Color(237, 250, 139));
+		rmDayField.setBounds(248, 243, 38, 20);
 		rmDayField.setColumns(10);
 		contentPane.add(rmDayField);
 
 		rmYearField = new JTextField();
-		rmYearField.setBounds(268, 245, 38, 20);
+		rmYearField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmYearField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmYearField.setBackground(new Color(237, 250, 139));
+		rmYearField.setBounds(297, 243, 38, 20);
 		rmYearField.setColumns(10);
 		contentPane.add(rmYearField);
 
 		lblAccountDetails = new JLabel("Account Details");
-		lblAccountDetails.setBounds(20, 26, 153, 14);
+		lblAccountDetails.setForeground(new Color(255, 255, 255));
+		lblAccountDetails.setBackground(new Color(255, 255, 255));
+		lblAccountDetails.setBounds(49, 24, 153, 14);
 		lblAccountDetails.setFont(new Font("Dialog", Font.BOLD, 15));
 		contentPane.add(lblAccountDetails);
 
 		separator = new JSeparator();
-		separator.setBounds(20, 114, 372, 2);
+		separator.setBounds(20, 114, 815, 2);
 		contentPane.add(separator);
 
 		lblPersonalInformation = new JLabel("Personal Information");
-		lblPersonalInformation.setBounds(20, 127, 153, 14);
+		lblPersonalInformation.setForeground(new Color(255, 255, 255));
+		lblPersonalInformation.setBackground(new Color(255, 255, 255));
+		lblPersonalInformation.setBounds(49, 125, 153, 14);
 		lblPersonalInformation.setFont(new Font("Dialog", Font.BOLD, 15));
 		contentPane.add(lblPersonalInformation);
 
 		lblMerchantInformation = new JLabel("Merchant Information");
-		lblMerchantInformation.setBounds(457, 36, 153, 14);
+		lblMerchantInformation.setForeground(new Color(255, 255, 255));
+		lblMerchantInformation.setBackground(new Color(255, 255, 255));
+		lblMerchantInformation.setBounds(484, 125, 153, 14);
 		lblMerchantInformation.setFont(new Font("Dialog", Font.BOLD, 15));
 		contentPane.add(lblMerchantInformation);
 
 		lblMerchantName = new JLabel("Merchant Name:");
-		lblMerchantName.setBounds(477, 61, 97, 14);
+		lblMerchantName.setForeground(new Color(255, 255, 255));
+		lblMerchantName.setBackground(new Color(255, 255, 255));
+		lblMerchantName.setBounds(504, 150, 97, 14);
 		lblMerchantName.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblMerchantName);
 
 		rmMerchantNameField = new JTextField();
-		rmMerchantNameField.setBounds(608, 58, 192, 20);
+		rmMerchantNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmMerchantNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmMerchantNameField.setBackground(new Color(237, 250, 139));
+		rmMerchantNameField.setBounds(635, 147, 192, 20);
 		rmMerchantNameField.setColumns(10);
 		contentPane.add(rmMerchantNameField);
 
 		lblCategory = new JLabel("Category:");
-		lblCategory.setBounds(477, 94, 97, 14);
+		lblCategory.setForeground(new Color(255, 255, 255));
+		lblCategory.setBackground(new Color(255, 255, 255));
+		lblCategory.setBounds(504, 183, 97, 14);
 		lblCategory.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblCategory);
 
 		lblMerchantAddress = new JLabel("Province:");
-		lblMerchantAddress.setBounds(503, 171, 107, 14);
+		lblMerchantAddress.setForeground(new Color(255, 255, 255));
+		lblMerchantAddress.setBackground(new Color(255, 255, 255));
+		lblMerchantAddress.setBounds(530, 270, 107, 14);
 		lblMerchantAddress.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblMerchantAddress);
 
 		merchantCategoryComboBox = new JComboBox();
-		merchantCategoryComboBox.setBounds(608, 89, 192, 22);
+		merchantCategoryComboBox.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		merchantCategoryComboBox.setFont(new Font("Dialog", Font.PLAIN, 12));
+		merchantCategoryComboBox.setBackground(new Color(237, 250, 139));
+		merchantCategoryComboBox.setBounds(635, 178, 192, 22);
 
 		//For choices
 
@@ -280,49 +353,74 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(merchantCategoryComboBox);
 
 		JLabel lblLocation = new JLabel("LOCATION");
-		lblLocation.setBounds(477, 122, 107, 14);
+		lblLocation.setForeground(new Color(255, 255, 255));
+		lblLocation.setBackground(new Color(255, 255, 255));
+		lblLocation.setBounds(514, 214, 107, 14);
 		lblLocation.setFont(new Font("Dialog", Font.BOLD, 12));
 		contentPane.add(lblLocation);
 
 		JLabel lblCity = new JLabel("City:");
-		lblCity.setBounds(503, 202, 107, 14);
+		lblCity.setForeground(new Color(255, 255, 255));
+		lblCity.setBackground(new Color(255, 255, 255));
+		lblCity.setBounds(530, 301, 107, 14);
 		lblCity.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblCity);
 
 		JLabel lblStreet = new JLabel("Street:");
-		lblStreet.setBounds(503, 264, 107, 14);
+		lblStreet.setForeground(new Color(255, 255, 255));
+		lblStreet.setBackground(new Color(255, 255, 255));
+		lblStreet.setBounds(530, 363, 107, 14);
 		lblStreet.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblStreet);
 
 		lblRegion = new JLabel("Region:");
-		lblRegion.setBounds(503, 140, 107, 14);
+		lblRegion.setForeground(new Color(255, 255, 255));
+		lblRegion.setBackground(new Color(255, 255, 255));
+		lblRegion.setBounds(530, 239, 107, 14);
 		lblRegion.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblRegion);
 
 		lblBarangay = new JLabel("Barangay:");
-		lblBarangay.setBounds(503, 234, 107, 14);
+		lblBarangay.setForeground(new Color(255, 255, 255));
+		lblBarangay.setBackground(new Color(255, 255, 255));
+		lblBarangay.setBounds(530, 333, 107, 14);
 		lblBarangay.setFont(new Font("Dialog", Font.PLAIN, 12));
 		contentPane.add(lblBarangay);
 
 		locProvinceComboBox = new JComboBox<String>();
-		locProvinceComboBox.setBounds(608, 169, 192, 22);
+		locProvinceComboBox.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		locProvinceComboBox.setFont(new Font("Dialog", Font.PLAIN, 12));
+		locProvinceComboBox.setBackground(new Color(237, 250, 139));
+		locProvinceComboBox.setBounds(635, 268, 192, 22);
 		contentPane.add(locProvinceComboBox);
 
 		locCityComboBox = new JComboBox<String>();
-		locCityComboBox.setBounds(608, 200, 192, 22);
+		locCityComboBox.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		locCityComboBox.setFont(new Font("Dialog", Font.PLAIN, 12));
+		locCityComboBox.setBackground(new Color(237, 250, 139));
+		locCityComboBox.setBounds(635, 299, 192, 22);
 		contentPane.add(locCityComboBox);
 
 		locBarangayComboBox = new JComboBox<String>();
-		locBarangayComboBox.setBounds(608, 231, 192, 22);
+		locBarangayComboBox.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		locBarangayComboBox.setFont(new Font("Dialog", Font.PLAIN, 12));
+		locBarangayComboBox.setBackground(new Color(237, 250, 139));
+		locBarangayComboBox.setBounds(635, 330, 192, 22);
 		contentPane.add(locBarangayComboBox);
 
 		rmStreetLocField = new JTextField();
-		rmStreetLocField.setBounds(608, 262, 192, 20);
+		rmStreetLocField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rmStreetLocField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rmStreetLocField.setBackground(new Color(237, 250, 139));
+		rmStreetLocField.setBounds(635, 361, 192, 20);
 		rmStreetLocField.setColumns(10);
 		contentPane.add(rmStreetLocField);
 		
 		locRegionComboBox = new JComboBox<String>();
-		locRegionComboBox.setBounds(608, 138, 192, 22);
+		locRegionComboBox.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		locRegionComboBox.setFont(new Font("Dialog", Font.PLAIN, 12));
+		locRegionComboBox.setBackground(new Color(237, 250, 139));
+		locRegionComboBox.setBounds(635, 237, 192, 22);
 
 		//For the elements of the location JComboBoxes
 		PHLocationsClass phLocs = new PHLocationsClass();
@@ -449,23 +547,31 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(locRegionComboBox);
 		
 		raGenderLabel = new JLabel("Gender:");
+		raGenderLabel.setForeground(new Color(255, 255, 255));
+		raGenderLabel.setBackground(new Color(255, 255, 255));
 		raGenderLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raGenderLabel.setBounds(40, 365, 97, 18);
+		raGenderLabel.setBounds(69, 363, 97, 18);
 		contentPane.add(raGenderLabel);
 		
 		maleRadioButton = new JRadioButton("Male");
-		maleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		maleRadioButton.setBounds(194, 366, 54, 23);
+		maleRadioButton.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		maleRadioButton.setBackground(new Color(237, 250, 139));
+		maleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 12));
+		maleRadioButton.setBounds(200, 364, 54, 23);
 		contentPane.add(maleRadioButton);
 		
 		femaleRadioButton = new JRadioButton("Female");
-		femaleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		femaleRadioButton.setBounds(248, 366, 64, 23);
+		femaleRadioButton.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		femaleRadioButton.setBackground(new Color(237, 250, 139));
+		femaleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 12));
+		femaleRadioButton.setBounds(261, 364, 74, 23);
 		contentPane.add(femaleRadioButton);
 		
 		othersRadioButton = new JRadioButton("Others");
-		othersRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		othersRadioButton.setBounds(314, 366, 64, 23);
+		othersRadioButton.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		othersRadioButton.setBackground(new Color(237, 250, 139));
+		othersRadioButton.setFont(new Font("Dialog", Font.PLAIN, 12));
+		othersRadioButton.setBounds(342, 364, 64, 23);
 		contentPane.add(othersRadioButton);
 		
 		maleRadioButton.addActionListener(new ActionListener() {
@@ -504,8 +610,10 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 
 
 		registerLoanerButton = new JButton("Register Merchant Account");
-		registerLoanerButton.setBounds(608, 294, 192, 48);
-		registerLoanerButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		registerLoanerButton.setBackground(new Color(173, 226, 138));
+		registerLoanerButton.setForeground(new Color(0, 0, 0));
+		registerLoanerButton.setBounds(366, 426, 192, 48);
+		registerLoanerButton.setFont(new Font("Dialog", Font.BOLD, 12));
 		registerLoanerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -661,12 +769,14 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 		contentPane.add(registerLoanerButton);
 
 		JLabel raYearLabel_1 = new JLabel("/");
-		raYearLabel_1.setBounds(213, 248, 16, 14);
+		raYearLabel_1.setBounds(242, 246, 16, 14);
 		raYearLabel_1.setFont(new Font("Dialog", Font.BOLD, 12));
 		contentPane.add(raYearLabel_1);
 
 		JButton btnAlreadyAMerchant = new JButton("Already a merchant? Login");
-		btnAlreadyAMerchant.setBounds(608, 340, 192, 23);
+		btnAlreadyAMerchant.setFont(new Font("Dialog", Font.PLAIN, 11));
+		btnAlreadyAMerchant.setBackground(new Color(237, 250, 139));
+		btnAlreadyAMerchant.setBounds(366, 474, 192, 23);
 		btnAlreadyAMerchant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginPage login = new LoginPage();
@@ -676,7 +786,7 @@ public class RegisterMerchantPage extends JFrame implements RegistrationPage{
 				HelperUtility.closePage(thisFrame);
 			}
 		});
-		btnAlreadyAMerchant.setForeground(Color.BLUE);
+		btnAlreadyAMerchant.setForeground(new Color(237, 250, 139));
 		btnAlreadyAMerchant.setContentAreaFilled(false);
 		btnAlreadyAMerchant.setBorderPainted(false);
 		contentPane.add(btnAlreadyAMerchant);

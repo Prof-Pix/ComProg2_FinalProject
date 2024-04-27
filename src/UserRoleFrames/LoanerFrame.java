@@ -8,14 +8,17 @@ import javax.swing.border.EmptyBorder;
 
 import AuthFrames.LoginPage;
 import ChatBot.HelpCenterChatBotDialog;
+import Database.DatabaseManager;
 import LoanerFramePanels.ApprovedLoansPanel;
 import LoanerFramePanels.MarketplacePanel;
 import LoanerFramePanels.OngoingLoansPanel;
 import LoanerFramePanels.PendingLoansPanel;
 import LoanerFramePanels.RejectedLoansPanel;
 import LoanerFramePanels.SeeDetailsProductPanel;
-import LoanerFramePanels.ViewProfilePanel;
+import LoanerFramePanels.ViewLoanerProfileDialog;
 import MerchantFramePanels.AddProductPanel;
+import MerchantFramePanels.ViewMerchantProfileDialog;
+import User.Loaner;
 import Utilities.HelperUtility;
 
 import java.awt.Color;
@@ -29,6 +32,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 public class LoanerFrame extends JFrame {
+	
+	DatabaseManager dbManager = new DatabaseManager();
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -37,7 +42,8 @@ public class LoanerFrame extends JFrame {
 	static JPanel currentPanel = null;
 	
 	private static int LOANER_ID;
-
+	private static Loaner LOANER_DATA;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -58,6 +64,16 @@ public class LoanerFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public LoanerFrame(int loanerId) {
+LoanerFrame.LOANER_ID = loanerId;
+		
+		try {
+			dbManager.connect();
+			LoanerFrame.LOANER_DATA = dbManager.getLoanerData(LOANER_ID);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		setTitle(LOANER_DATA.getFullName());
 		LoanerFrame.LOANER_ID = loanerId;
 		
 		setResizable(false);
@@ -72,11 +88,17 @@ public class LoanerFrame extends JFrame {
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem viewProfileMenuItem = new JMenuItem("View Profile");
-		viewProfileMenuItem.addActionListener(e -> showViewProfilePanel());
+		viewProfileMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ViewLoanerProfileDialog loanerProfileDialog = new ViewLoanerProfileDialog(LOANER_ID);
+				loanerProfileDialog.setVisible(true);
+			}
+			
+		});
 		mnNewMenu.add(viewProfileMenuItem);
-		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Edit Profile");
-		mnNewMenu.add(mntmNewMenuItem_2);
 		
 		JMenuItem logoutMenuItem = new JMenuItem("Log out");
 		logoutMenuItem.addActionListener(new ActionListener() {
@@ -135,9 +157,6 @@ public class LoanerFrame extends JFrame {
 			
 		});
 		mnNewMenu_3.add(faqsMenuItem);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("About HomeCredit");
-		mnNewMenu_3.add(mntmNewMenuItem_1);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -147,6 +166,8 @@ public class LoanerFrame extends JFrame {
 		JMenuItem menuItem = new JMenuItem("New menu item");
 		menuItem.setBounds(-34, 0, 61, -11);
 		contentPane.add(menuItem);
+		
+		showMarketPlacePanel();
 	}
 	
 	//For changing from one menu to another
@@ -195,18 +216,6 @@ public class LoanerFrame extends JFrame {
 			currentPanel = ongoingLoanPanel;
 			ongoingLoanPanel.setBounds(0,0,1200,700);
 			contentPane.add(ongoingLoanPanel);
-			contentPane.revalidate();
-			contentPane.repaint();
-		}
-		
-		private void showViewProfilePanel() {
-			if (currentPanel != null) {
-				contentPane.remove(currentPanel);		
-			}
-			ViewProfilePanel viewProfilePanel = new ViewProfilePanel(LOANER_ID);
-			currentPanel = viewProfilePanel;
-			viewProfilePanel.setBounds(0,0,1200,700);
-			contentPane.add(viewProfilePanel);
 			contentPane.revalidate();
 			contentPane.repaint();
 		}

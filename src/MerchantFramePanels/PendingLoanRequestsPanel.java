@@ -17,6 +17,7 @@ import Database.DatabaseManager;
 import Loan.LoanRequest;
 import Products.Product;
 import User.Loaner;
+import Utilities.HelperUtility;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 
 import javax.swing.SwingConstants;
 
+//DONE GUI
 public class PendingLoanRequestsPanel extends JPanel {
 	
 	DatabaseManager dbManager = new DatabaseManager();
@@ -39,52 +41,59 @@ public class PendingLoanRequestsPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public PendingLoanRequestsPanel(int merchantId) {
+		setBackground(new Color(37, 102, 112));
 		setLayout(null);
 		MERCHANT_ID = merchantId;
 		
 		refreshPendingLoanRequestPanel();
 		
 		
-		JLabel lblNewLabel_5 = new JLabel("Product Name");
+		JLabel lblNewLabel_5 = new JLabel("Product ");
+		lblNewLabel_5.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5.setBounds(54, 20, 93, 14);
+		lblNewLabel_5.setBounds(65, 20, 162, 14);
 		add(lblNewLabel_5);
 		
 		JLabel lblNewLabel_5_1 = new JLabel("Product Price");
+		lblNewLabel_5_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1.setBounds(250, 20, 93, 14);
+		lblNewLabel_5_1.setBounds(251, 20, 121, 14);
 		add(lblNewLabel_5_1);
 		
 		JLabel lblNewLabel_5_1_1 = new JLabel("Product Term");
+		lblNewLabel_5_1_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1_1.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1_1.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1_1.setBounds(396, 20, 93, 14);
+		lblNewLabel_5_1_1.setBounds(396, 20, 143, 14);
 		add(lblNewLabel_5_1_1);
 		
 		JLabel lblNewLabel_5_1_1_1 = new JLabel("Loaner's Name");
+		lblNewLabel_5_1_1_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1_1_1.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1_1_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1_1_1.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1_1_1.setBounds(565, 20, 93, 14);
+		lblNewLabel_5_1_1_1.setBounds(565, 20, 194, 14);
 		add(lblNewLabel_5_1_1_1);
 		
 		JLabel lblNewLabel_5_1_1_2 = new JLabel("Loan Date");
+		lblNewLabel_5_1_1_2.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1_1_2.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1_1_2.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1_1_2.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1_1_2.setBounds(783, 20, 93, 14);
+		lblNewLabel_5_1_1_2.setBounds(783, 20, 115, 14);
 		add(lblNewLabel_5_1_1_2);
 		
 		JLabel lblNewLabel_5_1_1_2_1 = new JLabel("Status");
+		lblNewLabel_5_1_1_2_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_5_1_1_2_1.setMaximumSize(new Dimension(175, 14));
 		lblNewLabel_5_1_1_2_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_5_1_1_2_1.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblNewLabel_5_1_1_2_1.setBounds(994, 21, 93, 14);
+		lblNewLabel_5_1_1_2_1.setBounds(952, 20, 162, 14);
 		add(lblNewLabel_5_1_1_2_1);
 		
 		
@@ -94,31 +103,58 @@ public class PendingLoanRequestsPanel extends JPanel {
 		add(scrollPane);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(37, 102, 112));
 		scrollPane.setViewportView(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
+
+		int i = 0;
 		for(LoanRequest loanReq :  merchantLoanRequests) {
 			
 			if(loanReq.isPending()) {
 				JPanel loanRequestPanel = new JPanel();
+				
 				panel.add(loanRequestPanel);
-				loanRequestPanel.setMaximumSize(new Dimension(2210, 70));
+				loanRequestPanel.setMaximumSize(new Dimension(2210, 150));
 				loanRequestPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 				loanRequestPanel.setLayout(new BoxLayout(loanRequestPanel, BoxLayout.X_AXIS));
 				
 				loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-				JLabel lblNewLabel = new JLabel(loanReq.getProductToLoanData().getName());
-				lblNewLabel.setMaximumSize(new Dimension(175, 14));
-				lblNewLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-				loanRequestPanel.add(lblNewLabel);
+				
+				JPanel panel_1 = new JPanel();
+				panel_1.setBorder(null);
+				
+				if(i % 2 == 1) {
+					loanRequestPanel.setBackground(new Color(237, 250, 139));
+					panel_1.setBackground(new Color(237, 250, 139));
+				} else {
+					loanRequestPanel.setBackground(new Color(205, 248,141));
+					panel_1.setBackground(new Color(205, 248,141));
+				}
+				
+				panel_1.setMaximumSize(new Dimension(175, 32767));
+				loanRequestPanel.add(panel_1);
+				panel_1.setLayout(null);
+				
+				JLabel productImage = new JLabel();
+				productImage.setBorder(new LineBorder(new Color(0, 0, 0)));
+				productImage.setBounds(10, 8, 109, 109);
+				productImage.setIcon(HelperUtility.resizeImage(loanReq.getProductToLoanData().getProductImage(), productImage.getWidth(), productImage.getHeight()));
+				panel_1.add(productImage);
+				
+				JLabel lblNewLabel_1_1 = new JLabel(loanReq.getProductToLoanData().getName());
+				lblNewLabel_1_1.setMaximumSize(new Dimension(125, 14));
+				lblNewLabel_1_1.setFont(new Font("Dialog", Font.PLAIN, 12));
+				lblNewLabel_1_1.setBounds(10, 123, 125, 14);
+				panel_1.add(lblNewLabel_1_1);
 				
 				loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-				JLabel lblNewLabel_1 = new JLabel(String.valueOf("₱ " + loanReq.getProductToLoanData().getPrice()));
+				JLabel lblNewLabel_1 = new JLabel("₱ " + String.valueOf(loanReq.getProductToLoanData().getPrice()));
 				lblNewLabel_1.setMaximumSize(new Dimension(125, 14));
 				lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 12));
 				loanRequestPanel.add(lblNewLabel_1);
 				loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
-				JLabel lblNewLabel_3 = new JLabel(String.valueOf(loanReq.getLoanedProductMonthsToPay()) + " months @ " + String.valueOf(loanReq.getLoanedProductInterestRate()*100) + "%");
+				JLabel lblNewLabel_3 = new JLabel(String.valueOf(loanReq.getLoanedProductMonthsToPay()) + " months @ " + String.valueOf(loanReq.getLoanedProductInterestRate() * 100)+ "%" );
 				lblNewLabel_3.setMaximumSize(new Dimension(150, 14));
 				lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 12));
 				loanRequestPanel.add(lblNewLabel_3);
@@ -162,9 +198,13 @@ public class PendingLoanRequestsPanel extends JPanel {
 				});
 				
 				approveButton.setFont(new Font("Dialog", Font.PLAIN, 12));
+				approveButton.setForeground(new Color(255, 255, 255));
+				approveButton.setBackground(new Color(64, 112, 86));
 				loanRequestPanel.add(approveButton);
 				loanRequestPanel.add(Box.createRigidArea(new Dimension(15,0)));
 				JButton rejectButton = new JButton("Reject");
+				rejectButton.setBackground(Color.RED);
+				rejectButton.setForeground(Color.white);
 				rejectButton.addActionListener(new ActionListener() {
 
 					@Override
@@ -197,6 +237,7 @@ public class PendingLoanRequestsPanel extends JPanel {
 				
 				loanRequestPanel.add(Box.createRigidArea(new Dimension(20,0)));
 			}
+			i++;
 			
 		}
 		

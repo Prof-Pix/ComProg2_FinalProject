@@ -32,6 +32,8 @@ import UserEnums.Occupation;
 import UserEnums.SourceOfIncome;
 import UserEnums.MonthlyIncome;
 import javax.swing.JRadioButton;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 
@@ -74,6 +76,7 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 	private JRadioButton maleRadioButton;
 	private JRadioButton femaleRadioButton;
 	private JRadioButton othersRadioButton;
+	private JLabel lblLoanerInformation;
 
 	/**
 	 * Launch the application.
@@ -98,145 +101,188 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		setResizable(false);
 		setTitle("Loaner Registration Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 622);
+		setBounds(100, 100, 900, 538);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(37, 102, 112));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(434, 0, 450, 590);
-		panel.setBackground(new Color(128, 0, 0));
-		contentPane.add(panel);
-
 		JLabel raUserLabel = new JLabel("Username:");
+		raUserLabel.setForeground(new Color(255, 255, 255));
 		raUserLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raUserLabel.setBounds(40, 53, 107, 14);
+		raUserLabel.setBounds(68, 49, 107, 14);
 		contentPane.add(raUserLabel);
 
 		rlUserField = new JTextField();
-		rlUserField.setBounds(172, 49, 192, 20);
+		rlUserField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlUserField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlUserField.setBackground(new Color(237, 250, 139));
+		rlUserField.setBounds(200, 45, 192, 20);
 		contentPane.add(rlUserField);
 		rlUserField.setColumns(10);
 
 		JLabel raFNameLabel = new JLabel("First Name:");
+		raFNameLabel.setForeground(new Color(255, 255, 255));
 		raFNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raFNameLabel.setBounds(40, 154, 97, 14);
+		raFNameLabel.setBounds(68, 150, 97, 14);
 		contentPane.add(raFNameLabel);
 
 		rlFNameField = new JTextField();
-		rlFNameField.setBounds(172, 150, 192, 20);
+		rlFNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlFNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlFNameField.setBackground(new Color(237, 250, 139));
+		rlFNameField.setBounds(200, 146, 192, 20);
 		rlFNameField.setColumns(10);
 		contentPane.add(rlFNameField);
 
 		JLabel lblMiddlename = new JLabel("Middle Name:");
+		lblMiddlename.setForeground(new Color(255, 255, 255));
 		lblMiddlename.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblMiddlename.setBounds(40, 185, 97, 14);
+		lblMiddlename.setBounds(68, 181, 97, 14);
 		contentPane.add(lblMiddlename);
 
 		rlMiddleNameField = new JTextField();
-		rlMiddleNameField.setBounds(172, 181, 192, 20);
+		rlMiddleNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlMiddleNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlMiddleNameField.setBackground(new Color(237, 250, 139));
+		rlMiddleNameField.setBounds(200, 177, 192, 20);
 		rlMiddleNameField.setColumns(10);
 		contentPane.add(rlMiddleNameField);
 
 		raLastNameLabel = new JLabel("Last Name:");
+		raLastNameLabel.setForeground(new Color(255, 255, 255));
 		raLastNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raLastNameLabel.setBounds(40, 216, 97, 14);
+		raLastNameLabel.setBounds(68, 212, 97, 14);
 		contentPane.add(raLastNameLabel);
 
 		rlLastNameField = new JTextField();
-		rlLastNameField.setBounds(172, 212, 192, 20);
+		rlLastNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlLastNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlLastNameField.setBackground(new Color(237, 250, 139));
+		rlLastNameField.setBounds(200, 208, 192, 20);
 		rlLastNameField.setColumns(10);
 		contentPane.add(rlLastNameField);
 
 		raAgeLabel = new JLabel("Age:");
+		raAgeLabel.setForeground(new Color(255, 255, 255));
 		raAgeLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raAgeLabel.setBounds(40, 306, 97, 18);
+		raAgeLabel.setBounds(68, 302, 97, 18);
 		contentPane.add(raAgeLabel);
 
 		rlPhoneNumberField = new JTextField();
-		rlPhoneNumberField.setBounds(172, 367, 192, 20);
+		rlPhoneNumberField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlPhoneNumberField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlPhoneNumberField.setBackground(new Color(237, 250, 139));
+		rlPhoneNumberField.setBounds(200, 363, 192, 20);
 		rlPhoneNumberField.setColumns(10);
 		contentPane.add(rlPhoneNumberField);
 
 		raEmailLabel = new JLabel("Email:");
+		raEmailLabel.setForeground(new Color(255, 255, 255));
 		raEmailLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raEmailLabel.setBounds(40, 341, 97, 14);
+		raEmailLabel.setBounds(68, 337, 97, 14);
 		contentPane.add(raEmailLabel);
 
 		rlAgeField = new JTextField();
-		rlAgeField.setBounds(172, 304, 46, 20);
+		rlAgeField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlAgeField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlAgeField.setBackground(new Color(237, 250, 139));
+		rlAgeField.setBounds(200, 300, 46, 20);
 		rlAgeField.setColumns(10);
 		contentPane.add(rlAgeField);
 
 		raPhoneNumberLabel = new JLabel("Phone Number:");
+		raPhoneNumberLabel.setForeground(new Color(255, 255, 255));
 		raPhoneNumberLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raPhoneNumberLabel.setBounds(40, 371, 97, 14);
+		raPhoneNumberLabel.setBounds(68, 367, 97, 14);
 		contentPane.add(raPhoneNumberLabel);
 
 		rlEmailField = new JTextField();
-		rlEmailField.setBounds(172, 335, 192, 20);
+		rlEmailField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlEmailField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlEmailField.setBackground(new Color(237, 250, 139));
+		rlEmailField.setBounds(200, 331, 192, 20);
 		rlEmailField.setColumns(10);
 		contentPane.add(rlEmailField);
 
 		raPasswordLabel = new JLabel("Password:");
+		raPasswordLabel.setForeground(new Color(255, 255, 255));
 		raPasswordLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raPasswordLabel.setBounds(40, 84, 107, 14);
+		raPasswordLabel.setBounds(68, 80, 107, 14);
 		contentPane.add(raPasswordLabel);
 
 		rlPasswordField = new JTextField();
+		rlPasswordField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlPasswordField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlPasswordField.setBackground(new Color(237, 250, 139));
 		rlPasswordField.setColumns(10);
-		rlPasswordField.setBounds(172, 80, 192, 20);
+		rlPasswordField.setBounds(200, 76, 192, 20);
 		contentPane.add(rlPasswordField);
 
 		JLabel lblBirthday = new JLabel("Birthday (MM/DD/YYYY):");
+		lblBirthday.setForeground(new Color(255, 255, 255));
 		lblBirthday.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblBirthday.setBounds(40, 248, 133, 14);
+		lblBirthday.setBounds(68, 244, 133, 14);
 		contentPane.add(lblBirthday);
 
 		JTextField rlMonthField = new JTextField();
-		rlMonthField.setBounds(172, 246, 38, 20);
+		rlMonthField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlMonthField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlMonthField.setBackground(new Color(237, 250, 139));
+		rlMonthField.setBounds(200, 242, 38, 20);
 		contentPane.add(rlMonthField);
 		rlMonthField.setColumns(10);
 
 		rlDayField = new JTextField();
+		rlDayField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlDayField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlDayField.setBackground(new Color(237, 250, 139));
 		rlDayField.setColumns(10);
-		rlDayField.setBounds(223, 246, 38, 20);
+		rlDayField.setBounds(251, 242, 38, 20);
 		contentPane.add(rlDayField);
 
 		rlYearField = new JTextField();
+		rlYearField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		rlYearField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		rlYearField.setBackground(new Color(237, 250, 139));
 		rlYearField.setColumns(10);
-		rlYearField.setBounds(273, 246, 38, 20);
+		rlYearField.setBounds(301, 242, 38, 20);
 		contentPane.add(rlYearField);
 
 		lblAccountDetails = new JLabel("Account Details");
+		lblAccountDetails.setForeground(new Color(255, 255, 255));
 		lblAccountDetails.setFont(new Font("Dialog", Font.BOLD, 15));
-		lblAccountDetails.setBounds(20, 26, 153, 14);
+		lblAccountDetails.setBounds(48, 22, 153, 14);
 		contentPane.add(lblAccountDetails);
 
 		separator = new JSeparator();
-		separator.setBounds(20, 114, 383, 2);
+		separator.setBounds(20, 110, 813, 2);
 		contentPane.add(separator);
 
 		lblPersonalInformation = new JLabel("Personal Information");
+		lblPersonalInformation.setForeground(new Color(255, 255, 255));
 		lblPersonalInformation.setFont(new Font("Dialog", Font.BOLD, 15));
-		lblPersonalInformation.setBounds(20, 127, 153, 14);
+		lblPersonalInformation.setBounds(48, 123, 153, 14);
 		contentPane.add(lblPersonalInformation);
 
 		lblSourceOfIncome = new JLabel("Source of Income: ");
+		lblSourceOfIncome.setForeground(new Color(255, 255, 255));
 		lblSourceOfIncome.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblSourceOfIncome.setBounds(40, 401, 107, 14);
+		lblSourceOfIncome.setBounds(495, 151, 107, 14);
 		contentPane.add(lblSourceOfIncome);
 
 		lblOccupation = new JLabel("Occupation:");
+		lblOccupation.setForeground(new Color(255, 255, 255));
 		lblOccupation.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblOccupation.setBounds(40, 433, 97, 14);
+		lblOccupation.setBounds(495, 184, 97, 14);
 		contentPane.add(lblOccupation);
 
 		lblMonthlyIncome = new JLabel("Monthly Income:");
+		lblMonthlyIncome.setForeground(new Color(255, 255, 255));
 		lblMonthlyIncome.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblMonthlyIncome.setBounds(40, 464, 97, 14);
+		lblMonthlyIncome.setBounds(495, 215, 97, 14);
 		contentPane.add(lblMonthlyIncome);
 
 		//SOURCE OF INCOME CHOICES
@@ -247,10 +293,11 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		for (SourceOfIncome soc: SourceOfIncome.values()) {
 			socModel.addElement(soc);
 		}
+		sourceOfIncomeComboBox.setBackground(new Color(237, 250, 139));
 
 		sourceOfIncomeComboBox.setModel(socModel);
 		sourceOfIncomeComboBox.setRenderer(new SourceOfIncomeRenderer());
-		sourceOfIncomeComboBox.setBounds(172, 396, 192, 22);
+		sourceOfIncomeComboBox.setBounds(627, 146, 192, 22);
 		contentPane.add(sourceOfIncomeComboBox);
 
 		//OCCUPATION CHOICES
@@ -261,44 +308,55 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		for (Occupation occupation: Occupation.values()) {
 			occupationModel.addElement(occupation);
 		}
+		occupationComboBox.setBackground(new Color(237, 250, 139));
 		occupationComboBox.setModel(occupationModel);
 		occupationComboBox.setRenderer(new OccupationRenderer());
-		occupationComboBox.setBounds(172, 428, 192, 22);
+		occupationComboBox.setBounds(627, 178, 192, 22);
 		contentPane.add(occupationComboBox);
+		monthlyIncomeComboBox.setBackground(new Color(237, 250, 139));
 
 		//MONTHLY INCOME CHOICES
 		monthlyIncomeComboBox.setModel(new DefaultComboBoxModel(new String[] {"--- Select monthly income ---", "₱ 10,000 or less", "₱ 10,000 to ₱ 30,000", "₱ 30,000 to ₱ 50,000", "₱ 50,000 or above"}));
-		monthlyIncomeComboBox.setBounds(172, 459, 192, 22);
+		monthlyIncomeComboBox.setBounds(627, 212, 192, 22);
 		contentPane.add(monthlyIncomeComboBox);
 
 		lblBirthday_1 = new JLabel("/");
+		lblBirthday_1.setForeground(new Color(173, 226, 138));
 		lblBirthday_1.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblBirthday_1.setBounds(214, 245, 11, 20);
+		lblBirthday_1.setBounds(242, 241, 11, 20);
 		contentPane.add(lblBirthday_1);
 
 		lblBirthday_2 = new JLabel("/");
+		lblBirthday_2.setForeground(new Color(173, 226, 138));
 		lblBirthday_2.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblBirthday_2.setBounds(265, 245, 11, 20);
+		lblBirthday_2.setBounds(293, 241, 11, 20);
 		contentPane.add(lblBirthday_2);
 
 		raGenderLabel = new JLabel("Gender:");
+		raGenderLabel.setForeground(new Color(255, 255, 255));
 		raGenderLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raGenderLabel.setBounds(38, 277, 97, 18);
+		raGenderLabel.setBounds(66, 273, 97, 18);
 		contentPane.add(raGenderLabel);
 
 		maleRadioButton = new JRadioButton("Male");
+		maleRadioButton.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		maleRadioButton.setBackground(new Color(237, 250, 139));
 		maleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		maleRadioButton.setBounds(172, 277, 54, 23);
+		maleRadioButton.setBounds(200, 273, 54, 23);
 		contentPane.add(maleRadioButton);
 
 		femaleRadioButton = new JRadioButton("Female");
+		femaleRadioButton.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		femaleRadioButton.setBackground(new Color(237, 250, 139));
 		femaleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		femaleRadioButton.setBounds(223, 277, 64, 23);
+		femaleRadioButton.setBounds(251, 273, 64, 23);
 		contentPane.add(femaleRadioButton);
 
 		othersRadioButton = new JRadioButton("Others");
+		othersRadioButton.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		othersRadioButton.setBackground(new Color(237, 250, 139));
 		othersRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		othersRadioButton.setBounds(283, 277, 64, 23);
+		othersRadioButton.setBounds(311, 273, 64, 23);
 		contentPane.add(othersRadioButton);
 
 		final ButtonGroup genderGroup = new ButtonGroup();
@@ -335,7 +393,9 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 		});
 
 		registerLoanerButton = new JButton("Register Loaner Account");
-		registerLoanerButton.setFont(new Font("Dialog", Font.PLAIN, 11));
+		registerLoanerButton.setBackground(new Color(173, 226, 138));
+		registerLoanerButton.setForeground(new Color(0, 0, 0));
+		registerLoanerButton.setFont(new Font("Dialog", Font.BOLD, 12));
 		registerLoanerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -490,7 +550,7 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 
 			}
 		});
-		registerLoanerButton.setBounds(172, 497, 192, 48);
+		registerLoanerButton.setBounds(339, 414, 192, 48);
 		contentPane.add(registerLoanerButton);
 
 		JButton alreadyAMemberButton = new JButton();
@@ -504,11 +564,17 @@ public class RegisterLoanerPage extends JFrame implements RegistrationPage{
 				HelperUtility.closePage(thisFrame);
 			}
 		});
-		alreadyAMemberButton.setForeground(Color.BLUE);
+		alreadyAMemberButton.setForeground(new Color(237, 250, 139));
 		alreadyAMemberButton.setContentAreaFilled(false);
 		alreadyAMemberButton.setBorderPainted(false);
-		alreadyAMemberButton.setBounds(172, 544, 192, 23);
+		alreadyAMemberButton.setBounds(339, 465, 192, 23);
 		contentPane.add(alreadyAMemberButton);
+		
+		lblLoanerInformation = new JLabel("Loaner Information");
+		lblLoanerInformation.setForeground(new Color(255, 255, 255));
+		lblLoanerInformation.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblLoanerInformation.setBounds(473, 123, 153, 14);
+		contentPane.add(lblLoanerInformation);
 
 	}
 

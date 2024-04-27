@@ -16,6 +16,8 @@ import Utilities.HelperUtility;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Enumeration;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 
 
@@ -71,161 +73,208 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		setResizable(false);
 		setTitle("Admin Registration Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 545);
+		setBounds(100, 100, 444, 590);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(37, 102, 112));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(434, 0, 450, 506);
-		panel.setBackground(new Color(128, 0, 0));
-		contentPane.add(panel);
-
 		JLabel raUserLabel = new JLabel("Username:");
+		raUserLabel.setForeground(new Color(255, 255, 255));
 		raUserLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raUserLabel.setBounds(40, 53, 107, 14);
 		contentPane.add(raUserLabel);
 
 		raUserField = new JTextField();
+		raUserField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raUserField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raUserField.setBackground(new Color(237, 250, 139));
 		raUserField.setToolTipText("Must be at least eight (8) characters and start with an uppercase letter. No symbols are allowed.");
 		raUserField.setBounds(194, 53, 192, 20);
 		contentPane.add(raUserField);
 		raUserField.setColumns(10);
 
 		JLabel raFNameLabel = new JLabel("First Name:");
+		raFNameLabel.setForeground(new Color(255, 255, 255));
 		raFNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raFNameLabel.setBounds(40, 154, 97, 14);
 		contentPane.add(raFNameLabel);
 
 		raFNameField = new JTextField();
+		raFNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raFNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raFNameField.setBackground(new Color(237, 250, 139));
 		raFNameField.setToolTipText("Must start with an uppercase letter, and it cannot contain any symbols or numbers.");
 		raFNameField.setBounds(194, 154, 192, 20);
 		raFNameField.setColumns(10);
 		contentPane.add(raFNameField);
 
 		JLabel lblMiddlename = new JLabel("Middle Name:");
+		lblMiddlename.setForeground(new Color(255, 255, 255));
 		lblMiddlename.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblMiddlename.setBounds(40, 185, 97, 14);
 		contentPane.add(lblMiddlename);
 
 		raMiddleNameField = new JTextField();
+		raMiddleNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raMiddleNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raMiddleNameField.setBackground(new Color(237, 250, 139));
 		raMiddleNameField.setToolTipText("Must start with an uppercase letter, and it cannot contain any symbols or numbers.");
 		raMiddleNameField.setBounds(194, 185, 192, 20);
 		raMiddleNameField.setColumns(10);
 		contentPane.add(raMiddleNameField);
 
 		raLastNameLabel = new JLabel("Last Name:");
+		raLastNameLabel.setForeground(new Color(255, 255, 255));
 		raLastNameLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raLastNameLabel.setBounds(40, 216, 97, 14);
 		contentPane.add(raLastNameLabel);
 
 		raLastNameField = new JTextField();
+		raLastNameField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raLastNameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raLastNameField.setBackground(new Color(237, 250, 139));
 		raLastNameField.setToolTipText("Must start with an uppercase letter, and it cannot contain any symbols or numbers.");
 		raLastNameField.setBounds(194, 216, 192, 20);
 		raLastNameField.setColumns(10);
 		contentPane.add(raLastNameField);
 
 		raAgeLabel = new JLabel("Age:");
+		raAgeLabel.setForeground(new Color(255, 255, 255));
 		raAgeLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raAgeLabel.setBounds(40, 302, 97, 18);
+		raAgeLabel.setBounds(40, 361, 97, 18);
 		contentPane.add(raAgeLabel);
 
 		raPhoneNumberField = new JTextField();
+		raPhoneNumberField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raPhoneNumberField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raPhoneNumberField.setBackground(new Color(237, 250, 139));
 		raPhoneNumberField.setToolTipText("Must be eleven (11) characters long.");
-		raPhoneNumberField.setBounds(194, 367, 192, 20);
+		raPhoneNumberField.setBounds(194, 426, 192, 20);
 		raPhoneNumberField.setColumns(10);
 		contentPane.add(raPhoneNumberField);
 
 		raEmailLabel = new JLabel("Email:");
+		raEmailLabel.setForeground(new Color(255, 255, 255));
 		raEmailLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raEmailLabel.setBounds(40, 337, 97, 14);
+		raEmailLabel.setBounds(40, 396, 97, 14);
 		contentPane.add(raEmailLabel);
 
 		raAgeField = new JTextField();
+		raAgeField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raAgeField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raAgeField.setBackground(new Color(237, 250, 139));
 		raAgeField.setToolTipText("Age must be at least 18 years old but not older than 60 years old.");
-		raAgeField.setBounds(194, 304, 46, 20);
+		raAgeField.setBounds(194, 363, 46, 20);
 		raAgeField.setColumns(10);
 		contentPane.add(raAgeField);
 
 		raPhoneNumberLabel = new JLabel("Phone Number:");
+		raPhoneNumberLabel.setForeground(new Color(255, 255, 255));
 		raPhoneNumberLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-		raPhoneNumberLabel.setBounds(40, 367, 97, 14);
+		raPhoneNumberLabel.setBounds(40, 426, 97, 14);
 		contentPane.add(raPhoneNumberLabel);
 
 		raEmailField = new JTextField();
+		raEmailField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raEmailField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raEmailField.setBackground(new Color(237, 250, 139));
 		raEmailField.setToolTipText("Sample Valid Email: xyz@hotmail.edu");
-		raEmailField.setBounds(194, 335, 192, 20);
+		raEmailField.setBounds(194, 394, 192, 20);
 		raEmailField.setColumns(10);
 		contentPane.add(raEmailField);
 
 		raPasswordLabel = new JLabel("Password:");
+		raPasswordLabel.setForeground(new Color(255, 255, 255));
 		raPasswordLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raPasswordLabel.setBounds(40, 84, 107, 14);
 		contentPane.add(raPasswordLabel);
 
 		raPasswordField = new JTextField();
+		raPasswordField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raPasswordField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raPasswordField.setBackground(new Color(237, 250, 139));
 		raPasswordField.setToolTipText("Must be eight (8) characters long.");
 		raPasswordField.setColumns(10);
 		raPasswordField.setBounds(194, 84, 192, 20);
 		contentPane.add(raPasswordField);
 
 		JLabel lblBirthday = new JLabel("Birthday (MM/DD/YYYY):");
+		lblBirthday.setForeground(new Color(255, 255, 255));
 		lblBirthday.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblBirthday.setBounds(40, 248, 129, 14);
 		contentPane.add(lblBirthday);
 
 		JTextField raMonthField = new JTextField();
+		raMonthField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raMonthField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raMonthField.setBackground(new Color(237, 250, 139));
 		raMonthField.setToolTipText("Day of birthdate");
 		raMonthField.setBounds(194, 247, 30, 20);
 		contentPane.add(raMonthField);
 		raMonthField.setColumns(10);
 
 		raDayField = new JTextField();
+		raDayField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raDayField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raDayField.setBackground(new Color(237, 250, 139));
 		raDayField.setToolTipText("Month of Birthdate");
 		raDayField.setColumns(10);
 		raDayField.setBounds(238, 247, 30, 20);
 		contentPane.add(raDayField);
 
 		raYearField = new JTextField();
+		raYearField.setFont(new Font("Dialog", Font.PLAIN, 12));
+		raYearField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		raYearField.setBackground(new Color(237, 250, 139));
 		raYearField.setToolTipText("Year of birthdate");
 		raYearField.setColumns(10);
 		raYearField.setBounds(282, 247, 38, 20);
 		contentPane.add(raYearField);
 
 		lblAccountDetails = new JLabel("Account Details");
+		lblAccountDetails.setForeground(new Color(255, 255, 255));
 		lblAccountDetails.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblAccountDetails.setBounds(20, 26, 153, 14);
 		contentPane.add(lblAccountDetails);
 
 		separator = new JSeparator();
-		separator.setBounds(20, 114, 383, 7);
+		separator.setBounds(10, 114, 408, 2);
 		contentPane.add(separator);
 
 		lblPersonalInformation = new JLabel("Personal Information");
+		lblPersonalInformation.setForeground(new Color(255, 255, 255));
 		lblPersonalInformation.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblPersonalInformation.setBounds(20, 127, 153, 14);
 		contentPane.add(lblPersonalInformation);
 
 		JLabel raGenderLabel = new JLabel("Gender:");
+		raGenderLabel.setForeground(new Color(255, 255, 255));
 		raGenderLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		raGenderLabel.setBounds(40, 273, 97, 18);
 		contentPane.add(raGenderLabel);
 
 		JRadioButton maleRadioButton = new JRadioButton("Male");
+		maleRadioButton.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		maleRadioButton.setBackground(new Color(237, 250, 139));
 		maleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		maleRadioButton.setBounds(194, 274, 54, 23);
+		maleRadioButton.setBounds(194, 278, 54, 23);
 		contentPane.add(maleRadioButton);
 
 		JRadioButton femaleRadioButton = new JRadioButton("Female");
+		femaleRadioButton.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		femaleRadioButton.setBackground(new Color(237, 250, 139));
 		femaleRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		femaleRadioButton.setBounds(248, 274, 64, 23);
+		femaleRadioButton.setBounds(194, 305, 64, 23);
 		contentPane.add(femaleRadioButton);
 
 		JRadioButton othersRadioButton = new JRadioButton("Others");
+		othersRadioButton.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		othersRadioButton.setBackground(new Color(237, 250, 139));
 		othersRadioButton.setFont(new Font("Dialog", Font.PLAIN, 11));
-		othersRadioButton.setBounds(314, 274, 64, 23);
+		othersRadioButton.setBounds(194, 331, 64, 23);
 		contentPane.add(othersRadioButton);
 
 		maleRadioButton.addActionListener(new ActionListener() {
@@ -274,6 +323,9 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		contentPane.add(lblBirthday_1_1);
 
 		registerAdminButton = new JButton("Register Admin Account");
+		registerAdminButton.setFont(new Font("Dialog", Font.BOLD, 12));
+		registerAdminButton.setBackground(new Color(173, 226, 138));
+		registerAdminButton.setForeground(new Color(0, 0, 0));
 		registerAdminButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -414,11 +466,11 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 
 			}		
 		});
-		registerAdminButton.setBounds(194, 404, 192, 48);
+		registerAdminButton.setBounds(194, 463, 192, 42);
 		contentPane.add(registerAdminButton);
 
 		JButton alreadyAMemberButton = new JButton("Already an admin? Login");
-		alreadyAMemberButton.setForeground(Color.BLUE);
+		alreadyAMemberButton.setForeground(new Color(237, 250, 139));
 		alreadyAMemberButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginPage login = new LoginPage();
@@ -431,7 +483,7 @@ public class RegisterAdminPage extends JFrame implements RegistrationPage {
 		});
 		alreadyAMemberButton.setContentAreaFilled(false);
 		alreadyAMemberButton.setBorderPainted(false); 
-		alreadyAMemberButton.setBounds(194, 453, 192, 23);
+		alreadyAMemberButton.setBounds(194, 510, 192, 23);
 		contentPane.add(alreadyAMemberButton);
 
 
