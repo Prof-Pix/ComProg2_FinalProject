@@ -301,6 +301,7 @@ public class AddProductPanel extends JPanel{
 		add(separator);
 
 		JButton refreshButton = new JButton("Refresh Table");
+		refreshButton.setForeground(new Color(255, 255, 255));
 		refreshButton.setBackground(new Color(64, 112, 86));
 		refreshButton.setFont(new Font("Dialog", Font.BOLD, 12));
 		refreshButton.setBounds(951, 100, 121, 23);
