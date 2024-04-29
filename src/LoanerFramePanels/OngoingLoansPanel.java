@@ -309,7 +309,7 @@ public class OngoingLoansPanel extends JPanel {
 
 					LoanPaymentPanel loanPayment = new LoanPaymentPanel(loanReq, ongoingLoan);
 					loanPayment.setVisible(true);
-
+					
 				}
 
 			});

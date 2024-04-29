@@ -17,6 +17,7 @@ import Database.DatabaseManager;
 import Loan.LoanRequest;
 import Products.Product;
 import User.Loaner;
+import UserRoleFrames.MerchantFrame;
 import Utilities.HelperUtility;
 
 import java.awt.Font;
@@ -185,6 +186,8 @@ public class PendingLoanRequestsPanel extends JPanel {
 								if (choice == JOptionPane.YES_OPTION) {
 									JOptionPane.showMessageDialog(null, "Loan Approved!", "Loan Approval Success", JOptionPane.INFORMATION_MESSAGE);
 								}
+								
+								MerchantFrame.showPendingLoanRequestPanel();
 							} else {
 								JOptionPane.showMessageDialog(null, "Server Error. Please try again later.", "Server Error", JOptionPane.ERROR_MESSAGE);
 							}

@@ -67,6 +67,7 @@ public class DatabaseManager {
 		}
 	}
 
+	//User Management SQL
 	public boolean registerAdminInDatabase(AdminRegistrationData data) {
 
 		int retrievedId = 0 ;
@@ -333,91 +334,6 @@ public class DatabaseManager {
 		}
 	}
 
-	public boolean addProductForMerchant(int merchantUserId, ProductRegistrationData data) {
-
-		int retrievedProductId = 0;
-		String addProductQuery = "INSERT INTO products (merchant_id, "
-				+ "product_picture, "
-				+ "product_name, "
-				+ "product_brand, "
-				+ "product_description, "
-				+ "product_specifications, "
-				+ "product_price, "
-				+ "product_stocks_available,"
-				+ "product_category) "
-				+ "VALUES (?,?,?,?,?,?,?,?,?)";
-
-
-		File imageFile = new File(data.getImageFilePath());
-
-		try(PreparedStatement prepSt = connection.prepareStatement(addProductQuery)) {
-
-			//For image
-			FileInputStream fileInputImage = null;
-			try {
-				fileInputImage = new FileInputStream(imageFile);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-
-			prepSt.setInt(1, data.getMerchantOwnerId());
-			prepSt.setBlob(2, fileInputImage);
-			prepSt.setString(3, data.getName());
-			prepSt.setString(4, data.getBrand());
-			prepSt.setString(5, data.getDescription());
-			prepSt.setString(6, data.getSpecifications());
-			prepSt.setFloat(7, data.getPrice());
-			prepSt.setInt(8, data.getStocksAvailable());
-			prepSt.setString(9, data.getCategory());
-
-			prepSt.executeUpdate();	
-
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		//Retrieve the product id
-		String retrieveProductIdQuery = "SELECT * FROM products where product_name = ?";
-
-		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductIdQuery)) {
-
-			prepSt.setString(1, data.getName());
-
-			ResultSet rs = prepSt.executeQuery();
-
-			if(rs.next()) {
-				retrievedProductId = rs.getInt(1);
-			}
-
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		} 
-
-		//Send the product loans
-		String addProductLoans = "INSERT INTO product_loan_table (product_id, months_to_pay, interest_rate) VALUES (?, ? , ?) ";
-
-		try (PreparedStatement prepSt = connection.prepareStatement(addProductLoans)){
-
-			prepSt.setInt(1, retrievedProductId);
-			for(ProductLoanTerm prodLoanTerms : data.getProductLoans()) {
-				prepSt.setInt(2, prodLoanTerms.getMonthsToPay());
-				prepSt.setFloat(3, prodLoanTerms.getInterestRate());
-
-				prepSt.executeUpdate();
-			}
-
-			return true;
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-	}
-
 	public String checkDuplicateCommonFieldsInput(String username, String email, String fullName, String phoneNumber, String userType) {
 
 		if (HelperUtility.doesCommonValueExist(connection, "username", username, userType)) { 		//check for username duplication
@@ -469,27 +385,6 @@ public class DatabaseManager {
 		else {
 			return statusText;
 		}
-	}
-
-	public String checkDuplicateProductOfMerchant(int merchantUserId, String productName) {
-
-		String query = "SELECT product_name FROM products WHERE merchant_id = ? AND product_name = ?";
-
-		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
-			prepSt.setInt(1, merchantUserId);
-			prepSt.setString(2, productName);
-
-			ResultSet rs = prepSt.executeQuery();
-
-			if(rs.next()) {
-				return "Product name '" + productName + "' is already in use. Please choose a different name.";
-			}
-
-		}catch (SQLException e) {
-			e.printStackTrace();
-			return "System error. Please try again later.";
-		}
-		return "ok";
 	}
 
 	public int verifyLoginInput(String userType, String usernameEmail, String password) {
@@ -587,86 +482,92 @@ public class DatabaseManager {
 
 	}
 
-	public void getUserdata(int userId) {
-		HashMap <String, String> userData = new HashMap<>();
+	//Product Management SQL
+	public boolean addProductForMerchant(int merchantUserId, ProductRegistrationData data) {
 
-		String query = "SELECT * FROM users WHERE user_id = ?";
+		int retrievedProductId = 0;
+		String addProductQuery = "INSERT INTO products (merchant_id, "
+				+ "product_picture, "
+				+ "product_name, "
+				+ "product_brand, "
+				+ "product_description, "
+				+ "product_specifications, "
+				+ "product_price, "
+				+ "product_stocks_available,"
+				+ "product_category) "
+				+ "VALUES (?,?,?,?,?,?,?,?,?)";
 
-		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
 
-			prepSt.setInt(1, userId);
+		File imageFile = new File(data.getImageFilePath());
+
+		try(PreparedStatement prepSt = connection.prepareStatement(addProductQuery)) {
+
+			//For image
+			FileInputStream fileInputImage = null;
+			try {
+				fileInputImage = new FileInputStream(imageFile);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+
+			prepSt.setInt(1, data.getMerchantOwnerId());
+			prepSt.setBlob(2, fileInputImage);
+			prepSt.setString(3, data.getName());
+			prepSt.setString(4, data.getBrand());
+			prepSt.setString(5, data.getDescription());
+			prepSt.setString(6, data.getSpecifications());
+			prepSt.setFloat(7, data.getPrice());
+			prepSt.setInt(8, data.getStocksAvailable());
+			prepSt.setString(9, data.getCategory());
+
+			prepSt.executeUpdate();	
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		//Retrieve the product id
+		String retrieveProductIdQuery = "SELECT * FROM products where product_name = ?";
+
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductIdQuery)) {
+
+			prepSt.setString(1, data.getName());
 
 			ResultSet rs = prepSt.executeQuery();
 
-			if (rs.next()) {
-				String username = rs.getString("username");
-				String password = rs.getString("password");
-				String firstName = rs.getString("first_name");
-				String middleName = rs.getString("middle_name");
-				String lastName = rs.getString("last_name");
-				String fullName = rs.getString("full_name");
-				Date birthdate = rs.getDate("birthday");
-				String email = rs.getString("email");
-				String phoneNumber = rs.getString("phone_number");
-
-				userData.put("username", username); 
-				userData.put("password", password);
-				userData.put("firstName", firstName);
-				userData.put("middleName", middleName);
-				userData.put("lastName", lastName);
-				userData.put("fullName", fullName);
-
-				// For the birthdate, convert it to a string if needed:
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-				userData.put("birthdate", dateFormat.format(birthdate));
-
-				userData.put("email", email);
-				userData.put("phoneNumber", phoneNumber); 
-
-				System.out.println(userData);
-
-
+			if(rs.next()) {
+				retrievedProductId = rs.getInt(1);
 			}
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		}catch(SQLException e) {
 			e.printStackTrace();
-		}
+			return false;
+		} 
 
+		//Send the product loans
+		String addProductLoans = "INSERT INTO product_loan_table (product_id, months_to_pay, interest_rate) VALUES (?, ? , ?) ";
+
+		try (PreparedStatement prepSt = connection.prepareStatement(addProductLoans)){
+
+			prepSt.setInt(1, retrievedProductId);
+			for(ProductLoanTerm prodLoanTerms : data.getProductLoans()) {
+				prepSt.setInt(2, prodLoanTerms.getMonthsToPay());
+				prepSt.setFloat(3, prodLoanTerms.getInterestRate());
+
+				prepSt.executeUpdate();
+			}
+
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 
 	}
 
-	public ArrayList<Product> getMerchantProductData(int merchantId) {
-
-		ArrayList<Product> merchantProducts = new ArrayList<>();
-
-		String productQuery = "SELECT * FROM products WHERE merchant_id = ?";
-
-		try(PreparedStatement productSt = connection.prepareStatement(productQuery)) {
-
-			productSt.setInt(1, merchantId);
-
-			ResultSet productResultSet = productSt.executeQuery();
-
-			while(productResultSet.next()) {
-
-				int productId = productResultSet.getInt("product_id");
-
-				Product merchantProd = getProductData(productId);
-
-				merchantProducts.add(merchantProd);
-
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-
-
-		return merchantProducts;
-
-	}
-
-	//Decide what to do (to delete the product completely or avoid deleting once there is an ongoing loan)
 	public boolean deleteMerchantProduct(int merchantId, int productId) {
 
 		System.out.println(productId);
@@ -786,6 +687,36 @@ public class DatabaseManager {
 
 	}
 
+	public ArrayList<Product> getMerchantProductData(int merchantId) {
+
+		ArrayList<Product> merchantProducts = new ArrayList<>();
+
+		String productQuery = "SELECT * FROM products WHERE merchant_id = ?";
+
+		try(PreparedStatement productSt = connection.prepareStatement(productQuery)) {
+
+			productSt.setInt(1, merchantId);
+
+			ResultSet productResultSet = productSt.executeQuery();
+
+			while(productResultSet.next()) {
+
+				int productId = productResultSet.getInt("product_id");
+
+				Product merchantProd = getProductData(productId);
+
+				merchantProducts.add(merchantProd);
+
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+
+
+		return merchantProducts;
+
+	}
+
 	public ArrayList<Product> getAllMerchantProducts() {
 		String query = "SELECT * FROM products";
 
@@ -814,6 +745,75 @@ public class DatabaseManager {
 		return merchantProducts;
 	}
 
+	//For getting the product data 
+	public Product getProductData(int productId) {
+
+		String retrieveProductQuery = "SELECT * FROM products WHERE product_id = ?";
+
+		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductQuery)) {
+
+			prepSt.setInt(1, productId);
+
+			ResultSet productSet = prepSt.executeQuery();
+
+			if(productSet.next()) {
+
+				//Get the product loan terms of each product
+				ArrayList<ProductLoanTerm> productLoanTerms = new ArrayList<>();
+				String productLoanTermQuery = "SELECT * FROM product_loan_table WHERE product_id = ?";
+
+				try(PreparedStatement productLoanTermSt = connection.prepareStatement(productLoanTermQuery)) {
+
+					productLoanTermSt.setInt(1, productId);
+
+					ResultSet productLoanTermsResultSet = productLoanTermSt.executeQuery();
+
+					while(productLoanTermsResultSet.next()) {		
+
+						int monthsToPay = productLoanTermsResultSet.getInt("months_to_pay");
+						float interestRate = productLoanTermsResultSet.getFloat("interest_rate");
+
+						ProductLoanTerm prodLoanTerm = new ProductLoanTerm(monthsToPay, interestRate);
+						productLoanTerms.add(prodLoanTerm);
+
+
+					}
+
+					//Conversion of BLOB to ImageIcon
+					byte[] imageBytes = productSet.getBytes("product_picture");
+					ImageIcon imageIcon = new ImageIcon(imageBytes);
+
+					//For merchant name
+					String merchantName = getMerchantName(productSet.getInt("merchant_id"));
+
+					Product productRetrieved = new Product(productId, 
+							productSet.getInt("merchant_id"), 
+							merchantName,
+							imageIcon, 
+							productSet.getString("product_name"), 
+							productSet.getString("product_brand"),
+							productSet.getString("product_description"),
+							productSet.getString("product_specifications"),
+							productSet.getFloat("product_price"),
+							productSet.getInt("product_stocks_available"),
+							productSet.getString("product_category"),
+							productLoanTerms);
+
+					return productRetrieved;
+
+				} catch(SQLException e) {
+					e.printStackTrace();
+					return null;
+				} 
+
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+	}
+
 	public String getMerchantName(int merchantId) {
 		String query = "SELECT merchant_name FROM merchant_table WHERE merchant_id = ?";
 
@@ -834,6 +834,48 @@ public class DatabaseManager {
 		return "Store Name";
 	}
 
+	public String getProductName(int productId) {
+		String query = "SELECT product_name FROM products WHERE product_id = ?";
+
+		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
+			prepSt.setInt(1, productId);
+
+			ResultSet productNameSet = prepSt.executeQuery();
+
+			if(productNameSet.next()) {
+				return productNameSet.getString("product_name");
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return "Store Name";
+	}
+
+	public String checkDuplicateProductOfMerchant(int merchantUserId, String productName) {
+
+		String query = "SELECT product_name FROM products WHERE merchant_id = ? AND product_name = ?";
+
+		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
+			prepSt.setInt(1, merchantUserId);
+			prepSt.setString(2, productName);
+
+			ResultSet rs = prepSt.executeQuery();
+
+			if(rs.next()) {
+				return "Product name '" + productName + "' is already in use. Please choose a different name.";
+			}
+
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return "System error. Please try again later.";
+		}
+		return "ok";
+	}
+
+	//Credit Management SQL
 	public boolean sendLoanRequest(Loaner loanerData, Product productData, ProductLoanTerm selectedProductLoanTerm) {
 
 		String sendLoanRequestQuery = "INSERT INTO loan_request_table(merchant_id,"
@@ -864,7 +906,7 @@ public class DatabaseManager {
 
 	}
 
-	//FOR MERCHANT
+	//For Merchant Loans
 	public ArrayList<LoanRequest> getPendingLoanRequest(int merchantId) {
 		String retrieveLoanRequest = "SELECT * FROM loan_request_table WHERE merchant_id = ?";
 
@@ -1065,7 +1107,7 @@ public class DatabaseManager {
 
 	}
 
-	//FOR LOANER
+	//For Loaner Loans
 	public ArrayList<LoanRequest> getPendingLoans(int loanerId) {
 
 		ArrayList<LoanRequest> pendingLoans = new ArrayList<>();
@@ -1172,226 +1214,6 @@ public class DatabaseManager {
 
 	}
 
-
-	//For each classes
-	public Admin getAdminData(int admindId) {
-		String retrieveAdminDataQuery = "SELECT * FROM users INNER JOIN admin_table ON users.user_id = admin_table.user_id WHERE admin_id = ?";
-		
-		try(PreparedStatement adminDataRetrieveSt = connection.prepareStatement(retrieveAdminDataQuery)) {
-			
-			adminDataRetrieveSt.setInt(1, admindId);
-			
-			ResultSet adminDataSet = adminDataRetrieveSt.executeQuery();
-			
-			if(adminDataSet.next()) {
-				LocalDate birthdate = adminDataSet.getDate("birthday").toLocalDate();
-				
-				Admin admin = new Admin(adminDataSet.getInt("admin_id"),
-						adminDataSet.getString("username"),
-						adminDataSet.getString("password"),
-						adminDataSet.getString("first_name"),
-						adminDataSet.getString("middle_name"),
-						adminDataSet.getString("last_name"),
-						adminDataSet.getString("gender"),
-						birthdate,
-						adminDataSet.getInt("age"),
-						adminDataSet.getString("email"),
-						adminDataSet.getString("phone_number"));
-				
-				return admin;
-			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		return null;
-	}
-	
-	public Merchant getMerchantData(int merchantId) {
-
-			//Get the user data
-			String retrieveMerchantDataQuery = "SELECT * FROM users INNER JOIN merchant_table ON users.user_id = merchant_table.user_id WHERE merchant_id = ?";
-
-			try(PreparedStatement merchantDataRetrieveSt = connection.prepareStatement(retrieveMerchantDataQuery)) {
-				merchantDataRetrieveSt.setInt(1, merchantId);
-
-				ResultSet merchantDataSet = merchantDataRetrieveSt.executeQuery();
-
-				if(merchantDataSet.next()) {
-					// For the birthdate
-					LocalDate birthdate = merchantDataSet.getDate("birthday").toLocalDate();
-
-					Merchant merchant = new Merchant(merchantDataSet.getInt("merchant_id"),
-							merchantDataSet.getString("username"),
-							merchantDataSet.getString("password"),
-							merchantDataSet.getString("first_name"),
-							merchantDataSet.getString("middle_name"),
-							merchantDataSet.getString("last_name"),
-							merchantDataSet.getString("gender"),
-							birthdate,
-							merchantDataSet.getInt("age"),
-							merchantDataSet.getString("email"),
-							merchantDataSet.getString("phone_number"),
-							merchantDataSet.getString("merchant_name"),
-							merchantDataSet.getString("merchant_category"),
-							merchantDataSet.getString("merchant_region_location"),
-							merchantDataSet.getString("merchant_province_location"),
-							merchantDataSet.getString("merchant_city_location"),
-							merchantDataSet.getString("merchant_barangay_location"),
-							merchantDataSet.getString("merchant_street_location")
-							);
-
-					return merchant;
-				}
-
-				return null;
-
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-
-
-	}
-
-	public Loaner getLoanerData(int loanerId) {
-
-		
-			String retrieveLoanerDataQuery = "SELECT * FROM users INNER JOIN loaner_table ON users.user_id = loaner_table.user_id WHERE loaner_id = ?";
-
-			try(PreparedStatement loanerDataRetrieveSt = connection.prepareStatement(retrieveLoanerDataQuery)) {
-				loanerDataRetrieveSt.setInt(1, loanerId);
-				
-				ResultSet loanerDataSet = loanerDataRetrieveSt.executeQuery();
-
-				if(loanerDataSet.next()) {
-					// For the birthdate
-					LocalDate birthdate = loanerDataSet.getDate("birthday").toLocalDate();
-					
-					Loaner loaner = new Loaner(loanerDataSet.getInt("loaner_id"),
-							loanerDataSet.getString("username"),
-							loanerDataSet.getString("password"),
-							loanerDataSet.getString("first_name"),
-							loanerDataSet.getString("middle_name"),
-							loanerDataSet.getString("last_name"),
-							loanerDataSet.getString("gender"),
-							birthdate,
-							loanerDataSet.getInt("age"),
-							loanerDataSet.getString("email"),
-							loanerDataSet.getString("phone_number"),
-							loanerDataSet.getString("source_of_income"),
-							loanerDataSet.getString("occupation"),
-							loanerDataSet.getString("monthly_income")
-							);
-
-					return loaner;
-				}
-
-				return null;
-
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-
-
-	}
-
-	//For getting the product data 
-	public Product getProductData(int productId) {
-
-		String retrieveProductQuery = "SELECT * FROM products WHERE product_id = ?";
-
-		try(PreparedStatement prepSt = connection.prepareStatement(retrieveProductQuery)) {
-
-			prepSt.setInt(1, productId);
-
-			ResultSet productSet = prepSt.executeQuery();
-
-			if(productSet.next()) {
-
-				//Get the product loan terms of each product
-				ArrayList<ProductLoanTerm> productLoanTerms = new ArrayList<>();
-				String productLoanTermQuery = "SELECT * FROM product_loan_table WHERE product_id = ?";
-
-				try(PreparedStatement productLoanTermSt = connection.prepareStatement(productLoanTermQuery)) {
-
-					productLoanTermSt.setInt(1, productId);
-
-					ResultSet productLoanTermsResultSet = productLoanTermSt.executeQuery();
-
-					while(productLoanTermsResultSet.next()) {		
-
-						int monthsToPay = productLoanTermsResultSet.getInt("months_to_pay");
-						float interestRate = productLoanTermsResultSet.getFloat("interest_rate");
-
-						ProductLoanTerm prodLoanTerm = new ProductLoanTerm(monthsToPay, interestRate);
-						productLoanTerms.add(prodLoanTerm);
-
-
-					}
-
-					//Conversion of BLOB to ImageIcon
-					byte[] imageBytes = productSet.getBytes("product_picture");
-					ImageIcon imageIcon = new ImageIcon(imageBytes);
-
-					//For merchant name
-					String merchantName = getMerchantName(productSet.getInt("merchant_id"));
-
-					Product productRetrieved = new Product(productId, 
-							productSet.getInt("merchant_id"), 
-							merchantName,
-							imageIcon, 
-							productSet.getString("product_name"), 
-							productSet.getString("product_brand"),
-							productSet.getString("product_description"),
-							productSet.getString("product_specifications"),
-							productSet.getFloat("product_price"),
-							productSet.getInt("product_stocks_available"),
-							productSet.getString("product_category"),
-							productLoanTerms);
-
-					return productRetrieved;
-
-				} catch(SQLException e) {
-					e.printStackTrace();
-					return null;
-				} 
-
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return null;
-	}
-
-	public String getProductName(int productId) {
-		String query = "SELECT product_name FROM products WHERE product_id = ?";
-
-		try(PreparedStatement prepSt = connection.prepareStatement(query)) {
-			prepSt.setInt(1, productId);
-
-			ResultSet productNameSet = prepSt.executeQuery();
-
-			if(productNameSet.next()) {
-				return productNameSet.getString("product_name");
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		return "Store Name";
-	}
-
 	public LoanRequest getLoanRequestData(int loanerId , int loanRequestId) {
 
 		String query = "SELECT * FROM loan_request_table WHERE loaner_id = ? AND loan_request_id = ?";
@@ -1441,6 +1263,136 @@ public class DatabaseManager {
 			e.printStackTrace();
 			return null;
 		}
+	}	
+
+	//For each classes
+	public Admin getAdminData(int admindId) {
+		String retrieveAdminDataQuery = "SELECT * FROM users INNER JOIN admin_table ON users.user_id = admin_table.user_id WHERE admin_id = ?";
+
+		try(PreparedStatement adminDataRetrieveSt = connection.prepareStatement(retrieveAdminDataQuery)) {
+
+			adminDataRetrieveSt.setInt(1, admindId);
+
+			ResultSet adminDataSet = adminDataRetrieveSt.executeQuery();
+
+			if(adminDataSet.next()) {
+				LocalDate birthdate = adminDataSet.getDate("birthday").toLocalDate();
+
+				Admin admin = new Admin(adminDataSet.getInt("admin_id"),
+						adminDataSet.getString("username"),
+						adminDataSet.getString("password"),
+						adminDataSet.getString("first_name"),
+						adminDataSet.getString("middle_name"),
+						adminDataSet.getString("last_name"),
+						adminDataSet.getString("gender"),
+						birthdate,
+						adminDataSet.getInt("age"),
+						adminDataSet.getString("email"),
+						adminDataSet.getString("phone_number"));
+
+				return admin;
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+
+	public Merchant getMerchantData(int merchantId) {
+
+		//Get the user data
+		String retrieveMerchantDataQuery = "SELECT * FROM users INNER JOIN merchant_table ON users.user_id = merchant_table.user_id WHERE merchant_id = ?";
+
+		try(PreparedStatement merchantDataRetrieveSt = connection.prepareStatement(retrieveMerchantDataQuery)) {
+			merchantDataRetrieveSt.setInt(1, merchantId);
+
+			ResultSet merchantDataSet = merchantDataRetrieveSt.executeQuery();
+
+			if(merchantDataSet.next()) {
+				// For the birthdate
+				LocalDate birthdate = merchantDataSet.getDate("birthday").toLocalDate();
+
+				Merchant merchant = new Merchant(merchantDataSet.getInt("merchant_id"),
+						merchantDataSet.getString("username"),
+						merchantDataSet.getString("password"),
+						merchantDataSet.getString("first_name"),
+						merchantDataSet.getString("middle_name"),
+						merchantDataSet.getString("last_name"),
+						merchantDataSet.getString("gender"),
+						birthdate,
+						merchantDataSet.getInt("age"),
+						merchantDataSet.getString("email"),
+						merchantDataSet.getString("phone_number"),
+						merchantDataSet.getString("merchant_name"),
+						merchantDataSet.getString("merchant_category"),
+						merchantDataSet.getString("merchant_region_location"),
+						merchantDataSet.getString("merchant_province_location"),
+						merchantDataSet.getString("merchant_city_location"),
+						merchantDataSet.getString("merchant_barangay_location"),
+						merchantDataSet.getString("merchant_street_location")
+						);
+
+				return merchant;
+			}
+
+			return null;
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+
+	}
+
+	public Loaner getLoanerData(int loanerId) {
+
+
+		String retrieveLoanerDataQuery = "SELECT * FROM users INNER JOIN loaner_table ON users.user_id = loaner_table.user_id WHERE loaner_id = ?";
+
+		try(PreparedStatement loanerDataRetrieveSt = connection.prepareStatement(retrieveLoanerDataQuery)) {
+			loanerDataRetrieveSt.setInt(1, loanerId);
+
+			ResultSet loanerDataSet = loanerDataRetrieveSt.executeQuery();
+
+			if(loanerDataSet.next()) {
+				// For the birthdate
+				LocalDate birthdate = loanerDataSet.getDate("birthday").toLocalDate();
+
+				Loaner loaner = new Loaner(loanerDataSet.getInt("loaner_id"),
+						loanerDataSet.getString("username"),
+						loanerDataSet.getString("password"),
+						loanerDataSet.getString("first_name"),
+						loanerDataSet.getString("middle_name"),
+						loanerDataSet.getString("last_name"),
+						loanerDataSet.getString("gender"),
+						birthdate,
+						loanerDataSet.getInt("age"),
+						loanerDataSet.getString("email"),
+						loanerDataSet.getString("phone_number"),
+						loanerDataSet.getString("source_of_income"),
+						loanerDataSet.getString("occupation"),
+						loanerDataSet.getString("monthly_income")
+						);
+
+				return loaner;
+			}
+
+			return null;
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+
 	}
 
 	public boolean setLoanRequestToOngoing(LoanRequest loanReq, int monthsPaidInAdvance) {
@@ -1451,8 +1403,7 @@ public class DatabaseManager {
 				+ "is_downpayment_paid = ?,"
 				+ "is_cancelled = ? "
 				+ "WHERE loan_request_id = ?";
-
-		System.out.println(loanReq.getLoanRequestId());
+		
 
 		try(PreparedStatement prepSt = connection.prepareStatement(updateLoanRequestStatusQuery)) {
 			prepSt.setBoolean(1, false);
@@ -1479,8 +1430,6 @@ public class DatabaseManager {
 		int remainingMonthsToPay = loanReq.getLoanedProductMonthsToPay() - monthsPaidInAdvance;
 		float paidBalance = loanReq.getDownPaymentAmount() + (loanReq.getMonthlyPayment() * monthsPaidInAdvance);
 		float remainingBalance = totalInterestedPrice - paidBalance;
-
-
 
 		String addLoanQuery = "INSERT INTO loan_table (loan_id,"
 				+ "loan_request_id, "
@@ -1689,7 +1638,7 @@ public class DatabaseManager {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return false;
-							
+
 				}
 
 
@@ -1786,7 +1735,7 @@ public class DatabaseManager {
 			return null;
 		}
 	}
-	
+
 	public ArrayList<Loan> getOngoingLoansMerchant(int merchantId) {
 
 		ArrayList<Loan> loans = new ArrayList<>();
@@ -1874,85 +1823,84 @@ public class DatabaseManager {
 		}
 	}
 
-
 	public ArrayList<Merchant> getAllMerchants() {
 		ArrayList<Merchant> allMerchants = new ArrayList<>();
-		
+
 		String getAllMerchantQuery = "SELECT * FROM merchant_table";
-		
+
 		try(PreparedStatement prepSt = connection.prepareStatement(getAllMerchantQuery)) {
-			
+
 			ResultSet allMerchantsSet = prepSt.executeQuery();
-			
+
 			while(allMerchantsSet.next()) {
 				int merchantId = allMerchantsSet.getInt("merchant_id");
 				Merchant merch = getMerchantData(merchantId);
 				System.out.println(merch.getMerchantId());
-				
+
 				allMerchants.add(merch);
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
 		return allMerchants;
-		
+
 	}
-	
+
 	public ArrayList<Loaner> getAllLoaner() {
 		ArrayList<Loaner> allLoaner = new ArrayList<>();
-		
+
 		String getAllLoanerQuery = "SELECT * FROM loaner_table";
-		
+
 		try(PreparedStatement prepSt = connection.prepareStatement(getAllLoanerQuery)) {
-			
+
 			ResultSet allLoanerSet = prepSt.executeQuery();
-			
+
 			while(allLoanerSet.next()) {
 				int loanerId = allLoanerSet.getInt("loaner_id");
 				Loaner loaner = getLoanerData(loanerId);
-				
+
 				allLoaner.add(loaner);
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return allLoaner;
 	}
-	
+
 	public ArrayList<Faqs> getAllFaqs() {
 		ArrayList<Faqs> faqs = new ArrayList<>();
-		
+
 		String retrieveFaqsQuery = "SELECT * FROM faqs_table";
-		
+
 		try(PreparedStatement prepSt = connection.prepareStatement(retrieveFaqsQuery)) {
 			ResultSet faqsSet = prepSt.executeQuery();
-			
-			
+
+
 			while(faqsSet.next()) {
 				Faqs faq = new Faqs(faqsSet.getInt("faq_id"),
 						faqsSet.getString("faq_title"),
 						faqsSet.getString("faq_query"),
 						faqsSet.getString("faq_answer"),
 						faqsSet.getString("faq_user_type"));
-				
+
 				faqs.add(faq);
 			}
-			
+
 			return faqs;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
-	
+
 }
 
 

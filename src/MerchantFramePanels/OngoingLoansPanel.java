@@ -185,11 +185,11 @@ public class OngoingLoansPanel extends JPanel {
 //		lblNewLabel_4_1.setFont(new Font("Dialog", Font.PLAIN, 12));
 //		loanRequestPanel.add(lblNewLabel_4_1);
 
-
+		int i = 0;
 
 		for(Loan loan :  merchantOngoingLoans) {
 
-			int i = 0;
+			
 				JPanel loanRequestPanel = new JPanel();
 				panel.add(loanRequestPanel);
 				loanRequestPanel.setMaximumSize(new Dimension(2210, 150));

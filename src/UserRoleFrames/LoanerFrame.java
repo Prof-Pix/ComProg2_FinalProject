@@ -36,7 +36,7 @@ public class LoanerFrame extends JFrame {
 	DatabaseManager dbManager = new DatabaseManager();
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+	private static JPanel contentPane;
 	
 	//For tracking the current panel;
 	static JPanel currentPanel = null;
@@ -196,7 +196,7 @@ LoanerFrame.LOANER_ID = loanerId;
 			contentPane.repaint();
 		}
 		
-		private void showApprovedLoanPanel() {
+		public static void showApprovedLoanPanel() {
 			if (currentPanel != null) {
 				contentPane.remove(currentPanel);		
 			}
@@ -208,7 +208,7 @@ LoanerFrame.LOANER_ID = loanerId;
 			contentPane.repaint();
 		}
 		
-		private void showOngoingLoanPanel() {
+		public static void showOngoingLoanPanel() {
 			if (currentPanel != null) {
 				contentPane.remove(currentPanel);		
 			}

@@ -34,12 +34,6 @@ public class LoanRequest {
 	private boolean isDownPaymentPaid;
 	private boolean isCancelled;
 	
-//	private String merchantName;
-//	private String loanedProductName;
-//	private String loanedProductBrand;
-//	private ImageIcon loanedProductPicture;
-//	private float loanedProductPrice;
-//	private String loanerName;
 	
 	//Auto-compute on each constructor
 	private float downPaymentAmount;

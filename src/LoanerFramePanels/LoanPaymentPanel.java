@@ -24,6 +24,7 @@ import Loan.Loan;
 import Loan.LoanRequest;
 import PaymentAccounts.BankAccount1;
 import PaymentAccounts.EWalletAccount;
+import UserRoleFrames.LoanerFrame;
 import Utilities.HelperUtility;
 
 import java.awt.Color;
@@ -601,6 +602,7 @@ public class LoanPaymentPanel extends JDialog {
 							if(dbManager.payOnGoingLoan(LOAN_DETAILS, monthsPaidInAdvance)) {
 								JOptionPane.showMessageDialog(null, "Payment Successful", "Invalid Action", JOptionPane.INFORMATION_MESSAGE);
 								HelperUtility.closeDialog(LoanPaymentPanel.this);
+								LoanerFrame.showOngoingLoanPanel();
 							} else {
 								JOptionPane.showMessageDialog(null, "Server Error", "Invalid Credentials", JOptionPane.ERROR_MESSAGE);
 							}

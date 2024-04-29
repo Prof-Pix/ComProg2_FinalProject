@@ -131,7 +131,6 @@ public class MerchantFrame extends JFrame {
 
 		MerchantFrame.MERCHANT_ID = merchantId;
 		dbManager.connect();
-		dbManager.getUserdata(merchantId);
 
 		setTitle("Merchant Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -280,7 +279,7 @@ public class MerchantFrame extends JFrame {
 		contentPane.repaint();
 	}
 
-	public void showPendingLoanRequestPanel() {
+	public static void showPendingLoanRequestPanel() {
 		if(currentPanel != null) {
 			contentPane.remove(currentPanel);
 		}

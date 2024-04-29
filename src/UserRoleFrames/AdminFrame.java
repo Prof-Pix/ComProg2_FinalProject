@@ -9,11 +9,13 @@ import javax.swing.border.EmptyBorder;
 import AdminFramePanels.ManageLoanerPanel;
 import AdminFramePanels.ManageMerchantPanel;
 import AdminFramePanels.ViewAdminProfileDialog;
+import AuthFrames.LoginPage;
 import ChatBot.HelpCenterChatBotDialog;
 import Database.DatabaseManager;
 import LoanerFramePanels.RejectedLoansPanel;
 import LoanerFramePanels.ViewLoanerProfileDialog;
 import User.Admin;
+import Utilities.HelperUtility;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -93,8 +95,17 @@ public class AdminFrame extends JFrame {
 		} );
 		mnNewMenu.add(viewProfileMenuItem);
 		
-		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Logout");
-		mnNewMenu.add(mntmNewMenuItem_4);
+		JMenuItem logoutButton = new JMenuItem("Logout");
+		logoutButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				logout();
+			}
+			
+		});
+		mnNewMenu.add(logoutButton);
 		
 		JMenuItem manageMerchantsMenuItem = new JMenuItem("Manage Merchants");
 		manageMerchantsMenuItem.addActionListener(e -> showManageMerchant());
@@ -154,5 +165,12 @@ public class AdminFrame extends JFrame {
 		contentPane.add(manageLoanerPanel);
 		contentPane.revalidate();
 		contentPane.repaint();
+	}
+	
+	//Logout
+	private void logout() {
+		HelperUtility.closePage(AdminFrame.this);
+		LoginPage login = new LoginPage();
+		login.setVisible(true);
 	}
 }

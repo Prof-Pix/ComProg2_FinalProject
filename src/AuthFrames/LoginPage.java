@@ -209,16 +209,19 @@ public class LoginPage extends JFrame {
 
 						switch(userType) {
 						case "admin" : {
+							HelperUtility.closePage(LoginPage.this);
 							AdminFrame adFrame = new AdminFrame(returnId);
 							adFrame.setVisible(true);
 							break;
 						}
 						case "merchant": {
+							HelperUtility.closePage(LoginPage.this);
 							MerchantFrame merchFrame = new MerchantFrame(returnId);
 							merchFrame.setVisible(true);
 							break;
 						}
 						case "loaner": {
+							HelperUtility.closePage(LoginPage.this);
 							LoanerFrame lnFrame = new LoanerFrame(returnId);
 							lnFrame.setVisible(true);
 							break;

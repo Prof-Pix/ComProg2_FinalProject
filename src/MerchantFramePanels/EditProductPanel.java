@@ -31,6 +31,7 @@ import Products.ProductLoanTerm;
 import Products.ProductRegistrationData;
 import User.Merchant;
 import UserEnums.MerchantCategory;
+import UserRoleFrames.MerchantFrame;
 import Utilities.HelperUtility;
 
 import java.awt.Color;
@@ -495,8 +496,9 @@ public class EditProductPanel extends JDialog {
 								productLoanTerms);
 						
 						if(Merchant.editProduct(MERCHANT_ID, productRegData, productData.getProductId())) {
-							System.out.println(productData.getProductId());
 							JOptionPane.showMessageDialog(null, "Your product is successfully edit!", "Product Edited", JOptionPane.INFORMATION_MESSAGE);
+							HelperUtility.closeDialog(EditProductPanel.this);
+							MerchantFrame.showViewProductsPanel();
 						} else {
 							JOptionPane.showMessageDialog(null, "Please try again later.", "Server Error!", JOptionPane.ERROR_MESSAGE);
 						}

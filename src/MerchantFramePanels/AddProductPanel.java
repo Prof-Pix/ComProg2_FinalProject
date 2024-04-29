@@ -458,6 +458,7 @@ public class AddProductPanel extends JPanel{
 					if(Merchant.addProduct(MERCHANT_ID, productData)) {
 						//Empty all the fields
 						JOptionPane.showMessageDialog(null, "Your product is successfully added!", "Product Added", JOptionPane.INFORMATION_MESSAGE);
+						MerchantFrame.showViewProductsPanel();
 					} else {
 						JOptionPane.showMessageDialog(null, "Please try again later.", "Server Error!", JOptionPane.ERROR_MESSAGE);
 					}

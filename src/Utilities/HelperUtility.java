@@ -87,13 +87,14 @@ public class HelperUtility {
 		return input == null || input.trim().isEmpty() ;
 	}
 
-
+	//FOR GENERATING A 16 CHARACTER LONG ID
 	public static long generateRandomId() {
 		UUID uuid = UUID.randomUUID();
 		long id = Math.abs(uuid.getMostSignificantBits()); // Get the first 64 bits
 		return id; 
 	}
 	
+	//FOR RESIZING AN IMAGE using filepath
 	public static ImageIcon resizeImage(String filePath, int labelWidth, int labelHeight) {
 		ImageIcon imageIcon = new ImageIcon(filePath);
 				Image originalImage = imageIcon.getImage();
@@ -102,6 +103,7 @@ public class HelperUtility {
 				 return scaledImageIcon;
 	}
 	
+	//FOR RESIZING AN IMAGE using image
 	public static ImageIcon resizeImage(ImageIcon imageIcon, int labelWidth, int labelHeight) {
 				Image originalImage = imageIcon.getImage();
 				Image scaledImage = originalImage.getScaledInstance(labelWidth,labelHeight, Image.SCALE_SMOOTH);
